@@ -55,6 +55,18 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="src\Controller\TabController.cs" />
+    <Compile Include="src\Interface\IObservable.cs" />
+    <Compile Include="src\Interface\IObserver.cs" />
+    <Compile Include="src\View\DrawSurface.cs" />
+    <Compile Include="src\Enums.cs" />
+    <Compile Include="src\Model\TablatureEditor.cs" />
+    <Compile Include="src\Model\Coord.cs" />
+    <Compile Include="src\Model\Cursor.cs" />
+    <Compile Include="src\Model\Tab.cs" />
+    <Compile Include="src\Model\TabElement.cs" />
+    <Compile Include="src\Model\TabPosition.cs" />
+    <Compile Include="src\Util.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -63,6 +75,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="src\Configuration.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -95,6 +108,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
