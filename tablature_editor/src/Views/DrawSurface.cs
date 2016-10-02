@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
+using TablatureEditor.Models;
+using TablatureEditor.Configs;
 
-namespace tablature_editor
+namespace TablatureEditor
 {
     class DrawSurface : FrameworkElement
     {
@@ -48,26 +46,26 @@ namespace tablature_editor
                 new Rect(new Point(0, 0), new Size(this.Width, this.Height)));
         }
 
-        public void DrawRectangle(Coord tabCoord)
+        public void DrawRectangle(TabCoord tabCoord)
         {
             if (!isDrawing)
                 throw new Exception();
 
-            Coord canvasCoord = Coord.toCanvasCoord(tabCoord);
+            CanvasCoord canvasCoord = tabCoord.ToCanvasCoord();
             Point point = new Point(canvasCoord.x, canvasCoord.y);
 
             drawingContext.DrawRectangle(
                 Brushes.LightBlue,
                 null,
-                new Rect(point, new Size(Configuration.Inst.unitSizeX, Configuration.Inst.unitSizeX)));
+                new Rect(point, new Size(Configuration.UnitSizeX, Configuration.UnitSizeX)));
         }
 
-        public void DrawText(Coord tabCoord, string text)
+        public void DrawText(TabCoord tabCoord, string text)
         {
             if (!isDrawing)
                 throw new Exception();
 
-            Coord canvasCoord = Coord.toCanvasCoord(tabCoord);
+            Coord canvasCoord = tabCoord.ToCanvasCoord();
             Point point = new Point(canvasCoord.x, canvasCoord.y);
 
             drawingContext.DrawText(
