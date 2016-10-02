@@ -1,7 +1,7 @@
-﻿<Application x:Class="tablature_editor.App"
+﻿<Application x:Class="TablatureEditor.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:tablature_editor"
+             xmlns:local="clr-namespace:TablatureEditor"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
          

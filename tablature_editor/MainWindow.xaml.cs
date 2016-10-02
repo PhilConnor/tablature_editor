@@ -13,39 +13,43 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using tablature_editor.src;
-using tablature_editor.src.Controler;
-using static tablature_editor.src.Enums;
+using TablatureEditor.Controllers;
+using TablatureEditor.Models;
+using TablatureEditor.Configs;
+using TablatureEditor.Utils;
 
-namespace tablature_editor
+namespace TablatureEditor
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
-        TablatureEditor _editorFacade;
-        TabController _tabcontroller;
+        TabEditor editorFacade;
+        TabController tabController;
+        CursorController cursorController;
 
         public MainWindow()
         {
             InitializeComponent();
+            Configuration.Initialisation();
 
             // Setup
-            canvasCustom.Height = Configuration.Inst.canvasHeight;
-            canvasCustom.Width = Configuration.Inst.canvasWidth;
-            window.Background = new SolidColorBrush(Configuration.Inst.bgColor);            
+            canvasCustom.Height = Configuration.CanvasHeight;
+            canvasCustom.Width = Configuration.CanvasWidth;
+            window.Background = new SolidColorBrush(Configuration.BGColor);
+            cursorController = new CursorController();
        
             // Init & Dependancy injection
-            _editorFacade = new TablatureEditor(new Tab(), new Cursor());
-            _tabcontroller = new TabController(canvasCustom, _editorFacade);
+            editorFacade = new TabEditor(new Tab(), cursorController);
+            tabController = new TabController(canvasCustom, editorFacade);
 
         }
 
         private void window_TextInput(object sender, TextCompositionEventArgs e)
         {
             //text
-            _editorFacade.writeCharAtCursor(e.Text);
+            editorFacade.writeCharAtCursor(e.Text);
         }
 
         private void window_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -53,30 +57,30 @@ namespace tablature_editor
 
             //shift+arrow
             if (Keyboard.IsKeyDown(Key.LeftShift) && e.Key == Key.Left)
-                _editorFacade.moveCursor(CursorMovements.ExpandLeft);
+                editorFacade.moveCursor(CursorMovements.ExpandLeft);
             else if (Keyboard.IsKeyDown(Key.LeftShift) && e.Key == Key.Up)
-                _editorFacade.moveCursor(CursorMovements.ExpandUp);
+                editorFacade.moveCursor(CursorMovements.ExpandUp);
             else if (Keyboard.IsKeyDown(Key.LeftShift) && e.Key == Key.Right)
-                _editorFacade.moveCursor(CursorMovements.ExpandRight);
+                editorFacade.moveCursor(CursorMovements.ExpandRight);
             else if (Keyboard.IsKeyDown(Key.LeftShift) && e.Key == Key.Down)
-                _editorFacade.moveCursor(CursorMovements.ExpandDown);
+                editorFacade.moveCursor(CursorMovements.ExpandDown);
 
             //arrow
             else if (e.Key == Key.Left)
-                _editorFacade.moveCursor(CursorMovements.Left);
+                editorFacade.moveCursor(CursorMovements.Left);
             else if (e.Key == Key.Up)
-                _editorFacade.moveCursor(CursorMovements.Up);
+                editorFacade.moveCursor(CursorMovements.Up);
             else if (e.Key == Key.Right)
-                _editorFacade.moveCursor(CursorMovements.Right);
+                editorFacade.moveCursor(CursorMovements.Right);
             else if (e.Key == Key.Down)
-                _editorFacade.moveCursor(CursorMovements.Down);
+                editorFacade.moveCursor(CursorMovements.Down);
 
             //backspace, delete
             else if (e.Key == Key.Back || e.Key == Key.Delete)
-                _editorFacade.writeCharAtCursor("-");
+                editorFacade.writeCharAtCursor("-");
 
             else if (e.Key == Key.CapsLock)
-                _editorFacade.toggleWriteMode();
+                editorFacade.toggleWriteMode();
         }
 
     } // 
