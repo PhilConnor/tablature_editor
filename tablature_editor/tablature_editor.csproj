@@ -55,6 +55,21 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="src\Controllers\CursorController.cs" />
+    <Compile Include="src\Controllers\TabController.cs" />
+    <Compile Include="src\Interfaces\IObservable.cs" />
+    <Compile Include="src\Interfaces\IObserver.cs" />
+    <Compile Include="src\Models\CanvasCoord.cs" />
+    <Compile Include="src\Models\TabCoord.cs" />
+    <Compile Include="src\Views\DrawSurface.cs" />
+    <Compile Include="src\Utils\Enums.cs" />
+    <Compile Include="src\Models\TabEditor.cs" />
+    <Compile Include="src\Models\Coord.cs" />
+    <Compile Include="src\Models\Cursor.cs" />
+    <Compile Include="src\Models\Tab.cs" />
+    <Compile Include="src\Models\TabElement.cs" />
+    <Compile Include="src\Models\TabPosition.cs" />
+    <Compile Include="src\Utils\Util.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -63,6 +78,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="src\Configs\Configuration.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -95,6 +111,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace tablature_editor.Properties
+namespace TablatureEditor.Properties
 {
 
 
