@@ -32,7 +32,7 @@ namespace TablatureEditor.Controllers
 
             drawSurface.DrawBackground();
 
-            foreach(TabCoord tabCoord in tablatureEditor.cursorController.GetTouchingTabCoords())
+            foreach(TabCoord tabCoord in tablatureEditor.cursorController.GetSelectionTabCoords())
             {
                 drawSurface.DrawRectangle(tabCoord);
             }

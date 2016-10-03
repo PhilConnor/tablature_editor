@@ -31,9 +31,9 @@ namespace TablatureEditor.Models
             }
 
             // Set the char.
-            TabCoord tabCoord = cursorController.GetCursorTopLeft;
-            int cursorWidth = cursorController.GetCursorWidth;
-            int cursorHeight = cursorController.GetCursorHeight;
+            TabCoord tabCoord = cursorController.UpperLeftCoord;
+            int cursorWidth = cursorController.Width;
+            int cursorHeight = cursorController.Height;
 
             for (int x = tabCoord.x; x <= tabCoord.x + cursorWidth; ++x)
             {
@@ -59,35 +59,35 @@ namespace TablatureEditor.Models
             switch (mouvement)
             {
                 case CursorMovements.Left:
-                    cursorController.MoveCursorLeft();
+                    cursorController.MoveLeft();
                     break;
 
                 case CursorMovements.Up:
-                    cursorController.MoveCursorUp();
+                    cursorController.MoveUp();
                     break;
 
                 case CursorMovements.Right:
-                    cursorController.MoveCursorRight();
+                    cursorController.MoveRight();
                     break;
 
                 case CursorMovements.Down:
-                    cursorController.MoveCursorDown();
+                    cursorController.MoveDown();
                     break;
 
                 case CursorMovements.ExpandLeft:
-                    cursorController.ExpandCursorLeft();
+                    cursorController.ExpandLeft();
                     break;
 
                 case CursorMovements.ExpandUp:
-                    cursorController.ExpandCursorUp();
+                    cursorController.ExpandUp();
                     break;
 
                 case CursorMovements.ExpandRight:
-                    cursorController.ExpandCursorRight();
+                    cursorController.ExpandRight();
                     break;
 
                 case CursorMovements.ExpandDown:
-                    cursorController.ExpandCursorDown();
+                    cursorController.ExpandDown();
                     break;
             }
 
@@ -118,6 +118,7 @@ namespace TablatureEditor.Models
             observers.Add(observer);
         }
     }
+
     public enum WriteModes { Unity, Tenth, Twenyth, Thirtieth };
     public enum SkipModes { Zero, One };
 }

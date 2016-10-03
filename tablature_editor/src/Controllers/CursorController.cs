@@ -21,21 +21,21 @@ namespace TablatureEditor.Controllers
 
         #region Properties
         // Get the horizontal distance between the lower left and upper right corner of the cursor.
-        public TabCoord GetCursorTopLeft
+        public TabCoord UpperLeftCoord
         {
-            get { return cursor.UpperLeft; }
+            get { return cursor.UpperLeftCoord; }
         }
 
         // Get the horizontal distance between the lower left and upper right corner of the cursor.
-        public int GetCursorWidth
+        public int Width
         {
-            get { return cursor.LowerRight.x - cursor.UpperLeft.x; }
+            get { return cursor.LowerRightCoord.x - cursor.UpperLeftCoord.x; }
         }
 
         // Get the vertical distance between the lower left and upper right corner of the cursor.
-        public int GetCursorHeight
+        public int Height
         {
-            get { return cursor.LowerRight.y - cursor.UpperLeft.y; }
+            get { return cursor.LowerRightCoord.y - cursor.UpperLeftCoord.y; }
         }
         #endregion
 
@@ -47,102 +47,102 @@ namespace TablatureEditor.Controllers
 
         #region Public Methods
         // Move the cursor up.
-        public void MoveCursorUp()
+        public void MoveUp()
         {
             // If we are at the top of a staff, we want to select the staff above.
-            if (cursor.UpperLeft.y == 0)
+            if (cursor.UpperLeftCoord.y == 0)
             {
-                ChangeStaff(ChangeStaffDirection.Up);
+                SkipStaffUp();
             }
             else // Move the cursor 1 note up.
             {
-                --cursor.UpperLeft.y;
-                --cursor.LowerRight.y;
+                --cursor.UpperLeftCoord.y;
+                --cursor.LowerRightCoord.y;
             }
         }
 
         // Move the cursor right.
-        public void MoveCursorRight()
+        public void MoveRight()
         {
-            if (cursor.LowerRight.x < Configuration.TabLength - 1)
+            if (cursor.LowerRightCoord.x < Configuration.TabLength - 1)
             {
-                ++cursor.UpperLeft.x;
-                ++cursor.LowerRight.x;
+                ++cursor.UpperLeftCoord.x;
+                ++cursor.LowerRightCoord.x;
             }
         }
 
         // Move the cursor down.
-        public void MoveCursorDown()
+        public void MoveDown()
         {
             // If we are at the bottom of a staff, we want to select the staff bellow.
-            if (cursor.LowerRight.y == Configuration.NumberOfStrings - 1)
+            if (cursor.LowerRightCoord.y == Configuration.NumberOfStrings - 1)
             {
-                ChangeStaff(ChangeStaffDirection.Down);
+                SkipStaffDown();
             }
             else // Move the cursor 1 note down.
             {
-                ++cursor.UpperLeft.y;
-                ++cursor.LowerRight.y;
+                ++cursor.UpperLeftCoord.y;
+                ++cursor.LowerRightCoord.y;
             }
         }
 
         // Move the cursor left.
-        public void MoveCursorLeft()
+        public void MoveLeft()
         {
-            if (cursor.UpperLeft.x > 0)
+            if (cursor.UpperLeftCoord.x > 0)
             {
-                --cursor.UpperLeft.x;
-                --cursor.LowerRight.x;
+                --cursor.UpperLeftCoord.x;
+                --cursor.LowerRightCoord.x;
             }
         }
 
         //Expand the cursor 1 note up.
-        public void ExpandCursorUp()
+        public void ExpandUp()
         {
-            if (cursor.UpperLeft.y > 0)
+            if (cursor.UpperLeftCoord.y > 0)
             {
-                --cursor.UpperLeft.y;
+                --cursor.UpperLeftCoord.y;
             }
         }
 
         //Expand the cursor 1 note right.
-        public void ExpandCursorRight()
+        public void ExpandRight()
         {
-            if (cursor.LowerRight.x < Configuration.TabLength - 1)
+            if (cursor.LowerRightCoord.x < Configuration.TabLength - 1)
             {
-                ++cursor.LowerRight.x;
+                ++cursor.LowerRightCoord.x;
             }
         }
 
         //Expand the cursor 1 note down.
-        public void ExpandCursorDown()
+        public void ExpandDown()
         {
-            if (cursor.LowerRight.y < Configuration.NumberOfStrings - 1)
+            if (cursor.LowerRightCoord.y < Configuration.NumberOfStrings - 1)
             {
-                ++cursor.LowerRight.y;
+                ++cursor.LowerRightCoord.y;
             }
         }
 
         //Expand the cursor 1 note left.
-        public void ExpandCursorLeft()
+        public void ExpandLeft()
         {
-            if (cursor.UpperLeft.x > 0)
+            if (cursor.UpperLeftCoord.x > 0)
             {
-                --cursor.UpperLeft.x;
+                --cursor.UpperLeftCoord.x;
             }
         }
 
-        // Get a list of every notes currently selected by the cursor.
-        public List<TabCoord> GetTouchingTabCoords()
+        // Get a list of every coords of notes currently selected by the cursor.
+        public List<TabCoord> GetSelectionTabCoords()
         {
             List<TabCoord> touchingTabCoords = new List<TabCoord>();
 
-            int startX = cursor.UpperLeft.x;
-            int startY = cursor.UpperLeft.y;
+            int startX = cursor.UpperLeftCoord.x;
+            int startY = cursor.UpperLeftCoord.y;
 
-            for (int x = startX; x <= startX + GetCursorWidth; ++x)
+            for (int x = startX; x <= startX + Width; ++x)
             {
-                for (int y = startY; y <= startY + GetCursorHeight; ++y)
+                for (int y = startY; y <= startY + Height; ++y)
                 {
                     touchingTabCoords.Add(new TabCoord(x, y));
                 }
@@ -154,21 +154,23 @@ namespace TablatureEditor.Controllers
 
         #region Private Methods
         //Change the cursor 1 staff up or down.
-        private void ChangeStaff(ChangeStaffDirection direction)
+        private void SkipStaffUp()
         {
-            if (direction == ChangeStaffDirection.Down && 
-                cursor.LowerRight.x + Configuration.StaffLength < Configuration.TabLength)
+            if (cursor.UpperLeftCoord.x - Configuration.StaffLength > 0)
             {
-                cursor.UpperLeft.x += Configuration.StaffLength;
-                cursor.LowerRight.x += Configuration.StaffLength;
-            }
-            else if (direction == ChangeStaffDirection.Up  &&
-                cursor.UpperLeft.x - Configuration.StaffLength > 0)
-            {
-                cursor.UpperLeft.x -= Configuration.StaffLength;
-                cursor.LowerRight.x -= Configuration.StaffLength;
+                cursor.UpperLeftCoord.x -= Configuration.StaffLength;
+                cursor.LowerRightCoord.x -= Configuration.StaffLength;
             }
         }
+
+        private void SkipStaffDown()
+        {
+            if (cursor.LowerRightCoord.x + Configuration.StaffLength < Configuration.TabLength)
+            {
+                cursor.UpperLeftCoord.x += Configuration.StaffLength;
+                cursor.LowerRightCoord.x += Configuration.StaffLength;
+            }
+        }        
         #endregion
 
         /*
