@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Media;
 using TablatureEditor.Models;
 using TablatureEditor.Configs;
+using tablature_editor.Utils;
 
 namespace TablatureEditor
 {
@@ -51,7 +52,7 @@ namespace TablatureEditor
             if (!isDrawing)
                 throw new Exception();
 
-            CanvasCoord canvasCoord = tabCoord.ToCanvasCoord();
+            CanvasCoord canvasCoord = CoordConverter.ToCanvasCoord(tabCoord);
             Point point = new Point(canvasCoord.x, canvasCoord.y);
 
             drawingContext.DrawRectangle(
@@ -65,7 +66,7 @@ namespace TablatureEditor
             if (!isDrawing)
                 throw new Exception();
 
-            Coord canvasCoord = tabCoord.ToCanvasCoord();
+            Coord canvasCoord = CoordConverter.ToCanvasCoord(tabCoord);
             Point point = new Point(canvasCoord.x, canvasCoord.y);
 
             drawingContext.DrawText(
@@ -85,10 +86,7 @@ namespace TablatureEditor
 
         protected override int VisualChildrenCount
         {
-            get
-            {
-                return visuals.Count;
-            }
+            get { return visuals.Count; }
         }
     }
 }

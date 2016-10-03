@@ -118,4 +118,6 @@ namespace TablatureEditor.Models
             observers.Add(observer);
         }
     }
+    public enum WriteModes { Unity, Tenth, Twenyth, Thirtieth };
+    public enum SkipModes { Zero, One };
 }

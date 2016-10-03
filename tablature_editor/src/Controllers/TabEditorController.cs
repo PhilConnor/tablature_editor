@@ -14,12 +14,12 @@ namespace TablatureEditor.Controllers
     /// </summary>
     class TabController : IObserver
     {
-        private DrawSurface canvasCustom;
+        private DrawSurface drawSurface;
         private TabEditor tablatureEditor;        
         
-        public TabController(DrawSurface canvasCustom, TabEditor tablatureEditor)
+        public TabController(DrawSurface drawSurface, TabEditor tablatureEditor)
         {
-            this.canvasCustom = canvasCustom;
+            this.drawSurface = drawSurface;
             this.tablatureEditor = tablatureEditor;
 
             tablatureEditor.Subscribe(this);
@@ -28,13 +28,13 @@ namespace TablatureEditor.Controllers
 
         public void ReDrawTablature()
         {
-            canvasCustom.StartDrawing();
+            drawSurface.StartDrawing();
 
-            canvasCustom.DrawBackground();
+            drawSurface.DrawBackground();
 
             foreach(TabCoord tabCoord in tablatureEditor.cursorController.GetTouchingTabCoords())
             {
-                canvasCustom.DrawRectangle(tabCoord);
+                drawSurface.DrawRectangle(tabCoord);
             }
 
             for (int x = 0; x < tablatureEditor.tablature.positions.Count; ++x)
@@ -42,11 +42,11 @@ namespace TablatureEditor.Controllers
                 for (int y = 0; y < tablatureEditor.tablature.positions.ElementAt(0).elements.Count; ++y)
                 {
                     TabCoord tabCoord = new TabCoord(x, y);
-                    canvasCustom.DrawText(tabCoord, tablatureEditor.tablature.getTextAt(tabCoord));
+                    drawSurface.DrawText(tabCoord, tablatureEditor.tablature.getTextAt(tabCoord));
                 }
             }
 
-            canvasCustom.EndDrawing();
+            drawSurface.EndDrawing();
         }
 
         public void Notify()

@@ -20,4 +20,6 @@
             LowerRight = lowerRight;
         }
     }
+
+    public enum CursorMovements { Left, Up, Right, Down, ExpandLeft, ExpandUp, ExpandRight, ExpandDown };
 }
