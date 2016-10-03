@@ -13,9 +13,9 @@ namespace TablatureEditor.Models
         // Constructors.
         public TabPosition()
         {
-            elements = new List<TabElement>(Configuration.NumberOfStrings);
+            elements = new List<TabElement>(Config_Tab.NumberOfStrings);
 
-            for (int y = 0; y < Configuration.NumberOfStrings; ++y)
+            for (int y = 0; y < Config_Tab.NumberOfStrings; ++y)
             {
                 elements.Add(new TabElement());
             }

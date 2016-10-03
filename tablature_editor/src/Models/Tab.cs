@@ -15,12 +15,12 @@ namespace TablatureEditor.Models
 
         public void init()
         {
-            positions = new List<TabPosition>(Configuration.TabLength);
+            positions = new List<TabPosition>(Config_Tab.TabLength);
 
-            for (int x = 0; x < Configuration.TabLength; ++x)
+            for (int x = 0; x < Config_Tab.TabLength; ++x)
                 positions.Add(new TabPosition());
 
-            tabPositionAt(0).ParseTuning(Configuration.Tuning);
+            tabPositionAt(0).ParseTuning(Config_Tab.Tuning);
         }
         public int Length()
         {

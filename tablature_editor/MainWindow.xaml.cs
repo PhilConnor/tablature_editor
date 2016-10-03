@@ -32,12 +32,13 @@ namespace TablatureEditor
         public MainWindow()
         {
             InitializeComponent();
-            Configuration.Initialisation();
+            Config_Tab.Initialisation();
+            Config_DrawSurface.Initialisation();
 
             // Setup
-            canvasCustom.Height = Configuration.CanvasHeight;
-            canvasCustom.Width = Configuration.CanvasWidth;
-            window.Background = new SolidColorBrush(Configuration.BGColor);
+            canvasCustom.Height = Config_DrawSurface.Height;
+            canvasCustom.Width = Config_DrawSurface.Width;
+            window.Background = new SolidColorBrush(Config_DrawSurface.BGColor);
             cursorController = new CursorController();
        
             // Init & Dependancy injection

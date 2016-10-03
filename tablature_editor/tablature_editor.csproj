@@ -55,6 +55,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="src\Configs\Config_Tab.cs" />
     <Compile Include="src\Controllers\CursorController.cs" />
     <Compile Include="src\Controllers\TabEditorController.cs" />
     <Compile Include="src\Interfaces\IObservable.cs" />
@@ -78,7 +79,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\Configs\Configuration.cs" />
+    <Compile Include="src\Configs\Config_DrawSurface.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

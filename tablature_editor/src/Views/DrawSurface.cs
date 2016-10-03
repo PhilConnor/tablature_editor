@@ -58,7 +58,7 @@ namespace TablatureEditor
             drawingContext.DrawRectangle(
                 Brushes.LightBlue,
                 null,
-                new Rect(point, new Size(Configuration.UnitSizeX, Configuration.UnitSizeX)));
+                new Rect(point, new Size(Config_DrawSurface.GridUnitWidth, Config_DrawSurface.GridUnitWidth)));
         }
 
         public void DrawText(TabCoord tabCoord, string text)

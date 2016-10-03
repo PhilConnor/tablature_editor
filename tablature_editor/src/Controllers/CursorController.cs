@@ -64,7 +64,7 @@ namespace TablatureEditor.Controllers
         // Move the cursor right.
         public void MoveRight()
         {
-            if (cursor.LowerRightCoord.x < Configuration.TabLength - 1)
+            if (cursor.LowerRightCoord.x < Config_Tab.TabLength - 1)
             {
                 ++cursor.UpperLeftCoord.x;
                 ++cursor.LowerRightCoord.x;
@@ -75,7 +75,7 @@ namespace TablatureEditor.Controllers
         public void MoveDown()
         {
             // If we are at the bottom of a staff, we want to select the staff bellow.
-            if (cursor.LowerRightCoord.y == Configuration.NumberOfStrings - 1)
+            if (cursor.LowerRightCoord.y == Config_Tab.NumberOfStrings - 1)
             {
                 SkipStaffDown();
             }
@@ -108,7 +108,7 @@ namespace TablatureEditor.Controllers
         //Expand the cursor 1 note right.
         public void ExpandRight()
         {
-            if (cursor.LowerRightCoord.x < Configuration.TabLength - 1)
+            if (cursor.LowerRightCoord.x < Config_Tab.TabLength - 1)
             {
                 ++cursor.LowerRightCoord.x;
             }
@@ -117,7 +117,7 @@ namespace TablatureEditor.Controllers
         //Expand the cursor 1 note down.
         public void ExpandDown()
         {
-            if (cursor.LowerRightCoord.y < Configuration.NumberOfStrings - 1)
+            if (cursor.LowerRightCoord.y < Config_Tab.NumberOfStrings - 1)
             {
                 ++cursor.LowerRightCoord.y;
             }
@@ -156,19 +156,19 @@ namespace TablatureEditor.Controllers
         //Change the cursor 1 staff up or down.
         private void SkipStaffUp()
         {
-            if (cursor.UpperLeftCoord.x - Configuration.StaffLength > 0)
+            if (cursor.UpperLeftCoord.x - Config_Tab.StaffLength > 0)
             {
-                cursor.UpperLeftCoord.x -= Configuration.StaffLength;
-                cursor.LowerRightCoord.x -= Configuration.StaffLength;
+                cursor.UpperLeftCoord.x -= Config_Tab.StaffLength;
+                cursor.LowerRightCoord.x -= Config_Tab.StaffLength;
             }
         }
 
         private void SkipStaffDown()
         {
-            if (cursor.LowerRightCoord.x + Configuration.StaffLength < Configuration.TabLength)
+            if (cursor.LowerRightCoord.x + Config_Tab.StaffLength < Config_Tab.TabLength)
             {
-                cursor.UpperLeftCoord.x += Configuration.StaffLength;
-                cursor.LowerRightCoord.x += Configuration.StaffLength;
+                cursor.UpperLeftCoord.x += Config_Tab.StaffLength;
+                cursor.LowerRightCoord.x += Config_Tab.StaffLength;
             }
         }        
         #endregion

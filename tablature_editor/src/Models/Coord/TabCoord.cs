@@ -17,8 +17,8 @@ namespace TablatureEditor.Models
         public bool IsValid()
         {
             var c3 = this.x >= 0 && this.y >= 0;
-            var c4 = this.x < (Configuration.StaffLength * Configuration.NStaff)
-                && this.y < Configuration.NumberOfStrings;
+            var c4 = this.x < (Config_Tab.StaffLength * Config_Tab.NStaff)
+                && this.y < Config_Tab.NumberOfStrings;
 
             return c3 && c4;
         }
