@@ -56,15 +56,15 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="src\Controllers\CursorController.cs" />
-    <Compile Include="src\Controllers\TabController.cs" />
+    <Compile Include="src\Controllers\TabEditorController.cs" />
     <Compile Include="src\Interfaces\IObservable.cs" />
     <Compile Include="src\Interfaces\IObserver.cs" />
-    <Compile Include="src\Models\CanvasCoord.cs" />
-    <Compile Include="src\Models\TabCoord.cs" />
+    <Compile Include="src\Models\Coord\CanvasCoord.cs" />
+    <Compile Include="src\Models\Coord\TabCoord.cs" />
+    <Compile Include="src\Utils\CoordConverter.cs" />
     <Compile Include="src\Views\DrawSurface.cs" />
-    <Compile Include="src\Utils\Enums.cs" />
     <Compile Include="src\Models\TabEditor.cs" />
-    <Compile Include="src\Models\Coord.cs" />
+    <Compile Include="src\Models\Coord\Coord.cs" />
     <Compile Include="src\Models\Cursor.cs" />
     <Compile Include="src\Models\Tab.cs" />
     <Compile Include="src\Models\TabElement.cs" />

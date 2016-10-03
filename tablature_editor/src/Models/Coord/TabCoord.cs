@@ -13,7 +13,7 @@ namespace TablatureEditor.Models
             this.y = y;
         }
 
-        // Checks if the coord is defined and inbound.
+        // Checks if the coord inbound.
         public bool IsValid()
         {
             var c3 = this.x >= 0 && this.y >= 0;

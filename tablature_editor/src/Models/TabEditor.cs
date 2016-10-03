@@ -21,7 +21,7 @@ namespace TablatureEditor.Models
             NotifyObserver();
         }
 
-        public void writeCharAtCursor(string keyChar)
+        public void WriteCharAtCursor(string keyChar)
         {
             // Concat 1, 2 or 3 depending on the write mode
             bool isWritingTwoNumber = writeMode != WriteModes.Unity && Util.isNumber(keyChar);
@@ -43,18 +43,18 @@ namespace TablatureEditor.Models
                 }
             }
 
-            moveCursor(CursorMovements.Right);
-            moveCursor(CursorMovements.Right);
+            MoveCursor(CursorMovements.Right);
+            MoveCursor(CursorMovements.Right);
 
             if (isWritingTwoNumber)
             {
-                moveCursor(CursorMovements.Right);
+                MoveCursor(CursorMovements.Right);
             }
 
             NotifyObserver();
         }
 
-        public void moveCursor(CursorMovements mouvement)
+        public void MoveCursor(CursorMovements mouvement)
         {
             switch (mouvement)
             {
@@ -94,14 +94,13 @@ namespace TablatureEditor.Models
             NotifyObserver();
         }
 
-        public void toggleWriteMode()
+        public void ToggleWriteMode()
         {
             switch (writeMode)
             {
                 case WriteModes.Unity: writeMode = WriteModes.Tenth; break;
                 case WriteModes.Tenth: writeMode = WriteModes.Twenyth; break;
-                case WriteModes.Twenyth: writeMode = WriteModes.Thirtieth; break;
-                case WriteModes.Thirtieth: writeMode = WriteModes.Unity; break;
+                case WriteModes.Twenyth: writeMode = WriteModes.Unity; break;
             }
 
             NotifyObserver();
@@ -119,6 +118,6 @@ namespace TablatureEditor.Models
         }
     }
 
-    public enum WriteModes { Unity, Tenth, Twenyth, Thirtieth };
+    public enum WriteModes { Unity, Tenth, Twenyth };
     public enum SkipModes { Zero, One };
 }

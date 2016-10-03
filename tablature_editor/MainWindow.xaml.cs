@@ -49,7 +49,7 @@ namespace TablatureEditor
         private void window_TextInput(object sender, TextCompositionEventArgs e)
         {
             //text
-            editorFacade.writeCharAtCursor(e.Text);
+            editorFacade.WriteCharAtCursor(e.Text);
         }
 
         private void window_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -57,30 +57,30 @@ namespace TablatureEditor
 
             //shift+arrow
             if (Keyboard.IsKeyDown(Key.LeftShift) && e.Key == Key.Left)
-                editorFacade.moveCursor(CursorMovements.ExpandLeft);
+                editorFacade.MoveCursor(CursorMovements.ExpandLeft);
             else if (Keyboard.IsKeyDown(Key.LeftShift) && e.Key == Key.Up)
-                editorFacade.moveCursor(CursorMovements.ExpandUp);
+                editorFacade.MoveCursor(CursorMovements.ExpandUp);
             else if (Keyboard.IsKeyDown(Key.LeftShift) && e.Key == Key.Right)
-                editorFacade.moveCursor(CursorMovements.ExpandRight);
+                editorFacade.MoveCursor(CursorMovements.ExpandRight);
             else if (Keyboard.IsKeyDown(Key.LeftShift) && e.Key == Key.Down)
-                editorFacade.moveCursor(CursorMovements.ExpandDown);
+                editorFacade.MoveCursor(CursorMovements.ExpandDown);
 
             //arrow
             else if (e.Key == Key.Left)
-                editorFacade.moveCursor(CursorMovements.Left);
+                editorFacade.MoveCursor(CursorMovements.Left);
             else if (e.Key == Key.Up)
-                editorFacade.moveCursor(CursorMovements.Up);
+                editorFacade.MoveCursor(CursorMovements.Up);
             else if (e.Key == Key.Right)
-                editorFacade.moveCursor(CursorMovements.Right);
+                editorFacade.MoveCursor(CursorMovements.Right);
             else if (e.Key == Key.Down)
-                editorFacade.moveCursor(CursorMovements.Down);
+                editorFacade.MoveCursor(CursorMovements.Down);
 
             //backspace, delete
             else if (e.Key == Key.Back || e.Key == Key.Delete)
-                editorFacade.writeCharAtCursor("-");
+                editorFacade.WriteCharAtCursor("-");
 
             else if (e.Key == Key.CapsLock)
-                editorFacade.toggleWriteMode();
+                editorFacade.ToggleWriteMode();
         }
 
     } // 
