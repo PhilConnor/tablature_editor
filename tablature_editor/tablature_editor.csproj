@@ -56,7 +56,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="src\Configs\Config_Tab.cs" />
-    <Compile Include="src\Controllers\CursorController.cs" />
+    <Compile Include="src\Models\Cursor\CursorLogic.cs" />
     <Compile Include="src\Controllers\TabEditorController.cs" />
     <Compile Include="src\Interfaces\IObservable.cs" />
     <Compile Include="src\Interfaces\IObserver.cs" />
@@ -66,7 +66,7 @@
     <Compile Include="src\Views\DrawSurface.cs" />
     <Compile Include="src\Models\TabEditor.cs" />
     <Compile Include="src\Models\Coord\Coord.cs" />
-    <Compile Include="src\Models\Cursor.cs" />
+    <Compile Include="src\Models\Cursor\Cursor.cs" />
     <Compile Include="src\Models\Tab.cs" />
     <Compile Include="src\Models\TabElement.cs" />
     <Compile Include="src\Models\TabPosition.cs" />

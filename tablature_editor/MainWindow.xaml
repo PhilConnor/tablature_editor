@@ -27,7 +27,7 @@
         BorderBrush="Red"
         BorderThickness="1">
         <z:DrawSurface
-            x:Name="canvasCustom"
+            x:Name="drawSurface"
             Height="500"
             Width="500"
             Margin="0,20,0,0"

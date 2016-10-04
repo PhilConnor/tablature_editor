@@ -8,37 +8,40 @@ namespace TablatureEditor.Models
 {
     class TabEditor : IObserverable
     {
-        public Tab tablature;
-        public CursorController cursorController;
+        public Tablature _tablature;
+        public Cursor _cursor;
         public WriteModes writeMode;
         public SkipModes skipMode;
 
-        public TabEditor(Tab tablature, CursorController cursorController)
+        public TabEditor(Tablature tablature, Cursor cursor)
         {
-            this.writeMode = WriteModes.Unity;
-            this.skipMode = SkipModes.One;
+            writeMode = WriteModes.Unity;
+            skipMode = SkipModes.One;
 
-            this.tablature = tablature;
-            this.cursorController = cursorController;
+            _tablature = tablature;
+            _cursor = cursor;
 
             NotifyObserver();
         }
 
         //@TODO : fix number over 9 by hand bug
-        //@TODO : refactor this method
         public void WriteCharAtCursor(string keyChar)
         {
             keyChar = ApplyWriteMode(keyChar);
 
-            // Fill the cursor selection with appropriate input
-            TabCoord tabCoord = cursorController.UpperLeftCoord;
-            for (int x = tabCoord.x; x <= tabCoord.x + cursorController.Width; ++x)
+            // Fill the cursor selection with appropriate input            
+            TabCoord tabCoord = _cursor.UpperLeftCoord;
+            
+            for (int x = tabCoord.x; x <= tabCoord.x + _cursor.Logic.Width; ++x)
             {
-                for (int y = tabCoord.y; y <= tabCoord.y + cursorController.Height; ++y)
+                for (int y = tabCoord.y; y <= tabCoord.y + _cursor.Logic.Height; ++y)
                 {
-                    tablature.setTextAt(new TabCoord(x, y), keyChar);
+                    _tablature.setTextAt(new TabCoord(x, y), keyChar);
                 }
             }
+            
+            _tablature.setTextAt(new TabCoord(tabCoord.x, tabCoord.y), keyChar);
+
 
             ApplyCursorMovementBaseOnInput(keyChar);
 
@@ -77,35 +80,35 @@ namespace TablatureEditor.Models
             switch (mouvement)
             {
                 case CursorMovements.Left:
-                    cursorController.MoveLeft();
+                    _cursor.Logic.MoveLeft();
                     break;
 
                 case CursorMovements.Up:
-                    cursorController.MoveUp();
+                    _cursor.Logic.MoveUp();
                     break;
 
                 case CursorMovements.Right:
-                    cursorController.MoveRight();
+                    _cursor.Logic.MoveRight();
                     break;
 
                 case CursorMovements.Down:
-                    cursorController.MoveDown();
+                    _cursor.Logic.MoveDown();
                     break;
 
                 case CursorMovements.ExpandLeft:
-                    cursorController.ExpandLeft();
+                    _cursor.Logic.ExpandLeft();
                     break;
 
                 case CursorMovements.ExpandUp:
-                    cursorController.ExpandUp();
+                    _cursor.Logic.ExpandUp();
                     break;
 
                 case CursorMovements.ExpandRight:
-                    cursorController.ExpandRight();
+                    _cursor.Logic.ExpandRight();
                     break;
 
                 case CursorMovements.ExpandDown:
-                    cursorController.ExpandDown();
+                    _cursor.Logic.ExpandDown();
                     break;
             }
 

@@ -5,11 +5,11 @@ using TablatureEditor.Utils;
 
 namespace TablatureEditor.Models
 {
-    public class Tab
+    public class Tablature
     {
         public List<TabPosition> positions;
 
-        public Tab()
+        public Tablature()
         {
             init();
         }

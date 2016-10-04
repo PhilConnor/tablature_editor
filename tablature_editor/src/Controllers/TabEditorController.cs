@@ -42,7 +42,7 @@ namespace TablatureEditor.Controllers
 
         private void RedrawCursor()
         {
-            foreach (TabCoord tabCoord in tablatureEditor.cursorController.GetSelectionTabCoords())
+            foreach (TabCoord tabCoord in tablatureEditor._cursor.Logic.GetSelectionTabCoords())
             {
                 drawSurface.DrawRectangle(tabCoord);
             }
@@ -50,15 +50,15 @@ namespace TablatureEditor.Controllers
 
         private void RedrawElements()
         {
-            for (int x = 0; x < tablatureEditor.tablature.positions.Count; ++x)
+            for (int x = 0; x < tablatureEditor._tablature.positions.Count; ++x)
             {
-                for (int y = 0; y < tablatureEditor.tablature.positions.ElementAt(0).elements.Count; ++y)
+                for (int y = 0; y < tablatureEditor._tablature.positions.ElementAt(0).elements.Count; ++y)
                 {
                     TabCoord tabCoord = new TabCoord(x, y);
 
                     if (!IsAnElementAtAlreadyThere(tabCoord))
                     {
-                        drawSurface.DrawTextAtTabCoord(tabCoord, tablatureEditor.tablature.getTextAt(tabCoord));
+                        drawSurface.DrawTextAtTabCoord(tabCoord, tablatureEditor._tablature.getTextAt(tabCoord));
                     }
                 }
             }
@@ -72,7 +72,7 @@ namespace TablatureEditor.Controllers
                 return false;
 
             TabCoord tc = new TabCoord(tabCoord.x - 1, tabCoord.y);
-            string txt = tablatureEditor.tablature.getTextAt(tc);
+            string txt = tablatureEditor._tablature.getTextAt(tc);
             return Util.isNumberOver9(txt);
         }
         

@@ -6,18 +6,25 @@
         //Properties.
         public TabCoord UpperLeftCoord { get; set; }
         public TabCoord LowerRightCoord { get; set; }
+        public CursorLogic Logic { get; set; }
 
         //Constructors.
-        public Cursor()
+        public Cursor(CursorLogic cursorLogic)
         {
-            UpperLeftCoord = new TabCoord(0, 0);
-            LowerRightCoord = new TabCoord(0, 0);
+            Init(cursorLogic, new TabCoord(0, 0), new TabCoord(0, 0));
         }
 
-        public Cursor(TabCoord upperLeft, TabCoord lowerRight)
+        public Cursor(CursorLogic cursorLogic, TabCoord upperLeft, TabCoord lowerRight)
+        {
+            Init(cursorLogic, upperLeft, lowerRight);
+        }
+
+        private void Init(CursorLogic cursorLogic, TabCoord upperLeft, TabCoord lowerRight)
         {
             UpperLeftCoord = upperLeft;
             LowerRightCoord = lowerRight;
+            Logic = cursorLogic;
+            Logic.SetCursor(this);
         }
     }
 
