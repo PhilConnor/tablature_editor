@@ -13,12 +13,12 @@ namespace TablatureEditor.Controllers
     /// <summary>
     /// Manage redraw of graphics elements on notification.
     /// </summary>
-    class TabController : IObserver
+    class TablatureEditorController : IObserver
     {
         private DrawSurface drawSurface;
-        private TabEditor tablatureEditor;
+        private Models.TablatureEditor tablatureEditor;
 
-        public TabController(DrawSurface drawSurface, TabEditor tablatureEditor)
+        public TablatureEditorController(DrawSurface drawSurface, Models.TablatureEditor tablatureEditor)
         {
             this.drawSurface = drawSurface;
             this.tablatureEditor = tablatureEditor;

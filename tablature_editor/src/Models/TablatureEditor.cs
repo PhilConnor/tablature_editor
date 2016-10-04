@@ -6,14 +6,18 @@ using TablatureEditor.Utils;
 
 namespace TablatureEditor.Models
 {
-    class TabEditor : IObserverable
+    /// <summary>
+    /// Acts like a facade, provides unified and simplified access 
+    /// points to tablature and cursor models.
+    /// </summary>
+    class TablatureEditor : IObserverable
     {
         public Tablature _tablature;
         public Cursor _cursor;
         public WriteModes writeMode;
         public SkipModes skipMode;
 
-        public TabEditor(Tablature tablature, Cursor cursor)
+        public TablatureEditor(Tablature tablature, Cursor cursor)
         {
             writeMode = WriteModes.Unity;
             skipMode = SkipModes.One;
@@ -31,7 +35,7 @@ namespace TablatureEditor.Models
 
             // Fill the cursor selection with appropriate input            
             TabCoord tabCoord = _cursor.UpperLeftCoord;
-            
+
             for (int x = tabCoord.x; x <= tabCoord.x + _cursor.Logic.Width; ++x)
             {
                 for (int y = tabCoord.y; y <= tabCoord.y + _cursor.Logic.Height; ++y)
@@ -39,7 +43,7 @@ namespace TablatureEditor.Models
                     _tablature.setTextAt(new TabCoord(x, y), keyChar);
                 }
             }
-            
+
             _tablature.setTextAt(new TabCoord(tabCoord.x, tabCoord.y), keyChar);
 
 

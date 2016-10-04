@@ -7,22 +7,23 @@ namespace TablatureEditor.Models
 {
     public class Tablature
     {
-        public List<TabPosition> positions;
+        public List<TablaturePosition> positions;
 
         public Tablature()
         {
-            init();
+            Init();
         }
 
-        public void init()
+        public void Init()
         {
-            positions = new List<TabPosition>(Config_Tab.TabLength);
+            positions = new List<TablaturePosition>(Config_Tab.TabLength);
 
             for (int x = 0; x < Config_Tab.TabLength; ++x)
-                positions.Add(new TabPosition());
+                positions.Add(new TablaturePosition());
 
             tabPositionAt(0).ParseTuning(Config_Tab.Tuning);
         }
+
         public int Length()
         {
             return positions.Count();
@@ -50,12 +51,12 @@ namespace TablatureEditor.Models
             return positions.ElementAt(tabCoord.x).elements.ElementAt(tabCoord.y).Text;
         }
 
-        private TabElement tabElementAt(TabCoord tabCoord)
+        private TablatureElement tabElementAt(TabCoord tabCoord)
         {
             return positions.ElementAt(tabCoord.x).elements.ElementAt(tabCoord.y);
         }
 
-        private TabPosition tabPositionAt(int tabCoord_X)
+        private TablaturePosition tabPositionAt(int tabCoord_X)
         {
             return positions.ElementAt(tabCoord_X);
         }

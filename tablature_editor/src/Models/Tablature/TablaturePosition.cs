@@ -5,19 +5,19 @@ using TablatureEditor.Configs;
 
 namespace TablatureEditor.Models
 {
-    public class TabPosition
+    public class TablaturePosition
     {
         // Attributs.
-        public List<TabElement> elements; // From top to bottom.
+        public List<TablatureElement> elements; // From top to bottom.
 
         // Constructors.
-        public TabPosition()
+        public TablaturePosition()
         {
-            elements = new List<TabElement>(Config_Tab.NumberOfStrings);
+            elements = new List<TablatureElement>(Config_Tab.NumberOfStrings);
 
             for (int y = 0; y < Config_Tab.NumberOfStrings; ++y)
             {
-                elements.Add(new TabElement());
+                elements.Add(new TablatureElement());
             }
         }
 

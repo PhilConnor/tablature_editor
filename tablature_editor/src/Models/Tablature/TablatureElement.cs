@@ -1,12 +1,12 @@
 ﻿namespace TablatureEditor.Models
 {
-    public class TabElement
+    public class TablatureElement
     {
         // Properties.
         public string Text { get; set; }
 
         //Constructors.
-        public TabElement()
+        public TablatureElement()
         {
             ClearText();
         }

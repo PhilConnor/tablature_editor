@@ -26,7 +26,7 @@ namespace TablatureEditor
     /// </summary>
     public partial class MainWindow : Window
     {
-        TabEditor tabEditor;
+        Models.TablatureEditor tabEditor;
 
 
         public MainWindow()
@@ -46,9 +46,9 @@ namespace TablatureEditor
 
             Tablature tablature = new Tablature();
 
-            tabEditor = new TabEditor(tablature, cursor);
+            tabEditor = new Models.TablatureEditor(tablature, cursor);
 
-            TabController tabController = new TabController(drawSurface, tabEditor);
+            TablatureEditorController tabController = new TablatureEditorController(drawSurface, tabEditor);
         }
 
         public void Setup()
