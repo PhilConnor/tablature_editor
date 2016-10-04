@@ -24,7 +24,10 @@ namespace TablatureEditor.Configs
 
         // Colors
         public static Color BGColor { get; set; }
-        
+        public static Brush TextColor { get; set; }
+
+        public static Typeface TextFont { get; set; }
+
         //Constructors.
         public static void Initialisation()
         {
@@ -33,14 +36,18 @@ namespace TablatureEditor.Configs
             GridUnitWidth = FontSize;
             GridUnitHeight = GridUnitWidth;
             SpacingBetweenStaff = 2;
-            Width = GridUnitWidth * 80;
+            Width = GridUnitWidth * 81;
             Height = GridUnitHeight * 200;
             CharWidth = 12;
             CharHeight = 12;
             LineThickness = 12;
             MarginX = 10;
             MarginY = 10;
+
             BGColor = Colors.LightGray;
+            TextColor = Brushes.White;
+            TextFont = new Typeface("Verdana");
+
         }
     }
 }

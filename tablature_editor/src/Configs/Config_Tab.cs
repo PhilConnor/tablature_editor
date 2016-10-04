@@ -18,7 +18,7 @@ namespace TablatureEditor.Configs
         // Number of staffs.
         public static int NStaff { get; set; }
         public static int StaffLength { get; set; }
-
+        
         public static int TabLength
         {
             get

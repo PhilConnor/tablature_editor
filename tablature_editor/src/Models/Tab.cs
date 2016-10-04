@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using TablatureEditor.Configs;
+using TablatureEditor.Utils;
 
 namespace TablatureEditor.Models
 {
@@ -32,7 +33,7 @@ namespace TablatureEditor.Models
             return positions.ElementAt(0).elements.Count();
         }
 
-        public void setTextAt(Coord tabCoord, string elementText)
+        public void setTextAt(TabCoord tabCoord, string elementText)
         {
             //if we are about to write a 10th or 20th we remove the 
             // char occuring before it to make space for this extra character
@@ -44,12 +45,12 @@ namespace TablatureEditor.Models
             positions.ElementAt(tabCoord.x).elements.ElementAt(tabCoord.y).Text = elementText;
         }
 
-        public string getTextAt(Coord tabCoord)
+        public string getTextAt(TabCoord tabCoord)
         {
             return positions.ElementAt(tabCoord.x).elements.ElementAt(tabCoord.y).Text;
         }
 
-        private TabElement tabElementAt(Coord tabCoord)
+        private TabElement tabElementAt(TabCoord tabCoord)
         {
             return positions.ElementAt(tabCoord.x).elements.ElementAt(tabCoord.y);
         }
@@ -57,6 +58,11 @@ namespace TablatureEditor.Models
         private TabPosition tabPositionAt(int tabCoord_X)
         {
             return positions.ElementAt(tabCoord_X);
+        }
+
+        public bool isElementAtNumberGreatherThan10(TabCoord tabCoord)
+        {
+            return Util.isNumber(getTextAt(tabCoord));
         }
 
         public void removePosition(int tabCoord_X)

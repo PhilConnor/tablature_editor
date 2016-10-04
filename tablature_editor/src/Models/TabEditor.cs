@@ -21,6 +21,8 @@ namespace TablatureEditor.Models
             NotifyObserver();
         }
 
+        //@TODO : fix number over 9 by hand bug
+        //@TODO : refactor this method
         public void WriteCharAtCursor(string keyChar)
         {
             // Concat 1, 2 or 3 depending on the write mode
@@ -39,7 +41,7 @@ namespace TablatureEditor.Models
             {
                 for (int y = tabCoord.y; y <= tabCoord.y + cursorHeight; ++y)
                 {
-                    tablature.setTextAt(new CanvasCoord(x, y), keyChar);
+                    tablature.setTextAt(new TabCoord(x, y), keyChar);
                 }
             }
 
@@ -53,7 +55,7 @@ namespace TablatureEditor.Models
 
             NotifyObserver();
         }
-
+        
         public void MoveCursor(CursorMovements mouvement)
         {
             switch (mouvement)

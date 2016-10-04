@@ -14,13 +14,13 @@ namespace TablatureEditor.Models
         }
 
         // Checks if the coord inbound.
-        public bool IsValid()
-        {
-            var c3 = this.x >= 0 && this.y >= 0;
-            var c4 = this.x < (Config_Tab.StaffLength * Config_Tab.NStaff)
-                && this.y < Config_Tab.NumberOfStrings;
+        //public bool IsValid()
+        //{
+        //    var c3 = this.x >= 0 && this.y >= 0;
+        //    var c4 = this.x < (Config_Tab.StaffLength * Config_Tab.NStaff)
+        //        && this.y < Config_Tab.NumberOfStrings;
 
-            return c3 && c4;
-        }
+        //    return c3 && c4;
+        //}
     }
 }
