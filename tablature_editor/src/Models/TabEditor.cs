@@ -11,10 +11,13 @@ namespace TablatureEditor.Models
         public Tab tablature;
         public CursorController cursorController;
         public WriteModes writeMode;
-        
+        public SkipModes skipMode;
+
         public TabEditor(Tab tablature, CursorController cursorController)
         {
             this.writeMode = WriteModes.Unity;
+            this.skipMode = SkipModes.One;
+
             this.tablature = tablature;
             this.cursorController = cursorController;
 
@@ -25,37 +28,50 @@ namespace TablatureEditor.Models
         //@TODO : refactor this method
         public void WriteCharAtCursor(string keyChar)
         {
+            keyChar = ApplyWriteMode(keyChar);
+
+            // Fill the cursor selection with appropriate input
+            TabCoord tabCoord = cursorController.UpperLeftCoord;
+            for (int x = tabCoord.x; x <= tabCoord.x + cursorController.Width; ++x)
+            {
+                for (int y = tabCoord.y; y <= tabCoord.y + cursorController.Height; ++y)
+                {
+                    tablature.setTextAt(new TabCoord(x, y), keyChar);
+                }
+            }
+
+            ApplyCursorMovementBaseOnInput(keyChar);
+
+            NotifyObserver();
+        }
+
+        private void ApplyCursorMovementBaseOnInput(string keyChar)
+        {
+            bool isWritingTwoNumber = writeMode != WriteModes.Unity && Util.isNumber(keyChar);
+
+            // move cursor to the next char position
+            MoveCursor(CursorMovements.Right);
+
+            // move cursor again is input was more than one char at the same time (ex: 10)
+            if (isWritingTwoNumber)
+                MoveCursor(CursorMovements.Right);
+
+            // move cursor again if we are in skipModes.One
+            if (skipMode == SkipModes.One)
+                MoveCursor(CursorMovements.Right);
+        }
+
+        private string ApplyWriteMode(string keyChar)
+        {
             // Concat 1, 2 or 3 depending on the write mode
             bool isWritingTwoNumber = writeMode != WriteModes.Unity && Util.isNumber(keyChar);
             if (isWritingTwoNumber)
             {
                 keyChar = String.Concat((int)writeMode, keyChar);
             }
-
-            // Set the char.
-            TabCoord tabCoord = cursorController.UpperLeftCoord;
-            int cursorWidth = cursorController.Width;
-            int cursorHeight = cursorController.Height;
-
-            for (int x = tabCoord.x; x <= tabCoord.x + cursorWidth; ++x)
-            {
-                for (int y = tabCoord.y; y <= tabCoord.y + cursorHeight; ++y)
-                {
-                    tablature.setTextAt(new TabCoord(x, y), keyChar);
-                }
-            }
-
-            MoveCursor(CursorMovements.Right);
-            MoveCursor(CursorMovements.Right);
-
-            if (isWritingTwoNumber)
-            {
-                MoveCursor(CursorMovements.Right);
-            }
-
-            NotifyObserver();
+            return keyChar;
         }
-        
+
         public void MoveCursor(CursorMovements mouvement)
         {
             switch (mouvement)
