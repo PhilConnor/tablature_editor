@@ -26,7 +26,7 @@ namespace TablatureEditor
     /// </summary>
     public partial class MainWindow : Window
     {
-        Models.TablatureEditor tabEditor;
+        TablatureEditorController tabController;
 
 
         public MainWindow()
@@ -38,17 +38,16 @@ namespace TablatureEditor
 
             // Setup
             Setup();
-
-
+            
             // Init & Dependancy injection
             Models.CursorLogic cursorLogic = new Models.CursorLogic();
             Models.Cursor cursor = new Models.Cursor(cursorLogic);
 
             Tablature tablature = new Tablature();
 
-            tabEditor = new Models.TablatureEditor(tablature, cursor);
+            TablatureEditor tabEditor = new Models.TablatureEditor(tablature, cursor);
 
-            TablatureEditorController tabController = new TablatureEditorController(drawSurface, tabEditor);
+            tabController = new TablatureEditorController(drawSurface, tabEditor);
         }
 
         public void Setup()
@@ -60,39 +59,12 @@ namespace TablatureEditor
 
         private void window_TextInput(object sender, TextCompositionEventArgs e)
         {
-            //text
-            tabEditor.WriteCharAtCursor(e.Text);
+            tabController.window_TextInput(sender, e);
         }
 
         private void window_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-
-            //shift+arrow
-            if (Keyboard.IsKeyDown(Key.LeftShift) && e.Key == Key.Left)
-                tabEditor.MoveCursor(CursorMovements.ExpandLeft);
-            else if (Keyboard.IsKeyDown(Key.LeftShift) && e.Key == Key.Up)
-                tabEditor.MoveCursor(CursorMovements.ExpandUp);
-            else if (Keyboard.IsKeyDown(Key.LeftShift) && e.Key == Key.Right)
-                tabEditor.MoveCursor(CursorMovements.ExpandRight);
-            else if (Keyboard.IsKeyDown(Key.LeftShift) && e.Key == Key.Down)
-                tabEditor.MoveCursor(CursorMovements.ExpandDown);
-
-            //arrow
-            else if (e.Key == Key.Left)
-                tabEditor.MoveCursor(CursorMovements.Left);
-            else if (e.Key == Key.Up)
-                tabEditor.MoveCursor(CursorMovements.Up);
-            else if (e.Key == Key.Right)
-                tabEditor.MoveCursor(CursorMovements.Right);
-            else if (e.Key == Key.Down)
-                tabEditor.MoveCursor(CursorMovements.Down);
-
-            //backspace, delete
-            else if (e.Key == Key.Back || e.Key == Key.Delete)
-                tabEditor.WriteCharAtCursor("-");
-
-            else if (e.Key == Key.CapsLock)
-                tabEditor.ToggleWriteMode();
+            tabController.window_PreviewKeyDown(sender, e);
         }
 
     } // 
