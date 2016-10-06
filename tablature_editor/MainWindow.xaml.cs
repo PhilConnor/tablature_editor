@@ -13,13 +13,13 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using TablatureEditor.Controllers;
-using TablatureEditor.Models;
-using TablatureEditor.Configs;
-using TablatureEditor.Utils;
+using PFE.Controllers;
+using PFE.Models;
+using PFE.Configs;
+using PFE.Utils;
 using System.Windows.Input;
 
-namespace TablatureEditor
+namespace PFE
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -45,9 +45,9 @@ namespace TablatureEditor
 
             Tablature tablature = new Tablature();
 
-            TablatureEditor tabEditor = new Models.TablatureEditor(tablature, cursor);
+            TablatureEditor tablatureEditor = new Models.TablatureEditor(tablature, cursor);
 
-            tabController = new TablatureEditorController(drawSurface, tabEditor);
+            tabController = new TablatureEditorController(drawSurface, tablatureEditor);
         }
 
         public void Setup()

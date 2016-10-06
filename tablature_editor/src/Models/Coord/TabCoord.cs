@@ -1,7 +1,7 @@
 ﻿using System;
-using TablatureEditor.Configs;
+using PFE.Configs;
 
-namespace TablatureEditor.Models
+namespace PFE.Models
 {
     //Coordinates in the tablature.
     public class TabCoord : Coord
@@ -11,6 +11,11 @@ namespace TablatureEditor.Models
         {
             this.x = x;
             this.y = y;
+        }
+
+        public TabCoord Clone()
+        {
+            return new TabCoord(x, y);
         }
 
         // Checks if the coord inbound.

@@ -2,11 +2,11 @@
 using System.Globalization;
 using System.Windows;
 using System.Windows.Media;
-using TablatureEditor.Models;
-using TablatureEditor.Configs;
+using PFE.Models;
+using PFE.Configs;
 using tablature_editor.Utils;
 
-namespace TablatureEditor
+namespace PFE
 {
     class DrawSurface : FrameworkElement
     {

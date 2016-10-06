@@ -4,12 +4,12 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TablatureEditor.Models;
-using TablatureEditor.Interfaces;
-using TablatureEditor.Utils;
+using PFE.Models;
+using PFE.Interfaces;
+using PFE.Utils;
 using System.Windows.Input;
 
-namespace TablatureEditor.Controllers
+namespace PFE.Controllers
 {
     /// <summary>
     /// Manage redraw of graphics elements on notification and user inputs.

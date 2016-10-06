@@ -1,6 +1,6 @@
 ﻿using System.Windows.Media;
 
-namespace TablatureEditor.Configs
+namespace PFE.Configs
 {
     // Contains de configurations for the current tablature.
     public static class Config_Tab

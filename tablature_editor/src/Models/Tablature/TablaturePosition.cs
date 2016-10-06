@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using TablatureEditor.Configs;
+using PFE.Configs;
 
-namespace TablatureEditor.Models
+namespace PFE.Models
 {
     public class TablaturePosition
     {

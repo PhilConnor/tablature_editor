@@ -1,6 +1,6 @@
 ﻿using System.Windows.Media;
 
-namespace TablatureEditor.Configs
+namespace PFE.Configs
 {
     public static class Config_DrawSurface
     {

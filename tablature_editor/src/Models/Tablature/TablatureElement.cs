@@ -1,4 +1,4 @@
-﻿namespace TablatureEditor.Models
+﻿namespace PFE.Models
 {
     public class TablatureElement
     {

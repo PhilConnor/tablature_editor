@@ -1,7 +1,7 @@
 ﻿using System;
-using TablatureEditor.Configs;
+using PFE.Configs;
 
-namespace TablatureEditor.Models
+namespace PFE.Models
 {
     //Coordinates in the main canvas of the application.
     public class CanvasCoord : Coord
@@ -11,6 +11,11 @@ namespace TablatureEditor.Models
         {
             this.x = x;
             this.y = y;
-        }        
+        }
+        
+        public CanvasCoord Clone()
+        {
+            return new CanvasCoord(x, y);
+        }
     }
 }

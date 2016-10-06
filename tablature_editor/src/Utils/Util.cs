@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace TablatureEditor.Utils
+namespace PFE.Utils
 {
     public static class Util
     {

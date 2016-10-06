@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using TablatureEditor.Controllers;
-using TablatureEditor.Interfaces;
-using TablatureEditor.Utils;
+using PFE.Controllers;
+using PFE.Interfaces;
+using PFE.Utils;
 
-namespace TablatureEditor.Models
+namespace PFE.Models
 {
     /// <summary>
     /// Acts like a facade, provides unified and simplified access 
@@ -14,6 +14,7 @@ namespace TablatureEditor.Models
     {
         public Tablature _tablature;
         public Cursor _cursor;
+
         public WriteModes writeMode;
         public SkipModes skipMode;
 
@@ -34,11 +35,11 @@ namespace TablatureEditor.Models
             keyChar = ApplyWriteMode(keyChar);
 
             // Fill the cursor selection with appropriate input            
-            TabCoord tabCoord = _cursor.UpperLeftCoord;
+            TabCoord tabCoord = _cursor.TopLeftCoord();
 
-            for (int x = tabCoord.x; x <= tabCoord.x + _cursor.Logic.Width; ++x)
+            for (int x = tabCoord.x; x <= tabCoord.x + _cursor.Width - 1; ++x)
             {
-                for (int y = tabCoord.y; y <= tabCoord.y + _cursor.Logic.Height; ++y)
+                for (int y = tabCoord.y; y <= tabCoord.y + _cursor.Height - 1; ++y)
                 {
                     _tablature.setTextAt(new TabCoord(x, y), keyChar);
                 }

@@ -1,4 +1,4 @@
-﻿namespace TablatureEditor.Interfaces
+﻿namespace PFE.Interfaces
 {
     public interface IObserverable
     {
