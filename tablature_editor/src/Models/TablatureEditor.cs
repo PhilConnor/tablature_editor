@@ -12,8 +12,8 @@ namespace PFE.Models
     /// </summary>
     class TablatureEditor : IObserverable
     {
-        public Tablature _tablature;
-        public Cursor _cursor;
+        private Tablature Tablature;
+        private Cursor Cursor;
 
         public WriteModes writeMode;
         public SkipModes skipMode;
@@ -23,8 +23,8 @@ namespace PFE.Models
             writeMode = WriteModes.Unity;
             skipMode = SkipModes.One;
 
-            _tablature = tablature;
-            _cursor = cursor;
+            Tablature = tablature;
+            Cursor = cursor;
 
             NotifyObserver();
         }
@@ -35,18 +35,17 @@ namespace PFE.Models
             keyChar = ApplyWriteMode(keyChar);
 
             // Fill the cursor selection with appropriate input            
-            TabCoord tabCoord = _cursor.TopLeftCoord();
+            TabCoord tabCoord = Cursor.TopLeftCoord();
 
-            for (int x = tabCoord.x; x <= tabCoord.x + _cursor.Width - 1; ++x)
+            for (int x = tabCoord.x; x <= tabCoord.x + Cursor.Width - 1; ++x)
             {
-                for (int y = tabCoord.y; y <= tabCoord.y + _cursor.Height - 1; ++y)
+                for (int y = tabCoord.y; y <= tabCoord.y + Cursor.Height - 1; ++y)
                 {
-                    _tablature.setTextAt(new TabCoord(x, y), keyChar);
+                    Tablature.setTextAt(new TabCoord(x, y), keyChar);
                 }
             }
 
-            _tablature.setTextAt(new TabCoord(tabCoord.x, tabCoord.y), keyChar);
-
+            Tablature.setTextAt(new TabCoord(tabCoord.x, tabCoord.y), keyChar);
 
             ApplyCursorMovementBaseOnInput(keyChar);
 
@@ -85,35 +84,35 @@ namespace PFE.Models
             switch (mouvement)
             {
                 case CursorMovements.Left:
-                    _cursor.Logic.MoveLeft();
+                    Cursor.Logic.MoveLeft();
                     break;
 
                 case CursorMovements.Up:
-                    _cursor.Logic.MoveUp();
+                    Cursor.Logic.MoveUp();
                     break;
 
                 case CursorMovements.Right:
-                    _cursor.Logic.MoveRight();
+                    Cursor.Logic.MoveRight();
                     break;
 
                 case CursorMovements.Down:
-                    _cursor.Logic.MoveDown();
+                    Cursor.Logic.MoveDown();
                     break;
 
                 case CursorMovements.ExpandLeft:
-                    _cursor.Logic.ExpandLeft();
+                    Cursor.Logic.ExpandLeft();
                     break;
 
                 case CursorMovements.ExpandUp:
-                    _cursor.Logic.ExpandUp();
+                    Cursor.Logic.ExpandUp();
                     break;
 
                 case CursorMovements.ExpandRight:
-                    _cursor.Logic.ExpandRight();
+                    Cursor.Logic.ExpandRight();
                     break;
 
                 case CursorMovements.ExpandDown:
-                    _cursor.Logic.ExpandDown();
+                    Cursor.Logic.ExpandDown();
                     break;
             }
 

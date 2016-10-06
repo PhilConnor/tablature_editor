@@ -8,7 +8,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
-//using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
@@ -17,7 +16,6 @@ using PFE.Controllers;
 using PFE.Models;
 using PFE.Configs;
 using PFE.Utils;
-using System.Windows.Input;
 
 namespace PFE
 {
@@ -27,8 +25,7 @@ namespace PFE
     public partial class MainWindow : Window
     {
         TablatureEditorController tabController;
-
-
+        
         public MainWindow()
         {
             InitializeComponent();
@@ -38,13 +35,11 @@ namespace PFE
 
             // Setup
             Setup();
-            
+
             // Init & Dependancy injection
-            Models.CursorLogic cursorLogic = new Models.CursorLogic();
-            Models.Cursor cursor = new Models.Cursor(cursorLogic);
-
+            CursorLogic cursorLogic = new CursorLogic();
+            Cursor cursor = new Cursor(cursorLogic);
             Tablature tablature = new Tablature();
-
             TablatureEditor tablatureEditor = new Models.TablatureEditor(tablature, cursor);
 
             tabController = new TablatureEditorController(drawSurface, tablatureEditor);
@@ -54,18 +49,34 @@ namespace PFE
         {
             drawSurface.Height = Config_DrawSurface.Height;
             drawSurface.Width = Config_DrawSurface.Width;
+            window.Width = Config_DrawSurface.Window_Width;
+            window.Height = Config_DrawSurface.Window_Height;
             window.Background = new SolidColorBrush(Config_DrawSurface.BGColor);
+            window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+
         }
 
-        private void window_TextInput(object sender, TextCompositionEventArgs e)
+        private void window_TextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
         {
-            tabController.window_TextInput(sender, e);
+            tabController.TextInput(e);
         }
 
-        private void window_PreviewKeyDown(object sender, KeyEventArgs e)
+        private void window_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
-            tabController.window_PreviewKeyDown(sender, e);
+            tabController.KeyDown(e);
         }
 
+        private void drawSurface_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            if (e.LeftButton == System.Windows.Input.MouseButtonState.Pressed)
+            {
+                tabController.MouseDrag(sender,e);
+            }
+        }
+
+        private void drawSurface_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            tabController.MouseDown(sender,e);
+        }
     } // 
 }

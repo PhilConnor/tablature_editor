@@ -8,6 +8,8 @@ namespace PFE.Configs
         // Canvas.
         public static int Width { get; set; }
         public static int Height { get; set; }
+        public static int Window_Width { get; set; }
+        public static int Window_Height { get; set; }
         public static int CharWidth { get; set; }
         public static int CharHeight { get; set; }
         public static int LineThickness { get; set; }
@@ -32,17 +34,19 @@ namespace PFE.Configs
         public static void Initialisation()
         {
             // Maybe editable in the future.
-            FontSize = 12;
+            FontSize = 18;
             GridUnitWidth = FontSize;
             GridUnitHeight = GridUnitWidth;
             SpacingBetweenStaff = 2;
             Width = GridUnitWidth * 81;
             Height = GridUnitHeight * 200;
-            CharWidth = 12;
-            CharHeight = 12;
-            LineThickness = 12;
-            MarginX = 10;
-            MarginY = 10;
+            Window_Width = GridUnitWidth * 83;
+            Window_Height = GridUnitHeight * 200;
+            CharWidth = 18;
+            CharHeight = 18;
+            LineThickness = 18;
+            MarginX = 18;
+            MarginY = 18;
 
             BGColor = Colors.LightGray;
             TextColor = Brushes.White;

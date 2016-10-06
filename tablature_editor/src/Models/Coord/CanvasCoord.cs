@@ -1,5 +1,6 @@
 ﻿using System;
 using PFE.Configs;
+using System.Windows;
 
 namespace PFE.Models
 {
@@ -12,10 +13,15 @@ namespace PFE.Models
             this.x = x;
             this.y = y;
         }
-        
+
         public CanvasCoord Clone()
         {
             return new CanvasCoord(x, y);
+        }
+
+        public static CanvasCoord PointToCanvasCoord(Point p)
+        {
+            return new CanvasCoord((int)p.X, (int)p.Y);
         }
     }
 }

@@ -8,6 +8,8 @@ using PFE.Models;
 using PFE.Interfaces;
 using PFE.Utils;
 using System.Windows.Input;
+using System.Windows;
+using tablature_editor.Utils;
 
 namespace PFE.Controllers
 {
@@ -43,7 +45,7 @@ namespace PFE.Controllers
 
         private void RedrawCursor()
         {
-            foreach (TabCoord tabCoord in _tablatureEditor._cursor.Logic.GetSelectionTabCoords())
+            foreach (TabCoord tabCoord in _tablatureEditor.Cursor.Logic.GetSelectionTabCoords())
             {
                 _drawSurface.DrawRectangle(tabCoord);
             }
@@ -51,15 +53,15 @@ namespace PFE.Controllers
 
         private void RedrawElements()
         {
-            for (int x = 0; x < _tablatureEditor._tablature.positions.Count; ++x)
+            for (int x = 0; x < _tablatureEditor.Tablature.positions.Count; ++x)
             {
-                for (int y = 0; y < _tablatureEditor._tablature.positions.ElementAt(0).elements.Count; ++y)
+                for (int y = 0; y < _tablatureEditor.Tablature.positions.ElementAt(0).elements.Count; ++y)
                 {
                     TabCoord tabCoord = new TabCoord(x, y);
 
                     if (!IsAnElementAtAlreadyThere(tabCoord))
                     {
-                        _drawSurface.DrawTextAtTabCoord(tabCoord, _tablatureEditor._tablature.getTextAt(tabCoord));
+                        _drawSurface.DrawTextAtTabCoord(tabCoord, _tablatureEditor.Tablature.getTextAt(tabCoord));
                     }
                 }
             }
@@ -73,12 +75,12 @@ namespace PFE.Controllers
                 return false;
 
             TabCoord tc = new TabCoord(tabCoord.x - 1, tabCoord.y);
-            string txt = _tablatureEditor._tablature.getTextAt(tc);
+            string txt = _tablatureEditor.Tablature.getTextAt(tc);
             return Util.isNumberOver9(txt);
         }
 
         #region User inputs
-        public void window_PreviewKeyDown(object sender, KeyEventArgs e)
+        public void KeyDown(KeyEventArgs e)
         {
             //shift + arrow
             if (Keyboard.IsKeyDown(Key.LeftShift) && e.Key == Key.Left)
@@ -108,10 +110,35 @@ namespace PFE.Controllers
                 _tablatureEditor.ToggleWriteMode();
         }
 
-        public void window_TextInput(object sender, TextCompositionEventArgs e)
+        public void TextInput(TextCompositionEventArgs e)
         {
             //text
             _tablatureEditor.WriteCharAtCursor(e.Text);
+        }
+
+        public void MouseDrag(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            Point p = e.GetPosition(sender as DrawSurface);
+            CanvasCoord c = CanvasCoord.PointToCanvasCoord(p);
+            TabCoord t = CoordConverter.ToTabCoord(c);
+            if (t == null)
+                return;
+
+            _tablatureEditor.Cursor._c2 = t;
+            Debug.WriteLine("drag " + c.ToString() + " " + t.ToString());
+        }
+
+        public void MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            Point p = e.GetPosition(sender as DrawSurface);
+            CanvasCoord c = CanvasCoord.PointToCanvasCoord(p);
+            TabCoord t = CoordConverter.ToTabCoord(c);
+
+            if (t == null)
+                return;
+
+            _tablatureEditor.Cursor.setPositions(t);
+            Debug.WriteLine("down " + c.ToString() + " " + t.ToString());
         }
 
         #endregion

@@ -32,6 +32,8 @@
             Width="500"
             Margin="0,20,0,0"
             HorizontalAlignment="Center"
-            VerticalAlignment="Top" />
+            VerticalAlignment="Top"
+            MouseDown="drawSurface_MouseDown"
+            MouseMove="drawSurface_MouseMove" />
     </Border>
 </Window>
