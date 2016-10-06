@@ -13,9 +13,9 @@ namespace PFE.Models
         // Constructors.
         public TablaturePosition()
         {
-            elements = new List<TablatureElement>(Config_Tab.NStrings);
+            elements = new List<TablatureElement>(Config_Tab.Inst().NStrings);
 
-            for (int y = 0; y < Config_Tab.NStrings; ++y)
+            for (int y = 0; y < Config_Tab.Inst().NStrings; ++y)
             {
                 elements.Add(new TablatureElement());
             }

@@ -16,12 +16,12 @@ namespace PFE.Models
 
         public void Init()
         {
-            positions = new List<TablaturePosition>(Config_Tab.TabLength);
+            positions = new List<TablaturePosition>(Config_Tab.Inst().TabLength);
 
-            for (int x = 0; x < Config_Tab.TabLength; ++x)
+            for (int x = 0; x < Config_Tab.Inst().TabLength; ++x)
                 positions.Add(new TablaturePosition());
 
-            tabPositionAt(0).ParseTuning(Config_Tab.Tuning);
+            tabPositionAt(0).ParseTuning(Config_Tab.Inst().Tuning);
         }
 
         public int Length()

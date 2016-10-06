@@ -40,11 +40,11 @@ namespace PFE.Models
             int firstX = _cursor.TopLeftCoord().x;
             int lastX = firstX + _cursor.Width - 1;
 
-            staffNumbers[0] = firstX / Config_Tab.TabLength;
+            staffNumbers[0] = firstX / Config_Tab.Inst().TabLength;
 
             for (var i = firstX + 1; i <= lastX; i++)
             {
-                int currentStaffNumber = i / Config_Tab.TabLength;
+                int currentStaffNumber = i / Config_Tab.Inst().TabLength;
                 int lastStaffNumberInArray = staffNumbers[staffNumbers.Count - 1];
 
                 if (currentStaffNumber != lastStaffNumberInArray)
@@ -76,7 +76,7 @@ namespace PFE.Models
 
         public void MoveDown()
         {
-            if (_cursor.BaseCoord.y == Config_Tab.NStrings - 1 || _cursor.DragableCoord.y == Config_Tab.NStrings - 1)
+            if (_cursor.BaseCoord.y == Config_Tab.Inst().NStrings - 1 || _cursor.DragableCoord.y == Config_Tab.Inst().NStrings - 1)
             {
                 changeStaff(true);
                 return;
@@ -88,7 +88,7 @@ namespace PFE.Models
 
         public void MoveRight()
         {
-            if (_cursor.BaseCoord.x >= Config_Tab.TabLength - 1 || _cursor.DragableCoord.x >= Config_Tab.TabLength - 1)
+            if (_cursor.BaseCoord.x >= Config_Tab.Inst().TabLength - 1 || _cursor.DragableCoord.x >= Config_Tab.Inst().TabLength - 1)
                 return;
 
             _cursor.BaseCoord.x++;
@@ -107,17 +107,17 @@ namespace PFE.Models
 
         public void ExpandDown()
         {
-            _cursor.DragableCoord.y = Math.Min(++_cursor.DragableCoord.y, Config_Tab.NStrings);
+            _cursor.DragableCoord.y = Math.Min(++_cursor.DragableCoord.y, Config_Tab.Inst().NStrings);
         }
 
         public void ExpandRight()
         {
-            _cursor.DragableCoord.x = Math.Min(++_cursor.DragableCoord.x, Config_Tab.TabLength - 1);
+            _cursor.DragableCoord.x = Math.Min(++_cursor.DragableCoord.x, Config_Tab.Inst().TabLength - 1);
         }
 
         public bool IsTouchingLastStaff()
         {
-            return GetStaffsTouchingNumbers().IndexOf(Config_Tab.NStaff - 1) != -1;
+            return GetStaffsTouchingNumbers().IndexOf(Config_Tab.Inst().NStaff - 1) != -1;
         }
 
         public bool IsTouchingFirstStaff()
@@ -127,7 +127,7 @@ namespace PFE.Models
 
         public bool isTouchingLastString()
         {
-            return Math.Max(_cursor.BaseCoord.y, _cursor.DragableCoord.y) == Config_Tab.NStrings - 1;
+            return Math.Max(_cursor.BaseCoord.y, _cursor.DragableCoord.y) == Config_Tab.Inst().NStrings - 1;
         }
 
         public bool isTouchingFirstString()
@@ -137,12 +137,12 @@ namespace PFE.Models
 
         public bool isTouchingLastPosition()
         {
-            return Math.Max(_cursor.BaseCoord.x, _cursor.DragableCoord.x) == Config_Tab.TabLength - 1;
+            return Math.Max(_cursor.BaseCoord.x, _cursor.DragableCoord.x) == Config_Tab.Inst().TabLength - 1;
         }
 
         public void changeStaff(bool goDown)
         {
-            int staffLenght = Config_Tab.StaffLength;
+            int staffLenght = Config_Tab.Inst().StaffLength;
 
             if (goDown)
             {

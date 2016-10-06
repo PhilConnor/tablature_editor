@@ -58,7 +58,7 @@ namespace PFE
             drawingContext.DrawRectangle(
                 Brushes.LightBlue,
                 null,
-                new Rect(point, new Size(Config_DrawSurface.GridUnitWidth, Config_DrawSurface.GridUnitWidth)));
+                new Rect(point, new Size(Config_DrawSurface.Inst().GridUnitWidth, Config_DrawSurface.Inst().GridUnitWidth)));
         }
 
         public void DrawTextAtTabCoord(TabCoord tabCoord, string text)
@@ -82,8 +82,8 @@ namespace PFE
                     c.ToString(),
                     CultureInfo.GetCultureInfo("en-us"),
                     FlowDirection.LeftToRight,
-                    Config_DrawSurface.TextFont,
-                    Config_DrawSurface.FontSize,
+                    Config_DrawSurface.Inst().TextFont,
+                    Config_DrawSurface.Inst().FontSize,
                     Brushes.White);
 
             drawingContext.DrawText(

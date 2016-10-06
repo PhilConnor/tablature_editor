@@ -10,7 +10,7 @@ namespace PFE.Models
     /// Acts like a facade, provides unified and simplified access 
     /// points to tablature and cursor models.
     /// </summary>
-    class TablatureEditor : IObserverable
+    class TablatureEditor : IObservable
     {
         private Tablature Tablature;
         private Cursor Cursor;

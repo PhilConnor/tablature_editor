@@ -30,8 +30,8 @@ namespace PFE
         {
             InitializeComponent();
 
-            Config_Tab.Initialisation();
-            Config_DrawSurface.Initialisation();
+            Config_Tab.Inst().Initialisation();
+            Config_DrawSurface.Inst().Initialisation();
 
             // Setup
             Setup();
@@ -40,18 +40,18 @@ namespace PFE
             CursorLogic cursorLogic = new CursorLogic();
             Cursor cursor = new Cursor(cursorLogic);
             Tablature tablature = new Tablature();
-            TablatureEditor tablatureEditor = new Models.TablatureEditor(tablature, cursor);
+            TablatureEditor tablatureEditor = new TablatureEditor(tablature, cursor);
 
             tabController = new TablatureEditorController(drawSurface, tablatureEditor);
         }
 
         public void Setup()
         {
-            drawSurface.Height = Config_DrawSurface.Height;
-            drawSurface.Width = Config_DrawSurface.Width;
-            window.Width = Config_DrawSurface.Window_Width;
-            window.Height = Config_DrawSurface.Window_Height;
-            window.Background = new SolidColorBrush(Config_DrawSurface.BGColor);
+            drawSurface.Height = Config_DrawSurface.Inst().Height;
+            drawSurface.Width = Config_DrawSurface.Inst().Width;
+            window.Width = Config_DrawSurface.Inst().Window_Width;
+            window.Height = Config_DrawSurface.Inst().Window_Height;
+            window.Background = new SolidColorBrush(Config_DrawSurface.Inst().BGColor);
             window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
 
         }

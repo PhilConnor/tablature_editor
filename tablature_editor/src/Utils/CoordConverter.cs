@@ -16,13 +16,13 @@ namespace tablature_editor.Utils
         {
             CanvasCoord canvasCoord = new CanvasCoord(0, 0);
 
-            canvasCoord.x = (tabCoord.x % Config_Tab.StaffLength) * Config_DrawSurface.GridUnitWidth;
-            canvasCoord.x += Config_DrawSurface.MarginX;
+            canvasCoord.x = (tabCoord.x % Config_Tab.Inst().StaffLength) * Config_DrawSurface.Inst().GridUnitWidth;
+            canvasCoord.x += Config_DrawSurface.Inst().MarginX;
 
-            canvasCoord.y = (int)Math.Floor((double)tabCoord.x / Config_Tab.StaffLength);
-            canvasCoord.y = canvasCoord.y * (Config_Tab.NStrings + Config_DrawSurface.SpacingBetweenStaff) + tabCoord.y;
-            canvasCoord.y = canvasCoord.y * Config_DrawSurface.GridUnitHeight;
-            canvasCoord.y += Config_DrawSurface.MarginY;
+            canvasCoord.y = (int)Math.Floor((double)tabCoord.x / Config_Tab.Inst().StaffLength);
+            canvasCoord.y = canvasCoord.y * (Config_Tab.Inst().NStrings + Config_DrawSurface.Inst().SpacingBetweenStaff) + tabCoord.y;
+            canvasCoord.y = canvasCoord.y * Config_DrawSurface.Inst().GridUnitHeight;
+            canvasCoord.y += Config_DrawSurface.Inst().MarginY;
 
             return canvasCoord;
         }
@@ -34,29 +34,29 @@ namespace tablature_editor.Utils
             TabCoord tabCoord = new TabCoord(0, 0);
 
             // Remove margin and scale
-            tabCoord.x = (int)Math.Floor((double)(canvasCoord.x - Config_DrawSurface.MarginX) / Config_DrawSurface.GridUnitWidth);
-            tabCoord.y = (int)Math.Floor((double)(canvasCoord.y - Config_DrawSurface.MarginY) / Config_DrawSurface.GridUnitHeight);
+            tabCoord.x = (int)Math.Floor((double)(canvasCoord.x - Config_DrawSurface.Inst().MarginX) / Config_DrawSurface.Inst().GridUnitWidth);
+            tabCoord.y = (int)Math.Floor((double)(canvasCoord.y - Config_DrawSurface.Inst().MarginY) / Config_DrawSurface.Inst().GridUnitHeight);
 
 
             //TODO: Implement support for bigger spacing between staffs (+1-1)
             //   If position is on a blankspace between staffs, make it on last string
-            if (tabCoord.y % (Config_Tab.NStrings + 1) == Config_Tab.NStrings)
+            if (tabCoord.y % (Config_Tab.Inst().NStrings + 1) == Config_Tab.Inst().NStrings)
             {
                 tabCoord.y = tabCoord.y - 1;
             }
 
             // If position is out of bound, null
             if (tabCoord.y < 0
-                || tabCoord.y >= (Config_Tab.NStrings + 1) * Config_Tab.NStaff - 1
+                || tabCoord.y >= (Config_Tab.Inst().NStrings + 1) * Config_Tab.Inst().NStaff - 1
                 || tabCoord.x < 0
-                || tabCoord.x >= Config_Tab.StaffLength)
+                || tabCoord.x >= Config_Tab.Inst().StaffLength)
             {
                 return null;
             }
 
             // Convert to x = char position, y = string number
-            tabCoord.x = (int)(tabCoord.x + ((Config_Tab.StaffLength * Math.Floor((double)tabCoord.y / (Config_Tab.NStrings + 1)))));
-            tabCoord.y = tabCoord.y % (Config_Tab.NStrings + 1);
+            tabCoord.x = (int)(tabCoord.x + ((Config_Tab.Inst().StaffLength * Math.Floor((double)tabCoord.y / (Config_Tab.Inst().NStrings + 1)))));
+            tabCoord.y = tabCoord.y % (Config_Tab.Inst().NStrings + 1);
 
             return tabCoord;
         }

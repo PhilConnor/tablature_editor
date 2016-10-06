@@ -54,9 +54,9 @@ namespace PFE.Controllers
 
         private void RedrawElements()
         {
-            for (int x = 0; x < Config_Tab.TabLength; ++x)
+            for (int x = 0; x < Config_Tab.Inst().TabLength; ++x)
             {
-                for (int y = 0; y < Config_Tab.NStrings; ++y)
+                for (int y = 0; y < Config_Tab.Inst().NStrings; ++y)
                 {
                     TabCoord tabCoord = new TabCoord(x, y);
 

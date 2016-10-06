@@ -1,37 +1,55 @@
-﻿using System.Windows.Media;
+﻿using PFE.Interfaces;
+using System.Windows.Media;
+using System;
+using System.Collections.Generic;
 
 namespace PFE.Configs
 {
-    public static class Config_DrawSurface
+    public class Config_DrawSurface : IObservable
     {
-
         // Canvas.
-        public static int Width { get; set; }
-        public static int Height { get; set; }
-        public static int Window_Width { get; set; }
-        public static int Window_Height { get; set; }
-        public static int CharWidth { get; set; }
-        public static int CharHeight { get; set; }
-        public static int LineThickness { get; set; }
-        public static int FontSize { get; set; }
-        public static int SpacingBetweenStaff { get; set; }
+        public int Width { get; set; }
+        public int Height { get; set; }
+        public int Window_Width { get; set; }
+        public int Window_Height { get; set; }
+        public int CharWidth { get; set; }
+        public int CharHeight { get; set; }
+        public int LineThickness { get; set; }
+        public int FontSize { get; set; }
+        public int SpacingBetweenStaff { get; set; }
 
         // Grid resolution.
-        public static int GridUnitWidth { get; set; }
-        public static int GridUnitHeight { get; set; }
+        public int GridUnitWidth { get; set; }
+        public int GridUnitHeight { get; set; }
 
         // Tab pages margins.
-        public static int MarginX { get; set; }
-        public static int MarginY { get; set; }
+        public int MarginX { get; set; }
+        public int MarginY { get; set; }
 
         // Colors
-        public static Color BGColor { get; set; }
-        public static Brush TextColor { get; set; }
+        public Color BGColor { get; set; }
+        public Brush TextColor { get; set; }
 
-        public static Typeface TextFont { get; set; }
+        public Typeface TextFont { get; set; }
+
+        private static Config_DrawSurface config;
+
+        public static Config_DrawSurface Inst()
+        {
+            if (config == null)
+            {
+                config = new Config_DrawSurface();
+                config.Initialisation();
+                return config;
+            }
+            else
+            {
+                return config;
+            }
+        }
 
         //Constructors.
-        public static void Initialisation()
+        public void Initialisation()
         {
             // Maybe editable in the future.
             FontSize = 14;
@@ -52,6 +70,17 @@ namespace PFE.Configs
             TextColor = Brushes.White;
             TextFont = new Typeface("Verdana");
 
+        }
+
+        private List<IObserver> observers = new List<IObserver>();
+        public void NotifyObserver()
+        {
+            observers.ForEach(o => o.Notify());
+        }
+
+        public void Subscribe(IObserver observer)
+        {
+            observers.Add(observer);
         }
     }
 }

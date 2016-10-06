@@ -1,6 +1,6 @@
 ﻿namespace PFE.Interfaces
 {
-    public interface IObserverable
+    public interface IObservable
     {
         void Subscribe(IObserver observer);
     }

@@ -1,13 +1,16 @@
-﻿using System.Windows.Media;
+﻿using PFE.Interfaces;
+using System.Windows.Media;
+using System;
+using System.Collections.Generic;
 
 namespace PFE.Configs
 {
     // Contains de configurations for the current tablature.
-    public static class Config_Tab
+    public class Config_Tab : IObservable
     {
         // Tuning and number of string.
-        public static string Tuning { get; set; } // Tablature parameters.
-        public static int NStrings
+        public string Tuning { get; set; } // Tablature parameters.
+        public int NStrings
         {
             get
             {
@@ -16,24 +19,50 @@ namespace PFE.Configs
         }
 
         // Number of staffs.
-        public static int NStaff { get; set; }
-        public static int StaffLength { get; set; }
+        public int NStaff { get; set; }
+        public int StaffLength { get; set; }
         
-        public static int TabLength
+        public int TabLength
         {
             get
             {
                 return NStaff * StaffLength;
             }
         }
-        
+
+        private static Config_Tab config;
+
+        public static Config_Tab Inst()
+        {
+            if (config == null)
+            {
+                config = new Config_Tab();
+                config.Initialisation();
+                return config;
+            }
+            else
+            {
+                return config;
+            }
+        }
         //Constructors.
-        public static void Initialisation()
+        public void Initialisation()
         {
             // Editable.
             NStaff = 3;
             StaffLength = 80;
             Tuning = "EADGBe";
+        }
+
+        private List<IObserver> observers = new List<IObserver>();
+        public void NotifyObserver()
+        {
+            observers.ForEach(o => o.Notify());
+        }
+
+        public void Subscribe(IObserver observer)
+        {
+            observers.Add(observer);
         }
     }
 }
