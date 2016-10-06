@@ -10,6 +10,7 @@ using PFE.Utils;
 using System.Windows.Input;
 using System.Windows;
 using tablature_editor.Utils;
+using PFE.Configs;
 
 namespace PFE.Controllers
 {
@@ -45,7 +46,7 @@ namespace PFE.Controllers
 
         private void RedrawCursor()
         {
-            foreach (TabCoord tabCoord in _tablatureEditor.Cursor.Logic.GetSelectionTabCoords())
+            foreach (TabCoord tabCoord in _tablatureEditor.GetSelectedTabCoords())
             {
                 _drawSurface.DrawRectangle(tabCoord);
             }
@@ -53,15 +54,15 @@ namespace PFE.Controllers
 
         private void RedrawElements()
         {
-            for (int x = 0; x < _tablatureEditor.Tablature.positions.Count; ++x)
+            for (int x = 0; x < Config_Tab.TabLength; ++x)
             {
-                for (int y = 0; y < _tablatureEditor.Tablature.positions.ElementAt(0).elements.Count; ++y)
+                for (int y = 0; y < Config_Tab.NStrings; ++y)
                 {
                     TabCoord tabCoord = new TabCoord(x, y);
 
                     if (!IsAnElementAtAlreadyThere(tabCoord))
                     {
-                        _drawSurface.DrawTextAtTabCoord(tabCoord, _tablatureEditor.Tablature.getTextAt(tabCoord));
+                        _drawSurface.DrawTextAtTabCoord(tabCoord, _tablatureEditor.GetTextAt(tabCoord));
                     }
                 }
             }
@@ -75,7 +76,7 @@ namespace PFE.Controllers
                 return false;
 
             TabCoord tc = new TabCoord(tabCoord.x - 1, tabCoord.y);
-            string txt = _tablatureEditor.Tablature.getTextAt(tc);
+            string txt = _tablatureEditor.GetTextAt(tc);
             return Util.isNumberOver9(txt);
         }
 
@@ -124,7 +125,7 @@ namespace PFE.Controllers
             if (t == null)
                 return;
 
-            _tablatureEditor.Cursor._c2 = t;
+            _tablatureEditor.SelectUpTo(t);
             Debug.WriteLine("drag " + c.ToString() + " " + t.ToString());
         }
 
@@ -137,7 +138,7 @@ namespace PFE.Controllers
             if (t == null)
                 return;
 
-            _tablatureEditor.Cursor.setPositions(t);
+            _tablatureEditor.Select(t);
             Debug.WriteLine("down " + c.ToString() + " " + t.ToString());
         }
 

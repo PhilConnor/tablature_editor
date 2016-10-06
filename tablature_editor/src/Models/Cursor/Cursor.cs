@@ -6,8 +6,8 @@ namespace PFE.Models
     public class Cursor
     {
         //Properties.
-        public TabCoord _c1 { get; set; }
-        public TabCoord _c2 { get; set; }
+        public TabCoord BaseCoord { get; set; }
+        public TabCoord DragableCoord { get; set; }
         public CursorLogic Logic { get; set; }
 
         //Constructors.
@@ -23,8 +23,8 @@ namespace PFE.Models
 
         private void Init(CursorLogic cursorLogic, TabCoord tabCoord1, TabCoord tabCoord2)
         {
-            _c1 = tabCoord1;
-            _c2 = tabCoord2;
+            BaseCoord = tabCoord1;
+            DragableCoord = tabCoord2;
             Logic = cursorLogic;
 
             //give the ref of this cursor on wich logic will be applied
@@ -33,41 +33,41 @@ namespace PFE.Models
 
         public int Width
         {
-            get { return Math.Abs(_c2.x - _c1.x) + 1; }
+            get { return Math.Abs(DragableCoord.x - BaseCoord.x) + 1; }
         }
 
         public int Height
         {
-            get { return Math.Abs(_c2.y - _c1.y) + 1; }
+            get { return Math.Abs(DragableCoord.y - BaseCoord.y) + 1; }
         }
 
-        public void setPositions(TabCoord tabCoord)
+        public void SetPositions(TabCoord tabCoord)
         {
-            _c1 = tabCoord.Clone();
-            _c2 = tabCoord.Clone();
+            BaseCoord = tabCoord.Clone();
+            DragableCoord = tabCoord.Clone();
         }
 
         public TabCoord TopLeftCoord()
         {
-            var x = Math.Min(_c1.x, _c2.x);
-            var y = Math.Min(_c1.y, _c2.y);
+            var x = Math.Min(BaseCoord.x, DragableCoord.x);
+            var y = Math.Min(BaseCoord.y, DragableCoord.y);
             return new TabCoord(x, y);
         }
 
         public void resetPositions()
         {
-            setPositions(new TabCoord(1, 0));
+            SetPositions(new TabCoord(1, 0));
         }
 
         public Cursor Clone()
         {
-            Cursor clone = new Cursor(Logic, _c1.Clone(), _c2.Clone());
+            Cursor clone = new Cursor(Logic, BaseCoord.Clone(), DragableCoord.Clone());
             return clone;
         }
 
         public bool Equals(Cursor c)
         {
-            return _c1.Equals(c._c1) && _c2.Equals(c._c2);
+            return BaseCoord.Equals(c.BaseCoord) && DragableCoord.Equals(c.DragableCoord);
         }
     }
 

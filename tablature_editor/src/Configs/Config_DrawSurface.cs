@@ -34,19 +34,19 @@ namespace PFE.Configs
         public static void Initialisation()
         {
             // Maybe editable in the future.
-            FontSize = 18;
+            FontSize = 14;
             GridUnitWidth = FontSize;
             GridUnitHeight = GridUnitWidth;
-            SpacingBetweenStaff = 2;
+            SpacingBetweenStaff = 1;
             Width = GridUnitWidth * 81;
             Height = GridUnitHeight * 200;
             Window_Width = GridUnitWidth * 83;
             Window_Height = GridUnitHeight * 200;
-            CharWidth = 18;
-            CharHeight = 18;
-            LineThickness = 18;
-            MarginX = 18;
-            MarginY = 18;
+            CharWidth = 14;
+            CharHeight = 14;
+            LineThickness = 14;
+            MarginX = 14;
+            MarginY = 14;
 
             BGColor = Colors.LightGray;
             TextColor = Brushes.White;

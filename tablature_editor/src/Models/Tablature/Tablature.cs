@@ -46,7 +46,7 @@ namespace PFE.Models
             positions.ElementAt(tabCoord.x).elements.ElementAt(tabCoord.y).Text = elementText;
         }
 
-        public string getTextAt(TabCoord tabCoord)
+        public string GetTextAt(TabCoord tabCoord)
         {
             return positions.ElementAt(tabCoord.x).elements.ElementAt(tabCoord.y).Text;
         }
@@ -63,7 +63,7 @@ namespace PFE.Models
 
         public bool isElementAtNumberGreatherThan10(TabCoord tabCoord)
         {
-            return Util.isNumber(getTextAt(tabCoord));
+            return Util.isNumber(GetTextAt(tabCoord));
         }
 
         public void removePosition(int tabCoord_X)

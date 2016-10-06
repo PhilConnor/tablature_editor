@@ -57,15 +57,15 @@ namespace PFE.Models
             bool isWritingTwoNumber = writeMode != WriteModes.Unity && Util.isNumber(keyChar);
 
             // move cursor to the next char position
-            MoveCursor(CursorMovements.Right);
+            MoveCursorWithoutNotifyingObservers(CursorMovements.Right);
 
             // move cursor again is input was more than one char at the same time (ex: 10)
             if (isWritingTwoNumber)
-                MoveCursor(CursorMovements.Right);
+                MoveCursorWithoutNotifyingObservers(CursorMovements.Right);
 
             // move cursor again if we are in skipModes.One
             if (skipMode == SkipModes.One)
-                MoveCursor(CursorMovements.Right);
+                MoveCursorWithoutNotifyingObservers(CursorMovements.Right);
         }
 
         private string ApplyWriteMode(string keyChar)
@@ -79,7 +79,7 @@ namespace PFE.Models
             return keyChar;
         }
 
-        public void MoveCursor(CursorMovements mouvement)
+        public void MoveCursorWithoutNotifyingObservers(CursorMovements mouvement)
         {
             switch (mouvement)
             {
@@ -115,7 +115,24 @@ namespace PFE.Models
                     Cursor.Logic.ExpandDown();
                     break;
             }
+        }
 
+        public void MoveCursor(CursorMovements mouvement)
+        {
+            MoveCursorWithoutNotifyingObservers(mouvement);
+            NotifyObserver();
+        }
+
+        public void Select(TabCoord tabCoord)
+        {
+            Cursor.SetPositions(tabCoord);
+            NotifyObserver();
+
+        }
+
+        public void SelectUpTo(TabCoord tabCoord)
+        {
+            Cursor.DragableCoord = tabCoord;
             NotifyObserver();
         }
 
@@ -131,6 +148,16 @@ namespace PFE.Models
             NotifyObserver();
         }
 
+        public string GetTextAt(TabCoord tabCoord)
+        {
+            return Tablature.GetTextAt(tabCoord);
+        }
+
+        public List<TabCoord> GetSelectedTabCoords()
+        {
+            return Cursor.Logic.GetSelectedTabCoords();
+        }
+        
         private List<IObserver> observers = new List<IObserver>();
         public void NotifyObserver()
         {

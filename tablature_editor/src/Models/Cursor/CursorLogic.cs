@@ -16,7 +16,7 @@ namespace PFE.Models
             _cursor = cursor;
         }
 
-        public List<TabCoord> GetSelectionTabCoords()
+        public List<TabCoord> GetSelectedTabCoords()
         {
             List<TabCoord> touchingTabCoords = new List<TabCoord>();
 
@@ -55,64 +55,64 @@ namespace PFE.Models
 
         public void MoveUp()
         {
-            if (_cursor._c1.y == 0 || _cursor._c2.y == 0)
+            if (_cursor.BaseCoord.y == 0 || _cursor.DragableCoord.y == 0)
             {
                 changeStaff(false);
                 return;
             }
 
-            _cursor._c1.y--;
-            _cursor._c2.y--;
+            _cursor.BaseCoord.y--;
+            _cursor.DragableCoord.y--;
         }
 
         public void MoveLeft()
         {
-            if (_cursor._c1.x == 0 || _cursor._c2.x == 0)
+            if (_cursor.BaseCoord.x == 0 || _cursor.DragableCoord.x == 0)
                 return;
 
-            _cursor._c1.x--;
-            _cursor._c2.x--;
+            _cursor.BaseCoord.x--;
+            _cursor.DragableCoord.x--;
         }
 
         public void MoveDown()
         {
-            if (_cursor._c1.y == Config_Tab.NumberOfStrings - 1 || _cursor._c2.y == Config_Tab.NumberOfStrings - 1)
+            if (_cursor.BaseCoord.y == Config_Tab.NStrings - 1 || _cursor.DragableCoord.y == Config_Tab.NStrings - 1)
             {
                 changeStaff(true);
                 return;
             }
 
-            _cursor._c1.y++;
-            _cursor._c2.y++;
+            _cursor.BaseCoord.y++;
+            _cursor.DragableCoord.y++;
         }
 
         public void MoveRight()
         {
-            if (_cursor._c1.x >= Config_Tab.TabLength - 1 || _cursor._c2.x >= Config_Tab.TabLength - 1)
+            if (_cursor.BaseCoord.x >= Config_Tab.TabLength - 1 || _cursor.DragableCoord.x >= Config_Tab.TabLength - 1)
                 return;
 
-            _cursor._c1.x++;
-            _cursor._c2.x++;
+            _cursor.BaseCoord.x++;
+            _cursor.DragableCoord.x++;
         }
 
         public void ExpandUp()
         {
-            _cursor._c2.y = Math.Max(--_cursor._c2.y, 0);
+            _cursor.DragableCoord.y = Math.Max(--_cursor.DragableCoord.y, 0);
         }
 
         public void ExpandLeft()
         {
-            _cursor._c2.x = Math.Max(--_cursor._c2.x, 0);
+            _cursor.DragableCoord.x = Math.Max(--_cursor.DragableCoord.x, 0);
         }
 
         public void ExpandDown()
         {
-            _cursor._c2.y = Math.Min(++_cursor._c2.y, Config_Tab.NumberOfStrings);
+            _cursor.DragableCoord.y = Math.Min(++_cursor.DragableCoord.y, Config_Tab.NStrings);
         }
 
         public void ExpandRight()
         {
-            _cursor._c2.x = Math.Min(++_cursor._c2.x, Config_Tab.TabLength - 1);
+            _cursor.DragableCoord.x = Math.Min(++_cursor.DragableCoord.x, Config_Tab.TabLength - 1);
         }
 
         public bool IsTouchingLastStaff()
@@ -127,17 +127,17 @@ namespace PFE.Models
 
         public bool isTouchingLastString()
         {
-            return Math.Max(_cursor._c1.y, _cursor._c2.y) == Config_Tab.NumberOfStrings - 1;
+            return Math.Max(_cursor.BaseCoord.y, _cursor.DragableCoord.y) == Config_Tab.NStrings - 1;
         }
 
         public bool isTouchingFirstString()
         {
-            return Math.Min(_cursor._c1.y, _cursor._c2.y) == 0;
+            return Math.Min(_cursor.BaseCoord.y, _cursor.DragableCoord.y) == 0;
         }
 
         public bool isTouchingLastPosition()
         {
-            return Math.Max(_cursor._c1.x, _cursor._c2.x) == Config_Tab.TabLength - 1;
+            return Math.Max(_cursor.BaseCoord.x, _cursor.DragableCoord.x) == Config_Tab.TabLength - 1;
         }
 
         public void changeStaff(bool goDown)
@@ -146,21 +146,21 @@ namespace PFE.Models
 
             if (goDown)
             {
-                _cursor._c1.x = _cursor._c1.x + staffLenght < staffLenght 
-                    ? _cursor._c1.x + staffLenght : _cursor._c1.x;
+                _cursor.BaseCoord.x = _cursor.BaseCoord.x + staffLenght < staffLenght 
+                    ? _cursor.BaseCoord.x + staffLenght : _cursor.BaseCoord.x;
 
-                _cursor._c2.x = _cursor._c2.x + staffLenght < staffLenght 
-                    ? _cursor._c2.x + staffLenght : _cursor._c2.x;
+                _cursor.DragableCoord.x = _cursor.DragableCoord.x + staffLenght < staffLenght 
+                    ? _cursor.DragableCoord.x + staffLenght : _cursor.DragableCoord.x;
             }
             else
             {
-                _cursor._c1.x = _cursor._c1.x - staffLenght >= 0 
-                    ? _cursor._c1.x - staffLenght 
-                    : _cursor._c1.x;
+                _cursor.BaseCoord.x = _cursor.BaseCoord.x - staffLenght >= 0 
+                    ? _cursor.BaseCoord.x - staffLenght 
+                    : _cursor.BaseCoord.x;
 
-                _cursor._c2.x = _cursor._c2.x - staffLenght >= 0 
-                    ? _cursor._c2.x - staffLenght 
-                    : _cursor._c2.x;
+                _cursor.DragableCoord.x = _cursor.DragableCoord.x - staffLenght >= 0 
+                    ? _cursor.DragableCoord.x - staffLenght 
+                    : _cursor.DragableCoord.x;
             }
         }
 

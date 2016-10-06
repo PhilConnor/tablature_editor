@@ -7,7 +7,7 @@ namespace PFE.Configs
     {
         // Tuning and number of string.
         public static string Tuning { get; set; } // Tablature parameters.
-        public static int NumberOfStrings
+        public static int NStrings
         {
             get
             {
