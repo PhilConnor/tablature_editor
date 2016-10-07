@@ -47,7 +47,6 @@ namespace PFE
                 new Rect(new Point(0, 0), new Size(this.Width, this.Height)));
         }
 
-        //TODO move logic manipulating tabCoord out of drawsurface
         public void DrawRectangle(CanvasCoord canvasCoord)
         {
             if (!isDrawing)
@@ -61,7 +60,6 @@ namespace PFE
                 new Rect(point, new Size(Config_DrawSurface.Inst().GridUnitWidth, Config_DrawSurface.Inst().GridUnitWidth)));
         }
 
-        //TODO move logic manipulating tabCoord out of drawsurface
         public void DrawTextAtTabCoord(CanvasCoord canvasCoord, char text)
         {
             if (!isDrawing)
