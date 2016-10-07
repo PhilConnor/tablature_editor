@@ -9,6 +9,28 @@ namespace PFE.Models
     {
         public List<TablaturePosition> positions;
 
+        // Tuning and number of string.
+        public string Tuning { get; set; } // Tablature parameters.
+        public int NStrings
+        {
+            get
+            {
+                return Tuning.Length;
+            }
+        }
+
+        // Number of staffs.
+        public int NStaff { get; set; }
+        public int StaffLength { get; set; }
+
+        public int TabLength
+        {
+            get
+            {
+                return NStaff * StaffLength;
+            }
+        }
+
         public Tablature()
         {
             Init();
@@ -16,12 +38,17 @@ namespace PFE.Models
 
         public void Init()
         {
-            positions = new List<TablaturePosition>(Config_Tab.Inst().TabLength);
+            //DEFAULT VALUES
+            Tuning = "EADGBe";
+            NStaff = 3;
+            StaffLength = 80;
+                    
+            positions = new List<TablaturePosition>(TabLength);
 
-            for (int x = 0; x < Config_Tab.Inst().TabLength; ++x)
-                positions.Add(new TablaturePosition());
+            for (int x = 0; x < TabLength; ++x)
+                positions.Add(new TablaturePosition(NStrings));
 
-            tabPositionAt(0).ParseTuning(Config_Tab.Inst().Tuning);
+            tabPositionAt(0).ParseTuning(Tuning);
         }
 
         public int Length()

@@ -30,15 +30,13 @@ namespace PFE
         {
             InitializeComponent();
 
-            Config_Tab.Inst().Initialisation();
             Config_DrawSurface.Inst().Initialisation();
 
             // Setup
             Setup();
 
             // Init & Dependancy injection
-            CursorLogic cursorLogic = new CursorLogic();
-            Cursor cursor = new Cursor(cursorLogic);
+            Cursor cursor = new Cursor();
             Tablature tablature = new Tablature();
             TablatureEditor tablatureEditor = new TablatureEditor(tablature, cursor);
 

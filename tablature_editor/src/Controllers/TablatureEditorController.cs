@@ -48,21 +48,27 @@ namespace PFE.Controllers
         {
             foreach (TabCoord tabCoord in _tablatureEditor.GetSelectedTabCoords())
             {
-                _drawSurface.DrawRectangle(tabCoord);
+                CanvasCoord canvasCoord = CoordConverter.ToCanvasCoord(tabCoord, _tablatureEditor);
+                _drawSurface.DrawRectangle(canvasCoord);
             }
         }
 
         private void RedrawElements()
         {
-            for (int x = 0; x < Config_Tab.Inst().TabLength; ++x)
+            for (int x = 0; x < _tablatureEditor.TabLength; ++x)
             {
-                for (int y = 0; y < Config_Tab.Inst().NStrings; ++y)
+                for (int y = 0; y < _tablatureEditor.NStrings; ++y)
                 {
                     TabCoord tabCoord = new TabCoord(x, y);
 
                     if (!IsAnElementAtAlreadyThere(tabCoord))
                     {
-                        _drawSurface.DrawTextAtTabCoord(tabCoord, _tablatureEditor.GetTextAt(tabCoord));
+                        for (int i = 0; i < _tablatureEditor.GetTextAt(tabCoord).Length; i++)
+                        {
+                            TabCoord adjustedTabCoord = new TabCoord(tabCoord.x + i, tabCoord.y);
+                            CanvasCoord canvasCoord = CoordConverter.ToCanvasCoord(adjustedTabCoord, _tablatureEditor);
+                            _drawSurface.DrawTextAtTabCoord(canvasCoord, _tablatureEditor.GetTextAt(tabCoord)[i]);
+                        }
                     }
                 }
             }
@@ -119,27 +125,27 @@ namespace PFE.Controllers
 
         public void MouseDrag(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            Point p = e.GetPosition(sender as DrawSurface);
-            CanvasCoord c = CanvasCoord.PointToCanvasCoord(p);
-            TabCoord t = CoordConverter.ToTabCoord(c);
-            if (t == null)
-                return;
+            //Point p = e.GetPosition(sender as DrawSurface);
+            //CanvasCoord c = CanvasCoord.PointToCanvasCoord(p);
+            //TabCoord t = CoordConverter.ToTabCoord(c);
+            //if (t == null)
+            //    return;
 
-            _tablatureEditor.SelectUpTo(t);
-            Debug.WriteLine("drag " + c.ToString() + " " + t.ToString());
+            //_tablatureEditor.SelectUpTo(t);
+            //Debug.WriteLine("drag " + c.ToString() + " " + t.ToString());
         }
 
         public void MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            Point p = e.GetPosition(sender as DrawSurface);
-            CanvasCoord c = CanvasCoord.PointToCanvasCoord(p);
-            TabCoord t = CoordConverter.ToTabCoord(c);
+            //Point p = e.GetPosition(sender as DrawSurface);
+            //CanvasCoord c = CanvasCoord.PointToCanvasCoord(p);
+            //TabCoord t = CoordConverter.ToTabCoord(c);
 
-            if (t == null)
-                return;
+            //if (t == null)
+            //    return;
 
-            _tablatureEditor.Select(t);
-            Debug.WriteLine("down " + c.ToString() + " " + t.ToString());
+            //_tablatureEditor.Select(t);
+            //Debug.WriteLine("down " + c.ToString() + " " + t.ToString());
         }
 
         #endregion

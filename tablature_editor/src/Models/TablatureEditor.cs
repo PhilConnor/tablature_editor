@@ -14,14 +14,45 @@ namespace PFE.Models
     {
         private Tablature Tablature;
         private Cursor Cursor;
+        private WriteModes WriteMode;
+        private SkipModes SkipMode;
 
-        public WriteModes writeMode;
-        public SkipModes skipMode;
+        // Number of staffs.
+
+        public int NStrings
+        {
+            get
+            {
+                return Tablature.NStrings;
+            }
+        }
+        public int NStaff
+        {
+            get
+            {
+                return Tablature.NStaff;
+            }
+        }
+        public int StaffLength
+        {
+            get
+            {
+                return Tablature.StaffLength;
+            }
+        }
+
+        public int TabLength
+        {
+            get
+            {
+                return Tablature.TabLength;
+            }
+        }
 
         public TablatureEditor(Tablature tablature, Cursor cursor)
         {
-            writeMode = WriteModes.Unity;
-            skipMode = SkipModes.One;
+            WriteMode = WriteModes.Unity;
+            SkipMode = SkipModes.One;
 
             Tablature = tablature;
             Cursor = cursor;
@@ -52,67 +83,40 @@ namespace PFE.Models
             NotifyObserver();
         }
 
-        private void ApplyCursorMovementBaseOnInput(string keyChar)
-        {
-            bool isWritingTwoNumber = writeMode != WriteModes.Unity && Util.isNumber(keyChar);
-
-            // move cursor to the next char position
-            MoveCursorWithoutNotifyingObservers(CursorMovements.Right);
-
-            // move cursor again is input was more than one char at the same time (ex: 10)
-            if (isWritingTwoNumber)
-                MoveCursorWithoutNotifyingObservers(CursorMovements.Right);
-
-            // move cursor again if we are in skipModes.One
-            if (skipMode == SkipModes.One)
-                MoveCursorWithoutNotifyingObservers(CursorMovements.Right);
-        }
-
-        private string ApplyWriteMode(string keyChar)
-        {
-            // Concat 1, 2 or 3 depending on the write mode
-            bool isWritingTwoNumber = writeMode != WriteModes.Unity && Util.isNumber(keyChar);
-            if (isWritingTwoNumber)
-            {
-                keyChar = String.Concat((int)writeMode, keyChar);
-            }
-            return keyChar;
-        }
-
         public void MoveCursorWithoutNotifyingObservers(CursorMovements mouvement)
         {
             switch (mouvement)
             {
                 case CursorMovements.Left:
-                    Cursor.Logic.MoveLeft();
+                    CursorMoveLeft();
                     break;
 
                 case CursorMovements.Up:
-                    Cursor.Logic.MoveUp();
+                    CursorMoveUp();
                     break;
 
                 case CursorMovements.Right:
-                    Cursor.Logic.MoveRight();
+                    CursorMoveRight();
                     break;
 
                 case CursorMovements.Down:
-                    Cursor.Logic.MoveDown();
+                    CursorMoveDown();
                     break;
 
                 case CursorMovements.ExpandLeft:
-                    Cursor.Logic.ExpandLeft();
+                    CursorExpandLeft();
                     break;
 
                 case CursorMovements.ExpandUp:
-                    Cursor.Logic.ExpandUp();
+                    CursorExpandUp();
                     break;
 
                 case CursorMovements.ExpandRight:
-                    Cursor.Logic.ExpandRight();
+                    CursorExpandRight();
                     break;
 
                 case CursorMovements.ExpandDown:
-                    Cursor.Logic.ExpandDown();
+                    CursorExpandDown();
                     break;
             }
         }
@@ -138,11 +142,11 @@ namespace PFE.Models
 
         public void ToggleWriteMode()
         {
-            switch (writeMode)
+            switch (WriteMode)
             {
-                case WriteModes.Unity: writeMode = WriteModes.Tenth; break;
-                case WriteModes.Tenth: writeMode = WriteModes.Twenyth; break;
-                case WriteModes.Twenyth: writeMode = WriteModes.Unity; break;
+                case WriteModes.Unity: WriteMode = WriteModes.Tenth; break;
+                case WriteModes.Tenth: WriteMode = WriteModes.Twenyth; break;
+                case WriteModes.Twenyth: WriteMode = WriteModes.Unity; break;
             }
 
             NotifyObserver();
@@ -155,10 +159,41 @@ namespace PFE.Models
 
         public List<TabCoord> GetSelectedTabCoords()
         {
-            return Cursor.Logic.GetSelectedTabCoords();
+            return Cursor.GetSelectedTabCoords();
         }
-        
+
+        #region private
+        private void ApplyCursorMovementBaseOnInput(string keyChar)
+        {
+            bool isWritingTwoNumber = WriteMode != WriteModes.Unity && Util.isNumber(keyChar);
+
+            // move cursor to the next char position
+            MoveCursorWithoutNotifyingObservers(CursorMovements.Right);
+
+            // move cursor again is input was more than one char at the same time (ex: 10)
+            if (isWritingTwoNumber)
+                MoveCursorWithoutNotifyingObservers(CursorMovements.Right);
+
+            // move cursor again if we are in skipModes.One
+            if (SkipMode == SkipModes.One)
+                MoveCursorWithoutNotifyingObservers(CursorMovements.Right);
+        }
+
+        private string ApplyWriteMode(string keyChar)
+        {
+            // Concat 1, 2 or 3 depending on the write mode
+            bool isWritingTwoNumber = WriteMode != WriteModes.Unity && Util.isNumber(keyChar);
+            if (isWritingTwoNumber)
+            {
+                keyChar = String.Concat((int)WriteMode, keyChar);
+            }
+            return keyChar;
+        }
+        #endregion
+
+        #region observer
         private List<IObserver> observers = new List<IObserver>();
+
         public void NotifyObserver()
         {
             observers.ForEach(o => o.Notify());
@@ -168,6 +203,147 @@ namespace PFE.Models
         {
             observers.Add(observer);
         }
+        #endregion
+
+        /////////////
+
+        public void changeStaff(bool goDown)
+        {
+            int staffLenght = Tablature.StaffLength;
+
+            if (goDown)
+            {
+                Cursor.BaseCoord.x 
+                    = Cursor.BaseCoord.x + staffLenght < staffLenght
+                    ? Cursor.BaseCoord.x + staffLenght 
+                    : Cursor.BaseCoord.x;
+
+                Cursor.DragableCoord.x 
+                    = Cursor.DragableCoord.x + staffLenght < staffLenght
+                    ? Cursor.DragableCoord.x + staffLenght 
+                    : Cursor.DragableCoord.x;
+            }
+            else
+            {
+                Cursor.BaseCoord.x 
+                    = Cursor.BaseCoord.x - staffLenght >= 0
+                    ? Cursor.BaseCoord.x - staffLenght
+                    : Cursor.BaseCoord.x;
+
+                Cursor.DragableCoord.x 
+                    = Cursor.DragableCoord.x - staffLenght >= 0
+                    ? Cursor.DragableCoord.x - staffLenght
+                    : Cursor.DragableCoord.x;
+            }
+        }
+
+        public List<int> GetStaffsTouchingNumbers()
+        {
+            List<int> staffNumbers = new List<int>();
+            int firstX = Cursor.TopLeftCoord().x;
+            int lastX = firstX + Cursor.Width - 1;
+
+            staffNumbers[0] = firstX / Tablature.TabLength;
+
+            for (var i = firstX + 1; i <= lastX; i++)
+            {
+                int currentStaffNumber = i / Tablature.TabLength;
+                int lastStaffNumberInArray = staffNumbers[staffNumbers.Count - 1];
+
+                if (currentStaffNumber != lastStaffNumberInArray)
+                    staffNumbers.Add(currentStaffNumber);
+            }
+            return staffNumbers;
+        }
+
+        public void CursorMoveUp()
+        {
+            if (Cursor.BaseCoord.y == 0 || Cursor.DragableCoord.y == 0)
+            {
+                changeStaff(false);
+                return;
+            }
+
+            Cursor.BaseCoord.y--;
+            Cursor.DragableCoord.y--;
+        }
+
+        public void CursorMoveLeft()
+        {
+            if (Cursor.BaseCoord.x == 0 || Cursor.DragableCoord.x == 0)
+                return;
+
+            Cursor.BaseCoord.x--;
+            Cursor.DragableCoord.x--;
+        }
+
+        public void CursorMoveDown()
+        {
+            if (Cursor.BaseCoord.y == Tablature.NStrings - 1 || Cursor.DragableCoord.y == Tablature.NStrings - 1)
+            {
+                changeStaff(true);
+                return;
+            }
+
+            Cursor.BaseCoord.y++;
+            Cursor.DragableCoord.y++;
+        }
+
+        public void CursorMoveRight()
+        {
+            if (Cursor.BaseCoord.x >= Tablature.TabLength - 1 || Cursor.DragableCoord.x >= Tablature.TabLength - 1)
+                return;
+
+            Cursor.BaseCoord.x++;
+            Cursor.DragableCoord.x++;
+        }
+
+        public void CursorExpandUp()
+        {
+            Cursor.DragableCoord.y = Math.Max(--Cursor.DragableCoord.y, 0);
+        }
+
+        public void CursorExpandLeft()
+        {
+            Cursor.DragableCoord.x = Math.Max(--Cursor.DragableCoord.x, 0);
+        }
+
+        public void CursorExpandDown()
+        {
+            Cursor.DragableCoord.y = Math.Min(++Cursor.DragableCoord.y, Tablature.NStrings);
+        }
+
+        public void CursorExpandRight()
+        {
+            Cursor.DragableCoord.x = Math.Min(++Cursor.DragableCoord.x, Tablature.TabLength - 1);
+        }
+
+        public bool IsTouchingLastStaff()
+        {
+            return GetStaffsTouchingNumbers().IndexOf(Tablature.NStaff - 1) != -1;
+        }
+
+        public bool isCursorTouchingFirstStaff()
+        {
+            return GetStaffsTouchingNumbers().IndexOf(0) != -1;
+        }
+
+        public bool isCursorTouchingLastString()
+        {
+            return Math.Max(Cursor.BaseCoord.y, Cursor.DragableCoord.y) == Tablature.NStrings - 1;
+        }
+
+        public bool isCursorTouchingFirstString()
+        {
+            return Math.Min(Cursor.BaseCoord.y, Cursor.DragableCoord.y) == 0;
+        }
+
+        public bool isCursorTouchingLastPosition()
+        {
+            return Math.Max(Cursor.BaseCoord.x, Cursor.DragableCoord.x) == Tablature.TabLength - 1;
+        }
+
+
     }
 
     public enum WriteModes { Unity, Tenth, Twenyth };

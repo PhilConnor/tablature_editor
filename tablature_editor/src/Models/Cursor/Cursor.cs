@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace PFE.Models
 {
@@ -8,27 +9,22 @@ namespace PFE.Models
         //Properties.
         public TabCoord BaseCoord { get; set; }
         public TabCoord DragableCoord { get; set; }
-        public CursorLogic Logic { get; set; }
 
         //Constructors.
-        public Cursor(CursorLogic cursorLogic)
+        public Cursor()
         {
-            Init(cursorLogic, new TabCoord(1, 0), new TabCoord(1, 0));
+            Init(new TabCoord(1, 0), new TabCoord(1, 0));
         }
 
-        public Cursor(CursorLogic cursorLogic, TabCoord tabCoord1, TabCoord tabCoord2)
+        public Cursor(TabCoord tabCoord1, TabCoord tabCoord2)
         {
-            Init(cursorLogic, tabCoord1, tabCoord2);
+            Init(tabCoord1, tabCoord2);
         }
 
-        private void Init(CursorLogic cursorLogic, TabCoord tabCoord1, TabCoord tabCoord2)
+        private void Init(TabCoord tabCoord1, TabCoord tabCoord2)
         {
             BaseCoord = tabCoord1;
             DragableCoord = tabCoord2;
-            Logic = cursorLogic;
-
-            //give the ref of this cursor on wich logic will be applied
-            Logic.SetCursor(this);
         }
 
         public int Width
@@ -61,13 +57,32 @@ namespace PFE.Models
 
         public Cursor Clone()
         {
-            Cursor clone = new Cursor(Logic, BaseCoord.Clone(), DragableCoord.Clone());
+            Cursor clone = new Cursor(BaseCoord.Clone(), DragableCoord.Clone());
             return clone;
         }
 
         public bool Equals(Cursor c)
         {
             return BaseCoord.Equals(c.BaseCoord) && DragableCoord.Equals(c.DragableCoord);
+        }
+
+        public List<TabCoord> GetSelectedTabCoords()
+        {
+            List<TabCoord> touchingTabCoords = new List<TabCoord>();
+
+            TabCoord topLeft = TopLeftCoord();
+            int startX = topLeft.x;
+            int startY = topLeft.y;
+
+            for (int x = startX; x <= startX + Width - 1; x++)
+            {
+                for (int y = startY; y <= startY + Height - 1; y++)
+                {
+                    touchingTabCoords.Add(new TabCoord(x, y));
+                }
+            }
+
+            return touchingTabCoords;
         }
     }
 

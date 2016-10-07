@@ -55,8 +55,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="src\Configs\Config_Tab.cs" />
-    <Compile Include="src\Models\Cursor\CursorLogic.cs" />
     <Compile Include="src\Controllers\TablatureEditorController.cs" />
     <Compile Include="src\Interfaces\IObservable.cs" />
     <Compile Include="src\Interfaces\IObserver.cs" />

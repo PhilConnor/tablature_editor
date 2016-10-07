@@ -11,11 +11,11 @@ namespace PFE.Models
         public List<TablatureElement> elements; // From top to bottom.
 
         // Constructors.
-        public TablaturePosition()
+        public TablaturePosition(int nStrings)
         {
-            elements = new List<TablatureElement>(Config_Tab.Inst().NStrings);
+            elements = new List<TablatureElement>(nStrings);
 
-            for (int y = 0; y < Config_Tab.Inst().NStrings; ++y)
+            for (int y = 0; y < nStrings; ++y)
             {
                 elements.Add(new TablatureElement());
             }

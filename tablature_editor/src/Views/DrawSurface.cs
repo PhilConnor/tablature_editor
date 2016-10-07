@@ -47,12 +47,12 @@ namespace PFE
                 new Rect(new Point(0, 0), new Size(this.Width, this.Height)));
         }
 
-        public void DrawRectangle(TabCoord tabCoord)
+        //TODO move logic manipulating tabCoord out of drawsurface
+        public void DrawRectangle(CanvasCoord canvasCoord)
         {
             if (!isDrawing)
                 throw new Exception();
 
-            CanvasCoord canvasCoord = CoordConverter.ToCanvasCoord(tabCoord);
             Point point = new Point(canvasCoord.x, canvasCoord.y);
 
             drawingContext.DrawRectangle(
@@ -61,18 +61,14 @@ namespace PFE
                 new Rect(point, new Size(Config_DrawSurface.Inst().GridUnitWidth, Config_DrawSurface.Inst().GridUnitWidth)));
         }
 
-        public void DrawTextAtTabCoord(TabCoord tabCoord, string text)
+        //TODO move logic manipulating tabCoord out of drawsurface
+        public void DrawTextAtTabCoord(CanvasCoord canvasCoord, char text)
         {
             if (!isDrawing)
                 throw new Exception("Something is wrong with the input text");
-
-            for (int i = 0; i < text.Length; i++)
-            {
-                TabCoord adjustedTabCoord = new TabCoord(tabCoord.x + i, tabCoord.y);
-                CanvasCoord canvasCoord = CoordConverter.ToCanvasCoord(adjustedTabCoord);
+            
                 Point point = new Point(canvasCoord.x, canvasCoord.y);
-                DrawCharAtPoint(point, text[i]);
-            }
+                DrawCharAtPoint(point, text);
         }
 
         private void DrawCharAtPoint(Point point, char c)
