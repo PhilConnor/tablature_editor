@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using PFE.Configs;
 using PFE.Models;
+using System.Windows;
 
 namespace tablature_editor.Utils
 {
@@ -68,5 +69,13 @@ namespace tablature_editor.Utils
 
             return tabCoord;
         }
+
+        public static TabCoord ToTabCoord(Point point, TablatureEditor tablatureEditor)
+        {
+            CanvasCoord canvasCoord = CanvasCoord.PointToCanvasCoord(point);
+            TabCoord tabCoord = CoordConverter.ToTabCoord(canvasCoord, tablatureEditor);
+            return tabCoord;
+        }
+
     }
 }

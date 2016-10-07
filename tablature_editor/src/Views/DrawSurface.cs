@@ -11,7 +11,6 @@ namespace PFE
     class DrawSurface : FrameworkElement
     {
         protected VisualCollection visuals;
-
         protected DrawingContext drawingContext;
         protected DrawingVisual drawingVisual;
 
@@ -64,9 +63,9 @@ namespace PFE
         {
             if (!isDrawing)
                 throw new Exception("Something is wrong with the input text");
-            
-                Point point = new Point(canvasCoord.x, canvasCoord.y);
-                DrawCharAtPoint(point, text);
+
+            Point point = new Point(canvasCoord.x, canvasCoord.y);
+            DrawCharAtPoint(point, text);
         }
 
         private void DrawCharAtPoint(Point point, char c)

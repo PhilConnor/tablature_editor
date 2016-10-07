@@ -125,27 +125,26 @@ namespace PFE.Controllers
 
         public void MouseDrag(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            Point p = e.GetPosition(sender as DrawSurface);
-            CanvasCoord c = CanvasCoord.PointToCanvasCoord(p);
-            TabCoord t = CoordConverter.ToTabCoord(c, _tablatureEditor);
-            if (t == null)
+            Point point = e.GetPosition(sender as DrawSurface);
+
+            TabCoord tabCoord = CoordConverter.ToTabCoord(point, _tablatureEditor);
+
+            if (tabCoord == null)
                 return;
 
-            _tablatureEditor.SelectUpTo(t);
-            Debug.WriteLine("drag " + c.ToString() + " " + t.ToString());
+            _tablatureEditor.SelectUpTo(tabCoord);
         }
 
         public void MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            Point p = e.GetPosition(sender as DrawSurface);
-            CanvasCoord c = CanvasCoord.PointToCanvasCoord(p);
-            TabCoord t = CoordConverter.ToTabCoord(c, _tablatureEditor);
+            Point point = e.GetPosition(sender as DrawSurface);
 
-            if (t == null)
+            TabCoord tabCoord = CoordConverter.ToTabCoord(point, _tablatureEditor);
+
+            if (tabCoord == null)
                 return;
 
-            _tablatureEditor.Select(t);
-            Debug.WriteLine("down " + c.ToString() + " " + t.ToString());
+            _tablatureEditor.Select(tabCoord);
         }
 
         #endregion
