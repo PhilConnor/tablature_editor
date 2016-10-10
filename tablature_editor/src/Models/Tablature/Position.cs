@@ -5,19 +5,19 @@ using PFE.Configs;
 
 namespace PFE.Models
 {
-    public class TablaturePosition
+    public class Position
     {
         // Attributs.
-        public List<TablatureElement> elements; // From top to bottom.
+        public List<Element> elements; // From top to bottom.
 
         // Constructors.
-        public TablaturePosition(int nStrings)
+        public Position(int nStrings)
         {
-            elements = new List<TablatureElement>(nStrings);
+            elements = new List<Element>(nStrings);
 
             for (int y = 0; y < nStrings; ++y)
             {
-                elements.Add(new TablatureElement());
+                elements.Add(new Element());
             }
         }
 
@@ -29,7 +29,7 @@ namespace PFE.Models
 
             for (int y = 0; y < elements.Count(); ++y)
             {
-                elements.ElementAt(y).Text = c.ElementAt(elements.Count() - 1 - y);
+                elements.ElementAt(y).Character = c.ElementAt(elements.Count() - 1 - y).ToCharArray()[0];
             }
         }
 
@@ -39,7 +39,7 @@ namespace PFE.Models
 
             for (int y = 0; y < tuningCharArray.Count(); ++y)
             {
-                elements.ElementAt(y).Text = tuningCharArray.ElementAt(elements.Count() - 1 - y).ToString();
+                elements.ElementAt(y).Character = tuningCharArray.ElementAt(elements.Count() - 1 - y);
             }
         }
     }

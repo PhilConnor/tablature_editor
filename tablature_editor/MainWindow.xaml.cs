@@ -24,7 +24,7 @@ namespace PFE
     /// </summary>
     public partial class MainWindow : Window
     {
-        TablatureEditorController tabController;
+        EditorController tabController;
         
         public MainWindow()
         {
@@ -38,9 +38,9 @@ namespace PFE
             // Init & Dependancy injection
             Cursor cursor = new Cursor();
             Tablature tablature = new Tablature();
-            TablatureEditor tablatureEditor = new TablatureEditor(tablature, cursor);
+            Editor tablatureEditor = new Editor(tablature, cursor);
 
-            tabController = new TablatureEditorController(drawSurface, tablatureEditor);
+            tabController = new EditorController(drawSurface, tablatureEditor);
         }
 
         public void Setup()

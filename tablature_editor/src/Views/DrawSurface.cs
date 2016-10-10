@@ -43,10 +43,13 @@ namespace PFE
             drawingContext.DrawRectangle(
                 Brushes.Black,
                 null,
-                new Rect(new Point(0, 0), new Size(this.Width, this.Height)));
+                new Rect(
+                    new Point(0, 0), 
+                    new Size(this.Width, 
+                    this.Height)));
         }
 
-        public void DrawRectangle(CanvasCoord canvasCoord)
+        public void DrawRectangle(DrawSurfaceCoord canvasCoord)
         {
             if (!isDrawing)
                 throw new Exception();
@@ -56,10 +59,13 @@ namespace PFE
             drawingContext.DrawRectangle(
                 Brushes.LightBlue,
                 null,
-                new Rect(point, new Size(Config_DrawSurface.Inst().GridUnitWidth, Config_DrawSurface.Inst().GridUnitWidth)));
+                new Rect(
+                    point, 
+                    new Size(Config_DrawSurface.Inst().GridUnitWidth, 
+                    Config_DrawSurface.Inst().GridUnitWidth)));
         }
 
-        public void DrawTextAtTabCoord(CanvasCoord canvasCoord, char text)
+        public void DrawTextAtTabCoord(DrawSurfaceCoord canvasCoord, char text)
         {
             if (!isDrawing)
                 throw new Exception("Something is wrong with the input text");

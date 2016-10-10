@@ -7,7 +7,7 @@ namespace PFE.Models
 {
     public class Tablature
     {
-        public List<TablaturePosition> positions;
+        public List<Position> positions;
 
         // Tuning and number of string.
         public string Tuning { get; set; } // Tablature parameters.
@@ -42,11 +42,11 @@ namespace PFE.Models
             Tuning = "EADGBe";
             NStaff = 3;
             StaffLength = 80;
-                    
-            positions = new List<TablaturePosition>(TabLength);
+
+            positions = new List<Position>(TabLength);
 
             for (int x = 0; x < TabLength; ++x)
-                positions.Add(new TablaturePosition(NStrings));
+                positions.Add(new Position(NStrings));
 
             tabPositionAt(0).ParseTuning(Tuning);
         }
@@ -60,37 +60,36 @@ namespace PFE.Models
         {
             return positions.ElementAt(0).elements.Count();
         }
-
-        public void setTextAt(TabCoord tabCoord, string elementText)
+        
+        public void SetElementCharAt(TabCoord tabCoord, char elementChar)
         {
-            //if we are about to write a 10th or 20th we remove the 
-            // char occuring before it to make space for this extra character
-            if (elementText.Length > 1 && tabCoord.y > 1)
-            {
-                positions.ElementAt(tabCoord.x).elements.ElementAt(tabCoord.y - 1).ClearText();
-            }
+            if (tabCoord == null)
+                return;          
 
-            positions.ElementAt(tabCoord.x).elements.ElementAt(tabCoord.y).Text = elementText;
+            tabElementAt(tabCoord).Character = elementChar;
         }
 
-        public string GetTextAt(TabCoord tabCoord)
+        public char GetElementCharAt(TabCoord tabCoord)
         {
-            return positions.ElementAt(tabCoord.x).elements.ElementAt(tabCoord.y).Text;
+            return tabElementAt(tabCoord).Character;
         }
 
-        private TablatureElement tabElementAt(TabCoord tabCoord)
+        private Element tabElementAt(TabCoord tabCoord)
         {
+            if (!tabCoord.IsValid(this))
+                return null;
+
             return positions.ElementAt(tabCoord.x).elements.ElementAt(tabCoord.y);
         }
 
-        private TablaturePosition tabPositionAt(int tabCoord_X)
+        private Position tabPositionAt(int tabCoord_X)
         {
             return positions.ElementAt(tabCoord_X);
         }
 
         public bool isElementAtNumberGreatherThan10(TabCoord tabCoord)
         {
-            return Util.isNumber(GetTextAt(tabCoord));
+            return Util.IsNumber(GetElementCharAt(tabCoord));
         }
 
         public void removePosition(int tabCoord_X)

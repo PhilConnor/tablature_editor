@@ -18,14 +18,24 @@ namespace PFE.Models
             return new TabCoord(x, y);
         }
 
-        // Checks if the coord inbound.
-        //public bool IsValid()
-        //{
-        //    var c3 = this.x >= 0 && this.y >= 0;
-        //    var c4 = this.x < (Config_Tab.StaffLength * Config_Tab.NStaff)
-        //        && this.y < Config_Tab.NumberOfStrings;
+        public TabCoord CoordOnLeft()
+        {
+            return new TabCoord(x - 1, y);
+        }
 
-        //    return c3 && c4;
-        //}
+        public TabCoord CoordOnRight()
+        {
+            return new TabCoord(x + 1, y);
+        }
+
+        //Checks if the coord inbound the tablature.
+        public bool IsValid(Tablature tablature)
+        {
+            bool c1 = x >= 0 && y >= 0;
+            bool c2 = x < tablature.StaffLength * tablature.NStaff;
+            bool c3 = y < tablature.NStrings;
+
+            return c1 && c2 && c3;
+        }
     }
 }

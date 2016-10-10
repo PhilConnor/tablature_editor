@@ -10,7 +10,7 @@ namespace PFE.Models
     /// Acts like a facade, provides unified and simplified access 
     /// points to tablature and cursor models.
     /// </summary>
-    class TablatureEditor : IObservable
+    class Editor : IObservable
     {
         private Tablature Tablature;
         private Cursor Cursor;
@@ -21,35 +21,23 @@ namespace PFE.Models
 
         public int NStrings
         {
-            get
-            {
-                return Tablature.NStrings;
-            }
+            get { return Tablature.NStrings; }
         }
         public int NStaff
         {
-            get
-            {
-                return Tablature.NStaff;
-            }
+            get { return Tablature.NStaff; }
         }
         public int StaffLength
         {
-            get
-            {
-                return Tablature.StaffLength;
-            }
+            get { return Tablature.StaffLength; }
         }
 
         public int TabLength
         {
-            get
-            {
-                return Tablature.TabLength;
-            }
+            get { return Tablature.TabLength; }
         }
 
-        public TablatureEditor(Tablature tablature, Cursor cursor)
+        public Editor(Tablature tablature, Cursor cursor)
         {
             WriteMode = WriteModes.Unity;
             SkipMode = SkipModes.One;
@@ -61,9 +49,9 @@ namespace PFE.Models
         }
 
         //@TODO : fix number over 9 by hand bug
-        public void WriteCharAtCursor(string keyChar)
+        public void WriteCharAtCursor(char keyChar)
         {
-            keyChar = ApplyWriteMode(keyChar);
+            //keyChar = ApplyWriteMode(keyChar);
 
             // Fill the cursor selection with appropriate input            
             TabCoord tabCoord = Cursor.TopLeftCoord();
@@ -72,11 +60,11 @@ namespace PFE.Models
             {
                 for (int y = tabCoord.y; y <= tabCoord.y + Cursor.Height - 1; ++y)
                 {
-                    Tablature.setTextAt(new TabCoord(x, y), keyChar);
+                    Tablature.SetElementCharAt(new TabCoord(x, y), keyChar);
                 }
             }
 
-            Tablature.setTextAt(new TabCoord(tabCoord.x, tabCoord.y), keyChar);
+            Tablature.SetElementCharAt(new TabCoord(tabCoord.x, tabCoord.y), keyChar);
 
             ApplyCursorMovementBaseOnInput(keyChar);
 
@@ -131,7 +119,6 @@ namespace PFE.Models
         {
             Cursor.SetPositions(tabCoord);
             NotifyObserver();
-
         }
 
         public void SelectUpTo(TabCoord tabCoord)
@@ -152,9 +139,9 @@ namespace PFE.Models
             NotifyObserver();
         }
 
-        public string GetTextAt(TabCoord tabCoord)
+        public char GetElementChartAt(TabCoord tabCoord)
         {
-            return Tablature.GetTextAt(tabCoord);
+            return Tablature.GetElementCharAt(tabCoord);
         }
 
         public List<TabCoord> GetSelectedTabCoords()
@@ -163,9 +150,9 @@ namespace PFE.Models
         }
 
         #region private
-        private void ApplyCursorMovementBaseOnInput(string keyChar)
+        private void ApplyCursorMovementBaseOnInput(char keyChar)
         {
-            bool isWritingTwoNumber = WriteMode != WriteModes.Unity && Util.isNumber(keyChar);
+            bool isWritingTwoNumber = WriteMode != WriteModes.Unity && Util.IsNumber(keyChar);
 
             // move cursor to the next char position
             MoveCursorWithoutNotifyingObservers(CursorMovements.Right);
@@ -179,16 +166,16 @@ namespace PFE.Models
                 MoveCursorWithoutNotifyingObservers(CursorMovements.Right);
         }
 
-        private string ApplyWriteMode(string keyChar)
-        {
-            // Concat 1, 2 or 3 depending on the write mode
-            bool isWritingTwoNumber = WriteMode != WriteModes.Unity && Util.isNumber(keyChar);
-            if (isWritingTwoNumber)
-            {
-                keyChar = String.Concat((int)WriteMode, keyChar);
-            }
-            return keyChar;
-        }
+        //private string ApplyWriteMode(char keyChar)
+        //{
+        //    Concat 1, 2 or 3 depending on the write mode
+        //    bool isWritingTwoNumber = WriteMode != WriteModes.Unity && Util.IsNumber(keyChar);
+        //    if (isWritingTwoNumber)
+        //    {
+        //        keyChar = String.Concat((int)WriteMode, keyChar);
+        //    }
+        //    return keyChar;
+        //}
         #endregion
 
         #region observer
@@ -213,24 +200,24 @@ namespace PFE.Models
 
             if (goDown)
             {
-                Cursor.BaseCoord.x 
+                Cursor.BaseCoord.x
                     = Cursor.BaseCoord.x + staffLenght < staffLenght
-                    ? Cursor.BaseCoord.x + staffLenght 
+                    ? Cursor.BaseCoord.x + staffLenght
                     : Cursor.BaseCoord.x;
 
-                Cursor.DragableCoord.x 
+                Cursor.DragableCoord.x
                     = Cursor.DragableCoord.x + staffLenght < staffLenght
-                    ? Cursor.DragableCoord.x + staffLenght 
+                    ? Cursor.DragableCoord.x + staffLenght
                     : Cursor.DragableCoord.x;
             }
             else
             {
-                Cursor.BaseCoord.x 
+                Cursor.BaseCoord.x
                     = Cursor.BaseCoord.x - staffLenght >= 0
                     ? Cursor.BaseCoord.x - staffLenght
                     : Cursor.BaseCoord.x;
 
-                Cursor.DragableCoord.x 
+                Cursor.DragableCoord.x
                     = Cursor.DragableCoord.x - staffLenght >= 0
                     ? Cursor.DragableCoord.x - staffLenght
                     : Cursor.DragableCoord.x;

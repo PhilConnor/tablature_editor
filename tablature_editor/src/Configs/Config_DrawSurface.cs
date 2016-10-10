@@ -7,7 +7,7 @@ namespace PFE.Configs
 {
     public class Config_DrawSurface : IObservable
     {
-        // Canvas.
+        // DrawSurface.
         public int Width { get; set; }
         public int Height { get; set; }
         public int Window_Width { get; set; }

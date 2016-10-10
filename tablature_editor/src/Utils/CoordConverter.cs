@@ -13,9 +13,9 @@ namespace tablature_editor.Utils
     {
         // Converts a tablature coord to a canvas pixel position on the canvas.
         // Used mainly to figure out where to draw the tab chars on the canvas.
-        public static CanvasCoord ToCanvasCoord(TabCoord tabCoord, TablatureEditor tablatureEditor)
+        public static DrawSurfaceCoord ToCanvasCoord(TabCoord tabCoord, Editor tablatureEditor)
         {
-            CanvasCoord canvasCoord = new CanvasCoord(0, 0);
+            DrawSurfaceCoord canvasCoord = new DrawSurfaceCoord(0, 0);
 
             canvasCoord.x = (tabCoord.x % tablatureEditor.StaffLength) * Config_DrawSurface.Inst().GridUnitWidth;
             canvasCoord.x += Config_DrawSurface.Inst().MarginX;
@@ -31,7 +31,7 @@ namespace tablature_editor.Utils
 
         // Converts a canvas coord to an actual position in the tablature.
         // Used mainly to track mouse position on the tablature.
-        public static TabCoord ToTabCoord(CanvasCoord canvasCoord, TablatureEditor tablatureEditor)
+        public static TabCoord ToTabCoord(DrawSurfaceCoord canvasCoord, Editor tablatureEditor)
         {
             TabCoord tabCoord = new TabCoord(0, 0);
 
@@ -70,9 +70,9 @@ namespace tablature_editor.Utils
             return tabCoord;
         }
 
-        public static TabCoord ToTabCoord(Point point, TablatureEditor tablatureEditor)
+        public static TabCoord ToTabCoord(Point point, Editor tablatureEditor)
         {
-            CanvasCoord canvasCoord = CanvasCoord.PointToCanvasCoord(point);
+            DrawSurfaceCoord canvasCoord = DrawSurfaceCoord.PointToCanvasCoord(point);
             TabCoord tabCoord = CoordConverter.ToTabCoord(canvasCoord, tablatureEditor);
             return tabCoord;
         }
