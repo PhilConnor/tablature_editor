@@ -5,12 +5,19 @@ using PFE.Configs;
 
 namespace PFE.Models
 {
+    /// <summary>
+    /// Represents a column(horizontal) position on the tablature.
+    /// Contains an element for each string of the tablature for 
+    /// this position.
+    /// </summary>
     public class Position
     {
-        // Attributs.
-        public List<Element> elements; // From top to bottom.
+        /// <summary>
+        /// The elements of this tablature from top to bottom.
+        /// Index 0 is the element on the first string (biggest string).
+        /// </summary>
+        public List<Element> elements;
 
-        // Constructors.
         public Position(int nStrings)
         {
             elements = new List<Element>(nStrings);
@@ -20,8 +27,7 @@ namespace PFE.Models
                 elements.Add(new Element());
             }
         }
-
-        // Public Methods.
+        
         public void ParseString(string stringTabElements)
         {
             string[] separators = { ":" };

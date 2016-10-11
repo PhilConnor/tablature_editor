@@ -24,8 +24,8 @@ namespace PFE
     /// </summary>
     public partial class MainWindow : Window
     {
-        EditorController tabController;
-        
+        EditorController editorController;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -38,43 +38,43 @@ namespace PFE
             // Init & Dependancy injection
             Cursor cursor = new Cursor();
             Tablature tablature = new Tablature();
-            Editor tablatureEditor = new Editor(tablature, cursor);
-
-            tabController = new EditorController(drawSurface, tablatureEditor);
+            Editor editor = new Editor(tablature, cursor);
+            editorController = new EditorController(editor, drawSurface);
         }
 
+        /// <summary>
+        /// Setup the window and drawSurface.
+        /// </summary>
         public void Setup()
         {
             drawSurface.Height = Config_DrawSurface.Inst().Height;
             drawSurface.Width = Config_DrawSurface.Inst().Width;
+
             window.Width = Config_DrawSurface.Inst().Window_Width;
             window.Height = Config_DrawSurface.Inst().Window_Height;
             window.Background = new SolidColorBrush(Config_DrawSurface.Inst().BGColor);
             window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-
         }
 
         private void window_TextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
         {
-            tabController.TextInput(e);
+            editorController.TextInput(e);
         }
 
         private void window_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
-            tabController.KeyDown(e);
+            editorController.KeyDown(e);
         }
 
         private void drawSurface_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            if (e.LeftButton == System.Windows.Input.MouseButtonState.Pressed)
-            {
-                tabController.MouseDrag(sender,e);
-            }
+            if (e.LeftButton == System.Windows.Input.MouseButtonState.Pressed)            
+                editorController.MouseDrag(sender, e);            
         }
 
         private void drawSurface_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            tabController.MouseDown(sender,e);
+            editorController.MouseDown(sender, e);
         }
     } // 
 }

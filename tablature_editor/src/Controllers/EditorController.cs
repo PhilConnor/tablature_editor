@@ -19,18 +19,33 @@ namespace PFE.Controllers
     /// </summary>
     class EditorController : IObserver
     {
+        /// <summary>
+        /// The drawSurface instance.
+        /// </summary>
         private DrawSurface _drawSurface;
-        private Models.Editor _tablatureEditor;
 
-        public EditorController(DrawSurface drawSurface, Editor tablatureEditor)
+        /// <summary>
+        /// The Editor instance.
+        /// </summary>
+        private Editor _tablatureEditor;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="drawSurface">the surface on wich to draw the editor</param>
+        /// <param name="tablatureEditor">an editor instance</param>
+        public EditorController(Editor tablatureEditor, DrawSurface drawSurface)
         {
-            _drawSurface = drawSurface;
             _tablatureEditor = tablatureEditor;
+            _drawSurface = drawSurface;
 
             tablatureEditor.Subscribe(this);
             ReDrawTablature();
         }
-
+        
+        /// <summary>
+        /// Redraws the Editor objects on the DrawSurface.
+        /// </summary>
         public void ReDrawTablature()
         {
             _drawSurface.StartDrawing();
@@ -44,15 +59,21 @@ namespace PFE.Controllers
             _drawSurface.EndDrawing();
         }
 
+        /// <summary>
+        /// Redraws the cursor.
+        /// </summary>
         private void RedrawCursor()
         {
             foreach (TabCoord tabCoord in _tablatureEditor.GetSelectedTabCoords())
             {
-                DrawSurfaceCoord canvasCoord = CoordConverter.ToCanvasCoord(tabCoord, _tablatureEditor);
+                DrawSurfaceCoord canvasCoord = CoordConverter.ToDrawSurfaceCoord(tabCoord, _tablatureEditor);
                 _drawSurface.DrawRectangle(canvasCoord);
             }
         }
 
+        /// <summary>
+        /// Redraws all tablature elements ( all chars )
+        /// </summary>
         private void RedrawElements()
         {
             //for each tab elements
@@ -61,36 +82,12 @@ namespace PFE.Controllers
                 for (int y = 0; y < _tablatureEditor.NStrings; ++y)
                 {
                     TabCoord tabCoord = new TabCoord(x, y);
-                    DrawSurfaceCoord canvasCoord = CoordConverter.ToCanvasCoord(tabCoord, _tablatureEditor);
-                    _drawSurface.DrawTextAtTabCoord(canvasCoord, _tablatureEditor.GetElementChartAt(tabCoord));
-
-                    //if an emelement is not already  drawn ad this coord
-                    //if (!IsAnElementAtAlreadyThere(tabCoord))
-                    //{
-                    //draw all char in tab element
-                    //for (int i = 0; i < _tablatureEditor.GetElementChartAt(tabCoord).Length; i++)
-                    //{
-                    //    TabCoord adjustedTabCoord = new TabCoord(tabCoord.x + i, tabCoord.y);
-                    //    DrawSurfaceCoord canvasCoord = CoordConverter.ToCanvasCoord(adjustedTabCoord, _tablatureEditor);
-                    //    _drawSurface.DrawTextAtTabCoord(canvasCoord, _tablatureEditor.GetElementChartAt(tabCoord)[i]);
-                    //}
-                    //}
+                    DrawSurfaceCoord canvasCoord = CoordConverter.ToDrawSurfaceCoord(tabCoord, _tablatureEditor);
+                    _drawSurface.DrawCharAtTabCoord(canvasCoord, _tablatureEditor.GetElementChartAt(tabCoord));                    
                 }
             }
         }
-
-        ///// Indicates if the element before the one pointed by 
-        ///// tabCoord is cointaining two char
-        //private bool IsAnElementAtAlreadyThere(TabCoord tabCoord)
-        //{
-        //    if (tabCoord.x == 0)
-        //        return false;
-
-        //    TabCoord tc = new TabCoord(tabCoord.x - 1, tabCoord.y);
-        //    string txt = _tablatureEditor.GetElementChartAt(tc);
-        //    return Util.IsNumberOver9(txt);
-        //}
-
+        
         #region User inputs
         public void KeyDown(KeyEventArgs e)
         {
@@ -153,6 +150,7 @@ namespace PFE.Controllers
         }
 
         #endregion
+
         public void Notify()
         {
             ReDrawTablature();

@@ -9,36 +9,47 @@ using System.Windows;
 
 namespace tablature_editor.Utils
 {
+    /// <summary>
+    /// Provides method for coord format conversion.
+    /// </summary>
     class CoordConverter
     {
-        // Converts a tablature coord to a canvas pixel position on the canvas.
-        // Used mainly to figure out where to draw the tab chars on the canvas.
-        public static DrawSurfaceCoord ToCanvasCoord(TabCoord tabCoord, Editor tablatureEditor)
+        /// <summary>
+        /// Converts a TabCoord to a DrawSurfaceCoord.
+        /// </summary>
+        /// <param name="tabCoord">The tabcoord to convert.</param>
+        /// <param name="tablatureEditor">The Editor that the TabCoord is relative to.</param>
+        /// <returns></returns>
+        public static DrawSurfaceCoord ToDrawSurfaceCoord(TabCoord tabCoord, Editor tablatureEditor)
         {
-            DrawSurfaceCoord canvasCoord = new DrawSurfaceCoord(0, 0);
+            DrawSurfaceCoord drawSurfaceCoord = new DrawSurfaceCoord(0, 0);
 
-            canvasCoord.x = (tabCoord.x % tablatureEditor.StaffLength) * Config_DrawSurface.Inst().GridUnitWidth;
-            canvasCoord.x += Config_DrawSurface.Inst().MarginX;
+            drawSurfaceCoord.x = (tabCoord.x % tablatureEditor.StaffLength) * Config_DrawSurface.Inst().GridUnitWidth;
+            drawSurfaceCoord.x += Config_DrawSurface.Inst().MarginX;
 
-            canvasCoord.y = (int)Math.Floor((double)tabCoord.x / tablatureEditor.StaffLength);
-            canvasCoord.y = canvasCoord.y *
+            drawSurfaceCoord.y = (int)Math.Floor((double)tabCoord.x / tablatureEditor.StaffLength);
+            drawSurfaceCoord.y = drawSurfaceCoord.y *
                 (tablatureEditor.NStrings + Config_DrawSurface.Inst().SpacingBetweenStaff) + tabCoord.y;
-            canvasCoord.y = canvasCoord.y * Config_DrawSurface.Inst().GridUnitHeight;
-            canvasCoord.y += Config_DrawSurface.Inst().MarginY;
+            drawSurfaceCoord.y = drawSurfaceCoord.y * Config_DrawSurface.Inst().GridUnitHeight;
+            drawSurfaceCoord.y += Config_DrawSurface.Inst().MarginY;
 
-            return canvasCoord;
+            return drawSurfaceCoord;
         }
 
-        // Converts a canvas coord to an actual position in the tablature.
-        // Used mainly to track mouse position on the tablature.
-        public static TabCoord ToTabCoord(DrawSurfaceCoord canvasCoord, Editor tablatureEditor)
+        /// <summary>
+        /// Converts a DrawSurfaceCoord to a TabCoord.
+        /// </summary>
+        /// <param name="drawSurfaceCoord">The DrawSurfaceCoord to convert.</param>
+        /// <param name="tablatureEditor">The Editor that the TabCoord will be relative to.</param>
+        /// <returns></returns>
+        public static TabCoord ToTabCoord(DrawSurfaceCoord drawSurfaceCoord, Editor tablatureEditor)
         {
             TabCoord tabCoord = new TabCoord(0, 0);
 
             // Remove margin and scale
-            tabCoord.x = (int)Math.Floor((double)(canvasCoord.x - Config_DrawSurface.Inst().MarginX)
+            tabCoord.x = (int)Math.Floor((double)(drawSurfaceCoord.x - Config_DrawSurface.Inst().MarginX)
                 / Config_DrawSurface.Inst().GridUnitWidth);
-            tabCoord.y = (int)Math.Floor((double)(canvasCoord.y - Config_DrawSurface.Inst().MarginY)
+            tabCoord.y = (int)Math.Floor((double)(drawSurfaceCoord.y - Config_DrawSurface.Inst().MarginY)
                 / Config_DrawSurface.Inst().GridUnitHeight);
 
 
@@ -59,7 +70,7 @@ namespace tablature_editor.Utils
             }
 
             // Convert to x = char position, y = string number
-            tabCoord.x 
+            tabCoord.x
                 = (int)(tabCoord.x
                 + ((tablatureEditor.StaffLength
                 * Math.Floor((double)tabCoord.y
@@ -70,10 +81,17 @@ namespace tablature_editor.Utils
             return tabCoord;
         }
 
-        public static TabCoord ToTabCoord(Point point, Editor tablatureEditor)
+
+        /// <summary>
+        /// Converts a Point to a TabCoord.
+        /// </summary>
+        /// <param name="pointOnDrawSurface">A point on the draw surface to be converted</param>
+        /// <param name="tablatureEditor">The Editor that the TabCoord will be relative to.</param>
+        /// <returns></returns>
+        public static TabCoord ToTabCoord(Point pointOnDrawSurface, Editor tablatureEditor)
         {
-            DrawSurfaceCoord canvasCoord = DrawSurfaceCoord.PointToCanvasCoord(point);
-            TabCoord tabCoord = CoordConverter.ToTabCoord(canvasCoord, tablatureEditor);
+            DrawSurfaceCoord drawSurfaceCoord = DrawSurfaceCoord.PointToDrawSurfaceCoord(pointOnDrawSurface);
+            TabCoord tabCoord = CoordConverter.ToTabCoord(drawSurfaceCoord, tablatureEditor);
             return tabCoord;
         }
 

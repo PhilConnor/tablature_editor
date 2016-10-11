@@ -5,7 +5,10 @@ using System.Collections.Generic;
 
 namespace PFE.Configs
 {
-    public class Config_DrawSurface : IObservable
+    /// <summary>
+    /// Configuration for the drawSurface view.
+    /// </summary>
+    public class Config_DrawSurface
     {
         // DrawSurface.
         public int Width { get; set; }
@@ -30,10 +33,11 @@ namespace PFE.Configs
         public Color BGColor { get; set; }
         public Brush TextColor { get; set; }
 
+        // Fonts
         public Typeface TextFont { get; set; }
 
+        // Singleton logic
         private static Config_DrawSurface config;
-
         public static Config_DrawSurface Inst()
         {
             if (config == null)
@@ -48,7 +52,7 @@ namespace PFE.Configs
             }
         }
 
-        //Constructors.
+        //Constructors with default values.
         public void Initialisation()
         {
             // Maybe editable in the future.
@@ -69,19 +73,7 @@ namespace PFE.Configs
             BGColor = Colors.LightGray;
             TextColor = Brushes.White;
             TextFont = new Typeface("Verdana");
-
-        }
-
-        private List<IObserver> observers = new List<IObserver>();
-        public void NotifyObserver()
-        {
-            observers.ForEach(o => o.Notify());
-        }
-
-        public void Subscribe(IObserver observer)
-        {
-            observers.Add(observer);
-        }
+        }        
     }
 }
 

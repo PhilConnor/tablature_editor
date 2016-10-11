@@ -4,10 +4,11 @@ using System.Windows;
 
 namespace PFE.Models
 {
-    //Coordinates in the main canvas of the application.
+    /// <summary>
+    /// Represents a 2d coordinate of a pixel on the DrawSurface.
+    /// </summary>
     public class DrawSurfaceCoord : Coord
     {
-        //Constructors.
         public DrawSurfaceCoord(int x, int y)
         {
             this.x = x;
@@ -18,8 +19,12 @@ namespace PFE.Models
         {
             return new DrawSurfaceCoord(x, y);
         }
-
-        public static DrawSurfaceCoord PointToCanvasCoord(Point p)
+        
+        /// <summary>
+        /// Converts a Point to a DrawSurfaceCoord.
+        /// Mainly used because mouse events from WPF returns Point objects.
+        /// </summary>
+        public static DrawSurfaceCoord PointToDrawSurfaceCoord(Point p)
         {
             return new DrawSurfaceCoord((int)p.X, (int)p.Y);
         }

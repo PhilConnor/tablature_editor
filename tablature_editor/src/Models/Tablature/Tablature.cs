@@ -5,96 +5,105 @@ using PFE.Utils;
 
 namespace PFE.Models
 {
+    /// <summary>
+    /// Represents the tablature itself. 
+    /// Contains all tab elements and the tuning.
+    /// </summary>
     public class Tablature
     {
+        #region properties
+        /// <summary>
+        /// The tab positions from left to right.
+        /// Index 0 is the left most tab position.
+        /// </summary>
         public List<Position> positions;
 
-        // Tuning and number of string.
+        /// <summary>
+        /// The current tuning as a string.
+        /// </summary>
         public string Tuning { get; set; } // Tablature parameters.
-        public int NStrings
-        {
-            get
-            {
-                return Tuning.Length;
-            }
-        }
 
-        // Number of staffs.
+        /// <summary>
+        /// The number of strings.
+        /// </summary>
+        public int NStrings { get { return Tuning.Length; } }
+
+        /// <summary>
+        /// The number of staffs in the tablature.
+        /// </summary>
         public int NStaff { get; set; }
+
+        /// <summary>
+        /// The length of a staff.
+        /// </summary>
         public int StaffLength { get; set; }
 
-        public int TabLength
-        {
-            get
-            {
-                return NStaff * StaffLength;
-            }
-        }
+        /// <summary>
+        /// The total length of the tablature.
+        /// </summary>
+        public int Length { get { return positions.Count(); } }
+        #endregion
 
+        #region public
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public Tablature()
         {
-            Init();
+            Init(3, 80, "EADGBe");
         }
 
-        public void Init()
+        /// <summary>
+        /// Inits the tablature to a black tablature with standard
+        /// tuning and some other default values.
+        /// </summary>
+        public void Init(int nStaff, int staffLength, string tuning)
         {
-            //DEFAULT VALUES
-            Tuning = "EADGBe";
-            NStaff = 3;
-            StaffLength = 80;
+            Tuning = tuning;
+            StaffLength = staffLength;
+            NStaff = nStaff;
 
-            positions = new List<Position>(TabLength);
-
-            for (int x = 0; x < TabLength; ++x)
+            //fills the tablature with clean blank.
+            positions = new List<Position>();
+            for (int x = 0; x < nStaff * staffLength; ++x)
                 positions.Add(new Position(NStrings));
 
-            tabPositionAt(0).ParseTuning(Tuning);
+            positions.ElementAt(0).ParseTuning(Tuning);
         }
 
-        public int Length()
-        {
-            return positions.Count();
-        }
-
-        public int StringCount()
-        {
-            return positions.ElementAt(0).elements.Count();
-        }
-        
+        /// <summary>
+        /// Set the char value of the element at tabCoord
+        /// </summary>
         public void SetElementCharAt(TabCoord tabCoord, char elementChar)
         {
             if (tabCoord == null)
-                return;          
+                return;
 
-            tabElementAt(tabCoord).Character = elementChar;
+            ElementAt(tabCoord).Character = elementChar;
         }
 
+        /// <summary>
+        /// Returns the char value of the element at tabCoord
+        /// </summary>
         public char GetElementCharAt(TabCoord tabCoord)
         {
-            return tabElementAt(tabCoord).Character;
+            return ElementAt(tabCoord).Character;
         }
 
-        private Element tabElementAt(TabCoord tabCoord)
+        /// <summary>
+        /// Returns the element at tabCoord
+        /// </summary>
+        public Element ElementAt(TabCoord tabCoord)
         {
             if (!tabCoord.IsValid(this))
                 return null;
 
             return positions.ElementAt(tabCoord.x).elements.ElementAt(tabCoord.y);
         }
+        #endregion
 
-        private Position tabPositionAt(int tabCoord_X)
-        {
-            return positions.ElementAt(tabCoord_X);
-        }
+        #region private
 
-        public bool isElementAtNumberGreatherThan10(TabCoord tabCoord)
-        {
-            return Util.IsNumber(GetElementCharAt(tabCoord));
-        }
-
-        public void removePosition(int tabCoord_X)
-        {
-            positions.RemoveAt(tabCoord_X);
-        }
+        #endregion
     }
 }

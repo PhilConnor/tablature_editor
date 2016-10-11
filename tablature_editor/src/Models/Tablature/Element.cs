@@ -2,18 +2,21 @@
 
 namespace PFE.Models
 {
+    /// <summary>
+    /// Represent a character on the tablature.
+    /// Is the basic entity of the tablature.
+    /// Event empty spaces are represented by an 
+    /// Element with a '-' character value.
+    /// </summary>
     public class Element
     {
-        // Properties.
         public char Character { get; set; }
 
-        //Constructors.
         public Element()
         {
             ClearText();
         }
 
-        //Public Methods.
         public void ClearText()
         {
             Character = '-';
