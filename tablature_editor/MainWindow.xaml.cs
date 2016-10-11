@@ -8,80 +8,73 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using TablatureEditor.Controllers;
-using TablatureEditor.Models;
-using TablatureEditor.Configs;
-using TablatureEditor.Utils;
+using PFE.Controllers;
+using PFE.Models;
+using PFE.Configs;
+using PFE.Utils;
 
-namespace TablatureEditor
+namespace PFE
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
-        TabEditor editorFacade;
-        TabController tabController;
-        CursorController cursorController;
+        EditorController editorController;
 
         public MainWindow()
         {
             InitializeComponent();
-            Configuration.Initialisation();
+
+            Config_DrawSurface.Inst().Initialisation();
 
             // Setup
-            canvasCustom.Height = Configuration.CanvasHeight;
-            canvasCustom.Width = Configuration.CanvasWidth;
-            window.Background = new SolidColorBrush(Configuration.BGColor);
-            cursorController = new CursorController();
-       
+            Setup();
+
             // Init & Dependancy injection
-            editorFacade = new TabEditor(new Tab(), cursorController);
-            tabController = new TabController(canvasCustom, editorFacade);
-
+            Cursor cursor = new Cursor();
+            Tablature tablature = new Tablature();
+            Editor editor = new Editor(tablature, cursor);
+            editorController = new EditorController(editor, drawSurface);
         }
 
-        private void window_TextInput(object sender, TextCompositionEventArgs e)
+        /// <summary>
+        /// Setup the window and drawSurface.
+        /// </summary>
+        public void Setup()
         {
-            //text
-            editorFacade.writeCharAtCursor(e.Text);
+            drawSurface.Height = Config_DrawSurface.Inst().Height;
+            drawSurface.Width = Config_DrawSurface.Inst().Width;
+
+            window.Width = Config_DrawSurface.Inst().Window_Width;
+            window.Height = Config_DrawSurface.Inst().Window_Height;
+            window.Background = new SolidColorBrush(Config_DrawSurface.Inst().BGColor);
+            window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
         }
 
-        private void window_PreviewKeyDown(object sender, KeyEventArgs e)
+        private void window_TextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
         {
-
-            //shift+arrow
-            if (Keyboard.IsKeyDown(Key.LeftShift) && e.Key == Key.Left)
-                editorFacade.moveCursor(CursorMovements.ExpandLeft);
-            else if (Keyboard.IsKeyDown(Key.LeftShift) && e.Key == Key.Up)
-                editorFacade.moveCursor(CursorMovements.ExpandUp);
-            else if (Keyboard.IsKeyDown(Key.LeftShift) && e.Key == Key.Right)
-                editorFacade.moveCursor(CursorMovements.ExpandRight);
-            else if (Keyboard.IsKeyDown(Key.LeftShift) && e.Key == Key.Down)
-                editorFacade.moveCursor(CursorMovements.ExpandDown);
-
-            //arrow
-            else if (e.Key == Key.Left)
-                editorFacade.moveCursor(CursorMovements.Left);
-            else if (e.Key == Key.Up)
-                editorFacade.moveCursor(CursorMovements.Up);
-            else if (e.Key == Key.Right)
-                editorFacade.moveCursor(CursorMovements.Right);
-            else if (e.Key == Key.Down)
-                editorFacade.moveCursor(CursorMovements.Down);
-
-            //backspace, delete
-            else if (e.Key == Key.Back || e.Key == Key.Delete)
-                editorFacade.writeCharAtCursor("-");
-
-            else if (e.Key == Key.CapsLock)
-                editorFacade.toggleWriteMode();
+            editorController.TextInput(e);
         }
 
+        private void window_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            editorController.KeyDown(e);
+        }
+
+        private void drawSurface_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            if (e.LeftButton == System.Windows.Input.MouseButtonState.Pressed)            
+                editorController.MouseDrag(sender, e);            
+        }
+
+        private void drawSurface_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            editorController.MouseDown(sender, e);
+        }
     } // 
 }

@@ -2,15 +2,19 @@
 using System.Globalization;
 using System.Windows;
 using System.Windows.Media;
-using TablatureEditor.Models;
-using TablatureEditor.Configs;
+using PFE.Models;
+using PFE.Configs;
+using tablature_editor.Utils;
 
-namespace TablatureEditor
+namespace PFE
 {
+    /// <summary>
+    /// The surface on wich the tablature is drawn.
+    /// Provites methods to draw the background, rectangles and text.
+    /// </summary>
     class DrawSurface : FrameworkElement
     {
         protected VisualCollection visuals;
-
         protected DrawingContext drawingContext;
         protected DrawingVisual drawingVisual;
 
@@ -19,6 +23,8 @@ namespace TablatureEditor
         public DrawSurface()
         {
             visuals = new VisualCollection(this);
+            this.Height = Config_DrawSurface.Inst().Height;
+            this.Width = Config_DrawSurface.Inst().Width;
         }
 
         public void StartDrawing()
@@ -43,38 +49,54 @@ namespace TablatureEditor
             drawingContext.DrawRectangle(
                 Brushes.Black,
                 null,
-                new Rect(new Point(0, 0), new Size(this.Width, this.Height)));
+                new Rect(
+                    new Point(0, 0), 
+                    new Size(this.Width, 
+                    this.Height)));
         }
 
-        public void DrawRectangle(TabCoord tabCoord)
+        /// <summary>
+        /// Draws a 1x1 GridUnit dimension rectangle at canvas coord.
+        /// Used mainly to draw the cursor.
+        /// </summary>
+        public void DrawRectangle(DrawSurfaceCoord canvasCoord)
         {
             if (!isDrawing)
                 throw new Exception();
 
-            CanvasCoord canvasCoord = tabCoord.ToCanvasCoord();
             Point point = new Point(canvasCoord.x, canvasCoord.y);
 
             drawingContext.DrawRectangle(
                 Brushes.LightBlue,
                 null,
-                new Rect(point, new Size(Configuration.UnitSizeX, Configuration.UnitSizeX)));
+                new Rect(
+                    point, 
+                    new Size(Config_DrawSurface.Inst().GridUnitWidth, 
+                    Config_DrawSurface.Inst().GridUnitWidth)));
         }
 
-        public void DrawText(TabCoord tabCoord, string text)
+        public void DrawCharAtTabCoord(DrawSurfaceCoord canvasCoord, char chr)
         {
             if (!isDrawing)
-                throw new Exception();
+                throw new Exception("Something is wrong with the input text");
 
-            Coord canvasCoord = tabCoord.ToCanvasCoord();
             Point point = new Point(canvasCoord.x, canvasCoord.y);
+            DrawCharAtPoint(point, chr);
+        }
 
-            drawingContext.DrawText(
-                new FormattedText(text,
+        private void DrawCharAtPoint(Point point, char c)
+        {
+            FormattedText formattedText =
+                new FormattedText(
+                    c.ToString(),
                     CultureInfo.GetCultureInfo("en-us"),
                     FlowDirection.LeftToRight,
-                    new Typeface("Verdana"),
-                    12,
-                    Brushes.White),
+                    Config_DrawSurface.Inst().TextFont,
+                    Config_DrawSurface.Inst().FontSize,
+                    Brushes.White);
+
+            drawingContext.DrawText(
+                formattedText,
                 point);
         }
 
@@ -85,10 +107,7 @@ namespace TablatureEditor
 
         protected override int VisualChildrenCount
         {
-            get
-            {
-                return visuals.Count;
-            }
+            get { return visuals.Count; }
         }
     }
 }
