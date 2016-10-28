@@ -6,15 +6,27 @@ using System.Threading.Tasks;
 
 namespace PFE.Models
 {
+    /// <summary>
+    /// Represents the tuning of the instruments.
+    /// The number of string can be infered from the 
+    /// number of notes of the tuning.
+    /// </summary>
     public class Tuning
     {
         public List<Note> notes;
 
+        /// <summary>
+        /// Constructs a 6 string standard tuning 
+        /// </summary>
         public Tuning()
         {
             SetToStandard();
         }
 
+        /// <summary>
+        /// Returns the number of strings for this tuning.
+        /// </summary>
+        /// <returns></returns>
         public int GetNumberOfString()
         {
             return notes.Count();

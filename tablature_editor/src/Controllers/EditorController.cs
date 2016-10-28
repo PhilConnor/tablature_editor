@@ -113,16 +113,21 @@ namespace PFE.Controllers
 
             //backspace, delete
             else if (e.Key == Key.Back || e.Key == Key.Delete)
-                _tablatureEditor.WriteCharAtCursor('-');
+                _tablatureEditor.ClearCharsAtCursor();
 
+            //capslock to toggle write mode
             else if (e.Key == Key.CapsLock)
                 _tablatureEditor.ToggleWriteMode();
+
         }
 
         public void TextInput(TextCompositionEventArgs e)
         {
+            char charInput = e.Text.ToCharArray()[0];
+           
             //text
-            _tablatureEditor.WriteCharAtCursor(e.Text.ToCharArray()[0]);
+            if (Char.IsLetterOrDigit(charInput))        
+                _tablatureEditor.WriteCharAtCursor(e.Text.ToCharArray()[0]);
         }
 
         public void MouseDrag(object sender, System.Windows.Input.MouseEventArgs e)
@@ -148,7 +153,6 @@ namespace PFE.Controllers
 
             _tablatureEditor.Select(tabCoord);
         }
-
         #endregion
 
         public void Notify()

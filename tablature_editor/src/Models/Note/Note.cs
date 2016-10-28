@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace PFE.Models
 {
+    //TODO commenting this class
     public class Note
     {
         public int Octave = 0;

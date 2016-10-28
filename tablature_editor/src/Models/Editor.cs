@@ -73,8 +73,6 @@ namespace PFE.Models
         /// If the cursor is bigger than 1x1, it wills the whole area with the cursor.
         /// </summary>
         /// <param name="chr"></param>
-        /// <TODO>Prevent triple num chars from being written.</TODO>
-        /// <TODO>Fix write mode.</TODO>
         public void WriteCharAtCursor(char chr)
         {
             TabCoord cursorTopLeftCoord = Cursor.TopLeftTabCoord();
@@ -112,6 +110,28 @@ namespace PFE.Models
 
             NotifyObserver();
         }
+
+        /// <summary>
+        /// Instruct the editor to clear all chars on cursor
+        /// </summary>
+        public void ClearCharsAtCursor()
+        {
+            TabCoord cursorTopLeftCoord = Cursor.TopLeftTabCoord();
+
+            // Fills the cursor selection with appropriate chr.
+            for (int x = cursorTopLeftCoord.x; x <= cursorTopLeftCoord.x + Cursor.Width - 1; ++x)
+            {
+                for (int y = cursorTopLeftCoord.y; y <= cursorTopLeftCoord.y + Cursor.Height - 1; ++y)
+                {
+                    TabCoord tabCoord = new TabCoord(x, y);
+                    Element element = Tablature.ElementAt(tabCoord);
+                    element.ClearText();                   
+                }
+            }
+            
+            NotifyObserver();
+        }
+
 
         public bool IsWriteModeActivated()
         {
