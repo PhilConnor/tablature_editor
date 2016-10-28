@@ -35,17 +35,17 @@ namespace PFE.Models
 
             for (int y = 0; y < elements.Count(); ++y)
             {
-                elements.ElementAt(y).Character = c.ElementAt(elements.Count() - 1 - y).ToCharArray()[0];
+                elements.ElementAt(y).ClearText();
+                elements.ElementAt(y).RightChar = c.ElementAt(elements.Count() - 1 - y).ToCharArray()[0];
             }
         }
 
         public void ParseTuning(string tuning)
         {
-            char[] tuningCharArray = tuning.ToCharArray();
-
-            for (int y = 0; y < tuningCharArray.Count(); ++y)
+            for (int y = 0; y < tuning.Count(); ++y)
             {
-                elements.ElementAt(y).Character = tuningCharArray.ElementAt(elements.Count() - 1 - y);
+                elements.ElementAt(y).ClearText();
+                elements.ElementAt(y).RightChar = tuning.ElementAt(elements.Count() - 1 - y);
             }
         }
     }

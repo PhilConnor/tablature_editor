@@ -10,7 +10,8 @@ namespace PFE.Models
     /// </summary>
     public class Element
     {
-        public char Character { get; set; }
+        public char RightChar { get; set; } // the main char, if its a number over9 the second digit is stored in leftchar
+        public char LeftChar { get; set; }
 
         public Element()
         {
@@ -19,12 +20,23 @@ namespace PFE.Models
 
         public void ClearText()
         {
-            Character = '-';
+            LeftChar = '-';
+            RightChar = '-';
         }
-
+                
         public bool IsNumber()
         {
-            return Util.IsNumber(Character);
+            return Util.IsNumber(RightChar);
+        }
+
+        public bool IsNumberOver9()
+        {
+            return Util.IsNumber(LeftChar);
+        }
+
+        public bool IsNumberUnder9()
+        {
+            return Util.IsNumber(RightChar) && !Util.IsNumber(LeftChar);
         }
     }
 }

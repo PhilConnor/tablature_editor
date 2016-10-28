@@ -84,11 +84,11 @@ namespace PFE
             DrawCharAtPoint(point, chr);
         }
 
-        private void DrawCharAtPoint(Point point, char c)
+        private void DrawCharAtPoint(Point point, char chr)
         {
             FormattedText formattedText =
                 new FormattedText(
-                    c.ToString(),
+                    chr.ToString(),
                     CultureInfo.GetCultureInfo("en-us"),
                     FlowDirection.LeftToRight,
                     Config_DrawSurface.Inst().TextFont,

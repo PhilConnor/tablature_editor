@@ -35,14 +35,6 @@ namespace PFE.Models
         {
             return new TabCoord(x + 1, y);
         }
-        
-        /// <summary>
-        /// Returns the TabCoord that is appart from two units on the right of this one.
-        /// </summary>
-        public TabCoord CoordOnRightRight()
-        {
-            return new TabCoord(x + 2, y);
-        }
 
         /// <summary>
         /// Returns true if this coord is valid in the tablature.
@@ -55,6 +47,34 @@ namespace PFE.Models
             bool c3 = y < tablature.NStrings; 
 
             return c1 && c2 && c3;
+        }
+
+        /// <summary>
+
+        /// </summary>
+        public bool IsOnLeftEdge(Tablature tablature)
+        {
+            if (!this.IsValid(tablature))
+                return false;
+
+            if (!this.CoordOnLeft().IsValid(tablature))
+                return true;
+
+            return false;
+        }
+
+        /// <summary>
+
+        /// </summary>
+        public bool IsOnRightEdge(Tablature tablature)
+        {
+            if (!this.IsValid(tablature))
+                return false;
+
+            if (!this.CoordOnRight().IsValid(tablature))
+                return true;
+
+            return false;
         }
     }
 }

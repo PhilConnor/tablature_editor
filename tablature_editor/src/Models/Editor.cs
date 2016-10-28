@@ -89,18 +89,24 @@ namespace PFE.Models
                     Element elementOnright = Tablature.ElementAt(tabCoordOnRight);
 
                     // if we are in 10th or 20th mode we write a 1 or 2 before the char.
-                    if (IsWriteModeActivated() && elementOnright != null)
+                    if (Util.IsNumber(chr) && IsWriteModeActivated() && elementOnright != null)
                     {
-                        Tablature.SetElementCharAt(tabCoord, GetWriteModeCharacter().Value);
-                        Tablature.SetElementCharAt(tabCoordOnRight, chr);
+                        Tablature.AttemptSetNumericalCharAt(tabCoord, GetWriteModeCharacter().Value);
+                        Tablature.AttemptSetNumericalCharAt(tabCoordOnRight, chr);
                     }
+                    // otherwise if we are writing a single numerical char
+                    else if (Util.IsNumber(chr))
+                    {
+                        Tablature.AttemptSetNumericalCharAt(tabCoord, chr);
+                    }
+                    // otherwise it means we are writing a non-numerical char
                     else
                     {
-                        Tablature.SetElementCharAt(tabCoord,chr);
+                        Tablature.AttemptSetCharAt(tabCoord, chr);
                     }
                 }
             }
-            
+
             //move the cursor to the next position.
             ApplyCursorMovementBaseOnInput(chr);
 
@@ -210,9 +216,9 @@ namespace PFE.Models
         /// <summary>
         /// Returns the TablatureElement at tabCoord.
         /// </summary>
-        public char GetElementChartAt(TabCoord tabCoord)
+        public char GetElementCharAt(TabCoord tabCoord)
         {
-            return Tablature.GetElementCharAt(tabCoord);
+            return Tablature.GetCharAt(tabCoord);
         }
 
         /// <summary>
@@ -257,25 +263,6 @@ namespace PFE.Models
                     : Cursor.DragableCoord.x;
             }
         }
-
-        //public List<int> GetStaffsTouchingNumbers()
-        //{
-        //    List<int> staffNumbers = new List<int>();
-        //    int firstX = Cursor.TopLeftTabCoord().x;
-        //    int lastX = firstX + Cursor.Width - 1;
-
-        //    staffNumbers[0] = firstX / Tablature.TabLength;
-
-        //    for (var i = firstX + 1; i <= lastX; i++)
-        //    {
-        //        int currentStaffNumber = i / Tablature.TabLength;
-        //        int lastStaffNumberInArray = staffNumbers[staffNumbers.Count - 1];
-
-        //        if (currentStaffNumber != lastStaffNumberInArray)
-        //            staffNumbers.Add(currentStaffNumber);
-        //    }
-        //    return staffNumbers;
-        //}
 
         public void CursorMoveUp()
         {
@@ -339,38 +326,12 @@ namespace PFE.Models
             Cursor.DragableCoord.x = Math.Min(++Cursor.DragableCoord.x, Tablature.Length - 1);
         }
 
-        //public bool IsTouchingLastStaff()
-        //{
-        //    return GetStaffsTouchingNumbers().IndexOf(Tablature.NStaff - 1) != -1;
-        //}
-
-        //public bool isCursorTouchingFirstStaff()
-        //{
-        //    return GetStaffsTouchingNumbers().IndexOf(0) != -1;
-        //}
-
-        //public bool isCursorTouchingLastString()
-        //{
-        //    return Math.Max(Cursor.BaseCoord.y, Cursor.DragableCoord.y) == Tablature.NStrings - 1;
-        //}
-
-        //public bool isCursorTouchingFirstString()
-        //{
-        //    return Math.Min(Cursor.BaseCoord.y, Cursor.DragableCoord.y) == 0;
-        //}
-
-        //public bool isCursorTouchingLastPosition()
-        //{
-        //    return Math.Max(Cursor.BaseCoord.x, Cursor.DragableCoord.x) == Tablature.TabLength - 1;
-        //}
-
-        //TODO: clear selection
         #endregion
 
         #region private
-        private void ApplyCursorMovementBaseOnInput(char keyChar)
+        private void ApplyCursorMovementBaseOnInput(char ch)
         {
-            bool isWritingTwoNumber = WriteMode != WriteModes.Unity && Util.IsNumber(keyChar);
+            bool isWritingTwoNumber = WriteMode != WriteModes.Unity && Util.IsNumber(ch);
 
             // move cursor to the next char position
             MoveCursorWithoutNotifyingObservers(CursorMovements.Right);

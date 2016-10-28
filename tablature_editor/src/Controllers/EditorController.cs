@@ -83,7 +83,7 @@ namespace PFE.Controllers
                 {
                     TabCoord tabCoord = new TabCoord(x, y);
                     DrawSurfaceCoord canvasCoord = CoordConverter.ToDrawSurfaceCoord(tabCoord, _tablatureEditor);
-                    _drawSurface.DrawCharAtTabCoord(canvasCoord, _tablatureEditor.GetElementChartAt(tabCoord));                    
+                    _drawSurface.DrawCharAtTabCoord(canvasCoord, _tablatureEditor.GetElementCharAt(tabCoord));                    
                 }
             }
         }
