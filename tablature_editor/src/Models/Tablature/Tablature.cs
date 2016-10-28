@@ -21,12 +21,12 @@ namespace PFE.Models
         /// <summary>
         /// The current tuning as a string.
         /// </summary>
-        public string Tuning { get; set; } // Tablature parameters.
+        public Tuning Tuning { get; set; }
 
         /// <summary>
         /// The number of strings.
         /// </summary>
-        public int NStrings { get { return Tuning.Length; } }
+        public int NStrings { get { return Tuning.GetNumberOfString(); } }
 
         /// <summary>
         /// The number of staffs in the tablature.
@@ -50,14 +50,14 @@ namespace PFE.Models
         /// </summary>
         public Tablature()
         {
-            Init(3, 80, "EADGBe");
+            Init(3, 80, new Tuning());
         }
 
         /// <summary>
         /// Inits the tablature to a black tablature with standard
         /// tuning and some other default values.
         /// </summary>
-        public void Init(int nStaff, int staffLength, string tuning)
+        public void Init(int nStaff, int staffLength, Tuning tuning)
         {
             Tuning = tuning;
             StaffLength = staffLength;

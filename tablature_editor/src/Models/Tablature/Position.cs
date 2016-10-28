@@ -27,7 +27,7 @@ namespace PFE.Models
                 elements.Add(new Element());
             }
         }
-        
+
         public void ParseString(string stringTabElements)
         {
             string[] separators = { ":" };
@@ -40,12 +40,12 @@ namespace PFE.Models
             }
         }
 
-        public void ParseTuning(string tuning)
+        public void ParseTuning(Tuning tuning)
         {
-            for (int y = 0; y < tuning.Count(); ++y)
+            for (int y = 0; y < tuning.notes.Count(); ++y)
             {
                 elements.ElementAt(y).ClearText();
-                elements.ElementAt(y).RightChar = tuning.ElementAt(elements.Count() - 1 - y);
+                elements.ElementAt(y).RightChar = tuning.notes.ElementAt(elements.Count() - 1 - y).GetNoteChar();
             }
         }
     }
