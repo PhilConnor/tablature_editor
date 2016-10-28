@@ -115,6 +115,12 @@ namespace PFE.Controllers
             else if (e.Key == Key.Back || e.Key == Key.Delete)
                 _tablatureEditor.ClearCharsAtCursor();
 
+            //enter
+            else if (!Keyboard.IsKeyDown(Key.LeftCtrl) && e.Key == Key.Enter)
+                _tablatureEditor.MoveCursor(CursorMovements.SkipStaffDown);
+            else if (Keyboard.IsKeyDown(Key.LeftCtrl) && e.Key == Key.Enter)
+                _tablatureEditor.MoveCursor(CursorMovements.SkipStaffUp);
+
             //capslock to toggle write mode
             else if (e.Key == Key.CapsLock)
                 _tablatureEditor.ToggleWriteMode();
@@ -123,6 +129,9 @@ namespace PFE.Controllers
 
         public void TextInput(TextCompositionEventArgs e)
         {
+            if (e.Text.Length < 1)
+                return;
+
             char charInput = e.Text.ToCharArray()[0];
            
             //text

@@ -77,7 +77,7 @@ namespace PFE.Models
         /// <param name="tabCoord"></param>
         /// <param name="ch"></param>
         public void AttemptSetCharAt(TabCoord tabCoord, char ch)
-        {            
+        {
             //exit if invalid coord
             if (tabCoord == null || !tabCoord.IsValid(this))
                 return;
@@ -86,7 +86,7 @@ namespace PFE.Models
             Element lmnt = ElementAt(tabCoord);
             Element lmntOnRight = ElementAt(tabCoord.CoordOnRight());
             Element lmntOnLeft = ElementAt(tabCoord.CoordOnLeft());
-            
+
             //if we are setting on the right char of num over 9
             if (lmnt.IsNumberOver9())
             {
@@ -96,12 +96,12 @@ namespace PFE.Models
                 lmnt.RightChar = ch;
             }
             //if we are setting on the left char of a num over 9
-            else if(lmntOnRight != null && lmntOnRight.IsNumberOver9())
+            else if (lmntOnRight != null && lmntOnRight.IsNumberOver9())
             {
                 lmnt.ClearText();
                 lmnt.RightChar = ch;
                 lmntOnRight.LeftChar = '-';
-            }                 
+            }
             //if we are setting over a non-num char or a num under 9
             else if (!lmnt.IsNumber() || lmnt.IsNumberUnder9())
             {
@@ -120,7 +120,7 @@ namespace PFE.Models
             //exit if invalid coord
             if (tabCoord == null || !tabCoord.IsValid(this))
                 return;
-                        
+
             //preparing work variables
             Element lmnt = ElementAt(tabCoord);
             Element lmntOnRight = ElementAt(tabCoord.CoordOnRight());
@@ -175,7 +175,7 @@ namespace PFE.Models
 
             if (lmntOnRight != null && lmntOnRight.IsNumberOver9())
                 return lmntOnRight.LeftChar;
-            else 
+            else
                 return lmnt.RightChar;
         }
 
@@ -183,8 +183,8 @@ namespace PFE.Models
         {
             if (ElementAt(tabCoord).RightChar != '-')
                 return true;
-            
-            if(!tabCoord.IsOnRightEdge(this))
+
+            if (!tabCoord.IsOnRightEdge(this))
             {
                 TabCoord tabCoordOnRight = tabCoord.CoordOnRight();
                 if (ElementAt(tabCoordOnRight).IsNumberOver9())
@@ -241,7 +241,7 @@ namespace PFE.Models
 
         public bool isElementOnLeftUnder9(TabCoord tabCoord)
         {
-            TabCoord tabCoordOnLeft= tabCoord.CoordOnLeft();
+            TabCoord tabCoordOnLeft = tabCoord.CoordOnLeft();
             if (tabCoordOnLeft.IsValid(this) && ElementAt(tabCoordOnLeft).IsNumberUnder9())
                 return true;
 
@@ -257,6 +257,15 @@ namespace PFE.Models
                 return null;
 
             return positions.ElementAt(tabCoord.x).elements.ElementAt(tabCoord.y);
+        }
+
+        public void AddNewStaff()
+        {
+            NStaff++;
+            for (int i = 0; i < StaffLength; i++)
+            {
+                positions.Add(new Position(NStrings));
+            }
         }
         #endregion
 
