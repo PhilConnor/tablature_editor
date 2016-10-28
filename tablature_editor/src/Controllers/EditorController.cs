@@ -83,7 +83,7 @@ namespace PFE.Controllers
                 {
                     TabCoord tabCoord = new TabCoord(x, y);
                     DrawSurfaceCoord canvasCoord = CoordConverter.ToDrawSurfaceCoord(tabCoord, _tablatureEditor);
-                    _drawSurface.DrawCharAtTabCoord(canvasCoord, _tablatureEditor.GetElementChartAt(tabCoord));                    
+                    _drawSurface.DrawCharAtTabCoord(canvasCoord, _tablatureEditor.GetElementCharAt(tabCoord));                    
                 }
             }
         }
@@ -113,16 +113,30 @@ namespace PFE.Controllers
 
             //backspace, delete
             else if (e.Key == Key.Back || e.Key == Key.Delete)
-                _tablatureEditor.WriteCharAtCursor('-');
+                _tablatureEditor.ClearCharsAtCursor();
 
+            //enter
+            else if (!Keyboard.IsKeyDown(Key.LeftCtrl) && e.Key == Key.Enter)
+                _tablatureEditor.MoveCursor(CursorMovements.SkipStaffDown);
+            else if (Keyboard.IsKeyDown(Key.LeftCtrl) && e.Key == Key.Enter)
+                _tablatureEditor.MoveCursor(CursorMovements.SkipStaffUp);
+
+            //capslock to toggle write mode
             else if (e.Key == Key.CapsLock)
                 _tablatureEditor.ToggleWriteMode();
+
         }
 
         public void TextInput(TextCompositionEventArgs e)
         {
+            if (e.Text.Length < 1)
+                return;
+
+            char charInput = e.Text.ToCharArray()[0];
+           
             //text
-            _tablatureEditor.WriteCharAtCursor(e.Text.ToCharArray()[0]);
+            if (Char.IsLetterOrDigit(charInput))        
+                _tablatureEditor.WriteCharAtCursor(e.Text.ToCharArray()[0]);
         }
 
         public void MouseDrag(object sender, System.Windows.Input.MouseEventArgs e)
@@ -148,7 +162,6 @@ namespace PFE.Controllers
 
             _tablatureEditor.Select(tabCoord);
         }
-
         #endregion
 
         public void Notify()

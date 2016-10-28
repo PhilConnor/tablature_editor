@@ -74,7 +74,17 @@ namespace PFE.Models
             int y = Math.Min(BaseCoord.y, DragableCoord.y);
             return new TabCoord(x, y);
         }
-        
+
+        public int FirstXValue()
+        {
+            return Math.Min(BaseCoord.x, DragableCoord.x);
+        }
+
+        public int LastXValue()
+        {
+            return Math.Max(BaseCoord.x, DragableCoord.x);
+        }
+
         /// <summary>
         /// Returns a clone instance.
         /// </summary>
@@ -117,5 +127,5 @@ namespace PFE.Models
         #endregion
     }
 
-    public enum CursorMovements { Left, Up, Right, Down, ExpandLeft, ExpandUp, ExpandRight, ExpandDown };
+    public enum CursorMovements { Left, Up, Right, Down, ExpandLeft, ExpandUp, ExpandRight, ExpandDown, SkipStaffDown, SkipStaffUp };
 }

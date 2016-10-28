@@ -73,8 +73,6 @@ namespace PFE.Models
         /// If the cursor is bigger than 1x1, it wills the whole area with the cursor.
         /// </summary>
         /// <param name="chr"></param>
-        /// <TODO>Prevent triple num chars from being written.</TODO>
-        /// <TODO>Fix write mode.</TODO>
         public void WriteCharAtCursor(char chr)
         {
             TabCoord cursorTopLeftCoord = Cursor.TopLeftTabCoord();
@@ -89,23 +87,51 @@ namespace PFE.Models
                     Element elementOnright = Tablature.ElementAt(tabCoordOnRight);
 
                     // if we are in 10th or 20th mode we write a 1 or 2 before the char.
-                    if (IsWriteModeActivated() && elementOnright != null)
+                    if (Util.IsNumber(chr) && IsWriteModeActivated() && elementOnright != null)
                     {
-                        Tablature.SetElementCharAt(tabCoord, GetWriteModeCharacter().Value);
-                        Tablature.SetElementCharAt(tabCoordOnRight, chr);
+                        Tablature.AttemptSetNumericalCharAt(tabCoord, GetWriteModeCharacter().Value);
+                        Tablature.AttemptSetNumericalCharAt(tabCoordOnRight, chr);
                     }
+                    // otherwise if we are writing a single numerical char
+                    else if (Util.IsNumber(chr))
+                    {
+                        Tablature.AttemptSetNumericalCharAt(tabCoord, chr);
+                    }
+                    // otherwise it means we are writing a non-numerical char
                     else
                     {
-                        Tablature.SetElementCharAt(tabCoord,chr);
+                        Tablature.AttemptSetCharAt(tabCoord, chr);
                     }
                 }
             }
-            
+
             //move the cursor to the next position.
             ApplyCursorMovementBaseOnInput(chr);
 
             NotifyObserver();
         }
+
+        /// <summary>
+        /// Instruct the editor to clear all chars on cursor
+        /// </summary>
+        public void ClearCharsAtCursor()
+        {
+            TabCoord cursorTopLeftCoord = Cursor.TopLeftTabCoord();
+
+            // Fills the cursor selection with appropriate chr.
+            for (int x = cursorTopLeftCoord.x; x <= cursorTopLeftCoord.x + Cursor.Width - 1; ++x)
+            {
+                for (int y = cursorTopLeftCoord.y; y <= cursorTopLeftCoord.y + Cursor.Height - 1; ++y)
+                {
+                    TabCoord tabCoord = new TabCoord(x, y);
+                    Element element = Tablature.ElementAt(tabCoord);
+                    element.ClearText();
+                }
+            }
+
+            NotifyObserver();
+        }
+
 
         public bool IsWriteModeActivated()
         {
@@ -161,6 +187,14 @@ namespace PFE.Models
                 case CursorMovements.ExpandDown:
                     CursorExpandDown();
                     break;
+
+                case CursorMovements.SkipStaffDown:
+                    CursorMoveStaffDown();
+                    break;
+
+                case CursorMovements.SkipStaffUp:
+                    CursorMoveStaffUp();
+                    break;
             }
         }
 
@@ -210,9 +244,9 @@ namespace PFE.Models
         /// <summary>
         /// Returns the TablatureElement at tabCoord.
         /// </summary>
-        public char GetElementChartAt(TabCoord tabCoord)
+        public char GetElementCharAt(TabCoord tabCoord)
         {
-            return Tablature.GetElementCharAt(tabCoord);
+            return Tablature.GetCharAt(tabCoord);
         }
 
         /// <summary>
@@ -223,97 +257,64 @@ namespace PFE.Models
             return Cursor.GetSelectedTabCoords();
         }
 
-        /// <summary>
-        /// Move the cursor to the bottom or top staff relative 
-        /// to the current position of the cursor.
-        /// </summary>
-        /// <param name="goDown">true is must go to the staff down.</param>
-        public void changeStaff(bool goDown)
+        public void CursorMoveStaffUp()
         {
-            int staffLenght = Tablature.StaffLength;
-
-            if (goDown)
-            {
-                Cursor.BaseCoord.x
-                    = Cursor.BaseCoord.x + staffLenght < staffLenght
-                    ? Cursor.BaseCoord.x + staffLenght
-                    : Cursor.BaseCoord.x;
-
-                Cursor.DragableCoord.x
-                    = Cursor.DragableCoord.x + staffLenght < staffLenght
-                    ? Cursor.DragableCoord.x + staffLenght
-                    : Cursor.DragableCoord.x;
-            }
-            else
-            {
-                Cursor.BaseCoord.x
-                    = Cursor.BaseCoord.x - staffLenght >= 0
-                    ? Cursor.BaseCoord.x - staffLenght
-                    : Cursor.BaseCoord.x;
-
-                Cursor.DragableCoord.x
-                    = Cursor.DragableCoord.x - staffLenght >= 0
-                    ? Cursor.DragableCoord.x - staffLenght
-                    : Cursor.DragableCoord.x;
-            }
+            if (!IsCursorTouchingFirstStaff())
+                SkipCursorUp();
         }
 
-        //public List<int> GetStaffsTouchingNumbers()
-        //{
-        //    List<int> staffNumbers = new List<int>();
-        //    int firstX = Cursor.TopLeftTabCoord().x;
-        //    int lastX = firstX + Cursor.Width - 1;
+        public void CursorMoveStaffDown()
+        {
+            if (IsCursorTouchingLastStaff())
+                Tablature.AddNewStaff();
 
-        //    staffNumbers[0] = firstX / Tablature.TabLength;
-
-        //    for (var i = firstX + 1; i <= lastX; i++)
-        //    {
-        //        int currentStaffNumber = i / Tablature.TabLength;
-        //        int lastStaffNumberInArray = staffNumbers[staffNumbers.Count - 1];
-
-        //        if (currentStaffNumber != lastStaffNumberInArray)
-        //            staffNumbers.Add(currentStaffNumber);
-        //    }
-        //    return staffNumbers;
-        //}
+            SkipCursorDown();
+        }
 
         public void CursorMoveUp()
         {
-            if (Cursor.BaseCoord.y == 0 || Cursor.DragableCoord.y == 0)
+            if (IsCursorTouchingFirstString())
             {
-                changeStaff(false);
-                return;
+                SkipCursorUp();
             }
-
-            Cursor.BaseCoord.y--;
-            Cursor.DragableCoord.y--;
+            else
+            {
+                Cursor.BaseCoord.y--;
+                Cursor.DragableCoord.y--;
+            }
         }
 
         public void CursorMoveLeft()
         {
-            if (Cursor.BaseCoord.x == 0 || Cursor.DragableCoord.x == 0)
-                return;
-
-            Cursor.BaseCoord.x--;
-            Cursor.DragableCoord.x--;
+            if (!IsCursorTouchingFirstPosition())
+            {
+                Cursor.BaseCoord.x--;
+                Cursor.DragableCoord.x--;
+            }
         }
 
         public void CursorMoveDown()
         {
-            if (Cursor.BaseCoord.y == Tablature.NStrings - 1 || Cursor.DragableCoord.y == Tablature.NStrings - 1)
+            if (IsCursorTouchingLastString() && IsCursorTouchingLastStaff())
             {
-                changeStaff(true);
-                return;
+                Tablature.AddNewStaff();
+                SkipCursorDown();
             }
-
-            Cursor.BaseCoord.y++;
-            Cursor.DragableCoord.y++;
+            else if (IsCursorTouchingLastString())
+            {
+                SkipCursorDown();
+            }
+            else
+            {
+                Cursor.BaseCoord.y++;
+                Cursor.DragableCoord.y++;
+            }
         }
 
         public void CursorMoveRight()
         {
-            if (Cursor.BaseCoord.x >= Tablature.Length - 1 || Cursor.DragableCoord.x >= Tablature.Length - 1)
-                return;
+            if (IsCursorTouchingLastPosition())
+                Tablature.AddNewStaff();
 
             Cursor.BaseCoord.x++;
             Cursor.DragableCoord.x++;
@@ -339,38 +340,44 @@ namespace PFE.Models
             Cursor.DragableCoord.x = Math.Min(++Cursor.DragableCoord.x, Tablature.Length - 1);
         }
 
-        //public bool IsTouchingLastStaff()
-        //{
-        //    return GetStaffsTouchingNumbers().IndexOf(Tablature.NStaff - 1) != -1;
-        //}
+        public void SkipCursorUp()
+        {
+            int staffLenght = Tablature.StaffLength;
 
-        //public bool isCursorTouchingFirstStaff()
-        //{
-        //    return GetStaffsTouchingNumbers().IndexOf(0) != -1;
-        //}
+            Cursor.BaseCoord.x
+                = Cursor.BaseCoord.x - staffLenght >= 0
+                ? Cursor.BaseCoord.x - staffLenght
+                : Cursor.BaseCoord.x;
 
-        //public bool isCursorTouchingLastString()
-        //{
-        //    return Math.Max(Cursor.BaseCoord.y, Cursor.DragableCoord.y) == Tablature.NStrings - 1;
-        //}
+            Cursor.DragableCoord.x
+                = Cursor.DragableCoord.x - staffLenght >= 0
+                ? Cursor.DragableCoord.x - staffLenght
+                : Cursor.DragableCoord.x;
+        }
 
-        //public bool isCursorTouchingFirstString()
-        //{
-        //    return Math.Min(Cursor.BaseCoord.y, Cursor.DragableCoord.y) == 0;
-        //}
+        public void SkipCursorDown()
+        {
+            int staffLenght = Tablature.StaffLength;
 
-        //public bool isCursorTouchingLastPosition()
-        //{
-        //    return Math.Max(Cursor.BaseCoord.x, Cursor.DragableCoord.x) == Tablature.TabLength - 1;
-        //}
+            Cursor.BaseCoord.x
+                = Cursor.BaseCoord.x + staffLenght < Tablature.Length
+                ? Cursor.BaseCoord.x + staffLenght
+                : Cursor.BaseCoord.x;
 
-        //TODO: clear selection
+            Cursor.DragableCoord.x
+                = Cursor.DragableCoord.x + staffLenght < Tablature.Length
+                ? Cursor.DragableCoord.x + staffLenght
+                : Cursor.DragableCoord.x;
+        }
+
+        // private
         #endregion
 
         #region private
-        private void ApplyCursorMovementBaseOnInput(char keyChar)
+
+        private void ApplyCursorMovementBaseOnInput(char ch)
         {
-            bool isWritingTwoNumber = WriteMode != WriteModes.Unity && Util.IsNumber(keyChar);
+            bool isWritingTwoNumber = WriteMode != WriteModes.Unity && Util.IsNumber(ch);
 
             // move cursor to the next char position
             MoveCursorWithoutNotifyingObservers(CursorMovements.Right);
@@ -382,6 +389,50 @@ namespace PFE.Models
             // move cursor again if we are in skipModes.One
             if (SkipMode == SkipModes.One)
                 MoveCursorWithoutNotifyingObservers(CursorMovements.Right);
+        }
+
+        private List<int> GetStaffsTouchingNumbers()
+        {
+            List<int> staffNumbers = new List<int>();
+            int firstX = Cursor.FirstXValue();
+            int lastX = Cursor.LastXValue();
+
+            for (var i = firstX; i <= lastX; i++)
+            {
+                int currentStaffNumber = i / Tablature.StaffLength;
+                staffNumbers.Add(currentStaffNumber);
+            }
+            return staffNumbers;
+        }
+
+        private bool IsCursorTouchingLastStaff()
+        {
+            return GetStaffsTouchingNumbers().IndexOf(Tablature.NStaff - 1) != -1;
+        }
+
+        private bool IsCursorTouchingFirstStaff()
+        {
+            return GetStaffsTouchingNumbers().IndexOf(0) != -1;
+        }
+
+        private bool IsCursorTouchingLastString()
+        {
+            return Math.Max(Cursor.BaseCoord.y, Cursor.DragableCoord.y) == Tablature.NStrings - 1;
+        }
+
+        private bool IsCursorTouchingFirstString()
+        {
+            return Math.Min(Cursor.BaseCoord.y, Cursor.DragableCoord.y) == 0;
+        }
+
+        private bool IsCursorTouchingLastPosition()
+        {
+            return Math.Max(Cursor.BaseCoord.x, Cursor.DragableCoord.x) == Tablature.Length - 1;
+        }
+
+        private bool IsCursorTouchingFirstPosition()
+        {
+            return Math.Min(Cursor.BaseCoord.x, Cursor.DragableCoord.x) <= 0;
         }
 
         #endregion
