@@ -121,6 +121,14 @@ namespace PFE.Controllers
             else if (Keyboard.IsKeyDown(Key.LeftCtrl) && e.Key == Key.Enter)
                 _tablatureEditor.MoveCursor(CursorMovements.SkipStaffUp);
 
+            //copy
+            else if (Keyboard.IsKeyDown(Key.LeftCtrl) && e.Key == Key.C)
+                System.Windows.Clipboard.SetText(_tablatureEditor.SelectionToAscii());
+
+            //paste
+            else if (Keyboard.IsKeyDown(Key.LeftCtrl) && e.Key == Key.V)
+                _tablatureEditor.ParseAscii(System.Windows.Clipboard.GetText());
+
             //capslock to toggle write mode
             else if (e.Key == Key.CapsLock)
                 _tablatureEditor.ToggleWriteMode();

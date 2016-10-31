@@ -15,6 +15,7 @@ namespace PFE.Models
         #region properties
         private Tablature Tablature;
         private Cursor Cursor;
+        private Clipboard Clipboard;
         private WriteModes WriteMode;
         private SkipModes SkipMode;
 
@@ -68,6 +69,68 @@ namespace PFE.Models
             NotifyObserver();
         }
 
+        public void ParseAscii(string ascii)
+        {
+                var startCoord = Cursor.TopLeftTabCoord();
+                var xLimit = TabLength;
+                var yLimit = NStrings;
+
+                var nReturn = 0;
+                var nCurCharPos = 0;
+
+                for (var i = 0; i <= ascii.Length - 1; i++)
+                {
+                    // if we are trying to write on an unexisting string, stop
+                    if (nReturn >= yLimit)
+                        break;
+
+                    // if we are at a line return, we
+                    if (ascii[i] == '\r')
+                    {
+                        i++; // skipping the \n after the \r
+                        nCurCharPos = 0;
+                        nReturn++;
+                        continue;
+                    }
+
+                    // if we are about to write outsite the xLimit, we add a new staff before
+                    // and get the new xLimit
+                    if (startCoord.x + nCurCharPos >= xLimit)
+                    {
+                        Tablature.AddNewStaff();
+                        xLimit = TabLength;
+                    }
+
+                    // write the clipboard current char on the tab
+                    Tablature.AttemptSetCharAt(
+                        new TabCoord(startCoord.x + nCurCharPos, startCoord.y + nReturn), 
+                        ascii[i]);
+
+                    nCurCharPos++;
+                }
+
+            NotifyObserver();
+        }
+
+        public string SelectionToAscii()
+        {
+            string ascii = "";
+
+            var topLeft = Cursor.TopLeftTabCoord();
+
+            for (var j = 0; j < Cursor.Height; j++)
+            {
+                for (var i = 0; i < Cursor.Width; i++)
+                {
+                    ascii += Tablature.GetCharAt(new TabCoord(topLeft.x + i, topLeft.y + j));
+                }
+                ascii += "\r\n";
+            }
+            ascii += "\r\n";
+
+            return ascii;
+        }
+
         /// <summary>
         /// Instruct the editor to place the char where the cursor is.
         /// If the cursor is bigger than 1x1, it wills the whole area with the cursor.
@@ -89,15 +152,9 @@ namespace PFE.Models
                     // if we are in 10th or 20th mode we write a 1 or 2 before the char.
                     if (Util.IsNumber(chr) && IsWriteModeActivated() && elementOnright != null)
                     {
-                        Tablature.AttemptSetNumericalCharAt(tabCoord, GetWriteModeCharacter().Value);
-                        Tablature.AttemptSetNumericalCharAt(tabCoordOnRight, chr);
+                        Tablature.AttemptSetCharAt(tabCoord, GetWriteModeCharacter().Value);
+                        Tablature.AttemptSetCharAt(tabCoordOnRight, chr);
                     }
-                    // otherwise if we are writing a single numerical char
-                    else if (Util.IsNumber(chr))
-                    {
-                        Tablature.AttemptSetNumericalCharAt(tabCoord, chr);
-                    }
-                    // otherwise it means we are writing a non-numerical char
                     else
                     {
                         Tablature.AttemptSetCharAt(tabCoord, chr);

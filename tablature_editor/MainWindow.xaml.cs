@@ -37,7 +37,7 @@ namespace PFE
 
             // Init & Dependancy injection
             Cursor cursor = new Cursor();
-            Tablature tablature = new Tablature();
+            Models.Tablature tablature = new Models.Tablature();
             Editor editor = new Editor(tablature, cursor);
             editorController = new EditorController(editor, drawSurface);
         }

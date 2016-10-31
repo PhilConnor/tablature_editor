@@ -82,6 +82,12 @@ namespace PFE.Models
             if (tabCoord == null || !tabCoord.IsValid(this))
                 return;
 
+            if (Util.IsNumber(ch))
+            {
+                AttemptSetNumericalCharAt(tabCoord, ch);
+                return;
+            }
+            
             //preparing work variables
             Element lmnt = ElementAt(tabCoord);
             Element lmntOnRight = ElementAt(tabCoord.CoordOnRight());
