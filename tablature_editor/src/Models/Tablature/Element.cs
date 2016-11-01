@@ -23,7 +23,12 @@ namespace PFE.Models
             LeftChar = '-';
             RightChar = '-';
         }
-                
+
+        public bool IsEmpty()
+        {
+            return LeftChar == '-' && RightChar == '-';
+        }
+
         public bool IsNumber()
         {
             return Util.IsNumber(RightChar);
