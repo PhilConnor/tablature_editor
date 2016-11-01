@@ -28,6 +28,25 @@ namespace PFE.Models
             }
         }
 
+        public bool IsEmpty()
+        {
+            for (int i = 0; i < elements.Count; i++)
+            {
+                if (!elements[i].IsEmpty())
+                    return false;
+            }
+
+            return true;
+        }
+
+        public void Clear()
+        {
+            for (int i = 0; i < elements.Count; i++)
+            {
+                elements[i].ClearText();
+            }
+        }
+
         public void ParseString(string stringTabElements)
         {
             string[] separators = { ":" };

@@ -77,6 +77,34 @@ namespace PFE.Models
         }
 
         /// <summary>
+        /// Inserts a space at tabCoordX position and 
+        /// shift all elements to the right.
+        /// If this makes an elements getting out of bound of the tablature, 
+        /// it will att a new staff to hold it.
+        /// </summary>
+        /// <param name="tabCoord"></param>
+        public void InsertSpaceAt(TabCoord tabCoord)
+        {
+            int x = tabCoord.x;
+            Position positionAtX = positions[x];
+            Position tmpPosition;
+
+            for (int i = x; i < Length; i++)
+            {
+                bool isStaffEnd = (0 == i % StaffLength);
+                bool isTabEnd = (i == Length - 1);
+
+                if (isTabEnd && !positions[i].IsEmpty())
+                    AddNewStaff();
+
+                tmpPosition = positions[i];
+                positions[i] = positionAtX;
+                positionAtX = tmpPosition;
+            }
+            positions[x].Clear();
+        }
+
+        /// <summary>
         /// Set the non numerical char at tabCoord
         /// </summary>
         /// <param name="tabCoord"></param>

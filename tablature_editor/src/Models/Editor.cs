@@ -127,6 +127,16 @@ namespace PFE.Models
             NotifyObserver();
         }
 
+        /// <summary>
+        /// Instruct the editor to insert space at cursor.
+        /// </summary>
+        public void InsertSpaceAtCursor()
+        {
+            TabCoord topLeft = Cursor.TopLeftTabCoord();
+            Tablature.InsertSpaceAt(topLeft);
+
+            NotifyObserver();
+        }
 
         public bool IsWriteModeActivated()
         {
