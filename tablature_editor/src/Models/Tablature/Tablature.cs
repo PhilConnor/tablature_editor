@@ -53,6 +53,11 @@ namespace PFE.Models
             Init(3, 80, new Tuning());
         }
 
+        public Tablature(int nStaff, int staffLength, Tuning tuning)
+        {
+            Init(nStaff, staffLength, tuning);
+        }
+
         /// <summary>
         /// Inits the tablature to a black tablature with standard
         /// tuning and some other default values.
@@ -87,7 +92,7 @@ namespace PFE.Models
                 AttemptSetNumericalCharAt(tabCoord, ch);
                 return;
             }
-            
+
             //preparing work variables
             Element lmnt = ElementAt(tabCoord);
             Element lmntOnRight = ElementAt(tabCoord.CoordOnRight());
@@ -273,6 +278,39 @@ namespace PFE.Models
                 positions.Add(new Position(NStrings));
             }
         }
+
+        public bool Equals(Tablature tablature)
+        {
+            if (tablature.Tuning != Tuning)
+                return false;
+
+            if (tablature.NStaff != NStaff)
+                return false;
+
+            if (tablature.StaffLength != StaffLength)
+                return false;
+
+            for (int i = 0; i < tablature.Length; i++)
+            {
+                if (!tablature.positions[i].Equals(positions[i]))
+                    return false;
+            }
+
+            return true;
+        }
+
+        public Tablature Clone()
+        {
+            Tablature clone = new Tablature(NStaff, StaffLength, Tuning.Clone());
+
+            for (int i = 0; i < Length; i++)
+            {
+                clone.positions[i] = positions[i].Clone();
+            }
+
+            return clone;
+        }
+
         #endregion
 
         #region private

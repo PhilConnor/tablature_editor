@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using PFE.Controllers;
 using PFE.Interfaces;
 using PFE.Utils;
+using PFE.UndoRedo;
 
 namespace PFE.Models
 {
@@ -15,7 +16,6 @@ namespace PFE.Models
         #region properties
         private Tablature Tablature;
         private Cursor Cursor;
-        private Clipboard Clipboard;
         private WriteModes WriteMode;
         private SkipModes SkipMode;
 
@@ -52,7 +52,7 @@ namespace PFE.Models
         }
         #endregion
 
-        #region public
+        #region Public
         /// <summary>
         /// Constructor.
         /// </summary>
@@ -67,68 +67,6 @@ namespace PFE.Models
             Cursor = cursor;
 
             NotifyObserver();
-        }
-
-        public void ParseAscii(string ascii)
-        {
-                var startCoord = Cursor.TopLeftTabCoord();
-                var xLimit = TabLength;
-                var yLimit = NStrings;
-
-                var nReturn = 0;
-                var nCurCharPos = 0;
-
-                for (var i = 0; i <= ascii.Length - 1; i++)
-                {
-                    // if we are trying to write on an unexisting string, stop
-                    if (nReturn >= yLimit)
-                        break;
-
-                    // if we are at a line return, we
-                    if (ascii[i] == '\r')
-                    {
-                        i++; // skipping the \n after the \r
-                        nCurCharPos = 0;
-                        nReturn++;
-                        continue;
-                    }
-
-                    // if we are about to write outsite the xLimit, we add a new staff before
-                    // and get the new xLimit
-                    if (startCoord.x + nCurCharPos >= xLimit)
-                    {
-                        Tablature.AddNewStaff();
-                        xLimit = TabLength;
-                    }
-
-                    // write the clipboard current char on the tab
-                    Tablature.AttemptSetCharAt(
-                        new TabCoord(startCoord.x + nCurCharPos, startCoord.y + nReturn), 
-                        ascii[i]);
-
-                    nCurCharPos++;
-                }
-
-            NotifyObserver();
-        }
-
-        public string SelectionToAscii()
-        {
-            string ascii = "";
-
-            var topLeft = Cursor.TopLeftTabCoord();
-
-            for (var j = 0; j < Cursor.Height; j++)
-            {
-                for (var i = 0; i < Cursor.Width; i++)
-                {
-                    ascii += Tablature.GetCharAt(new TabCoord(topLeft.x + i, topLeft.y + j));
-                }
-                ascii += "\r\n";
-            }
-            ascii += "\r\n";
-
-            return ascii;
         }
 
         /// <summary>
@@ -262,6 +200,7 @@ namespace PFE.Models
         public void MoveCursor(CursorMovements mouvement)
         {
             MoveCursorWithoutNotifyingObservers(mouvement);
+
             NotifyObserver();
         }
 
@@ -271,6 +210,7 @@ namespace PFE.Models
         public void Select(TabCoord tabCoord)
         {
             Cursor.SetTabCoords(tabCoord);
+
             NotifyObserver();
         }
 
@@ -280,6 +220,7 @@ namespace PFE.Models
         public void SelectUpTo(TabCoord dragableCoord)
         {
             Cursor.DragableCoord = dragableCoord;
+
             NotifyObserver();
         }
 
@@ -313,14 +254,29 @@ namespace PFE.Models
         {
             return Cursor.GetSelectedTabCoords();
         }
+        #endregion
+        public Memento GetMemento()
+        {
+            return new Memento(Cursor, Tablature);
+        }
 
-        public void CursorMoveStaffUp()
+        public void UpdateToMemento(Memento memento)
+        {
+            this.Tablature = memento.Tablature;
+            this.Cursor = memento.Cursor;
+
+            NotifyObserver();
+        }
+
+        #region Private
+
+        private void CursorMoveStaffUp()
         {
             if (!IsCursorTouchingFirstStaff())
                 SkipCursorUp();
         }
 
-        public void CursorMoveStaffDown()
+        private void CursorMoveStaffDown()
         {
             if (IsCursorTouchingLastStaff())
                 Tablature.AddNewStaff();
@@ -328,7 +284,7 @@ namespace PFE.Models
             SkipCursorDown();
         }
 
-        public void CursorMoveUp()
+        private void CursorMoveUp()
         {
             if (IsCursorTouchingFirstString())
             {
@@ -341,7 +297,7 @@ namespace PFE.Models
             }
         }
 
-        public void CursorMoveLeft()
+        private void CursorMoveLeft()
         {
             if (!IsCursorTouchingFirstPosition())
             {
@@ -350,7 +306,7 @@ namespace PFE.Models
             }
         }
 
-        public void CursorMoveDown()
+        private void CursorMoveDown()
         {
             if (IsCursorTouchingLastString() && IsCursorTouchingLastStaff())
             {
@@ -368,7 +324,7 @@ namespace PFE.Models
             }
         }
 
-        public void CursorMoveRight()
+        private void CursorMoveRight()
         {
             if (IsCursorTouchingLastPosition())
                 Tablature.AddNewStaff();
@@ -377,27 +333,27 @@ namespace PFE.Models
             Cursor.DragableCoord.x++;
         }
 
-        public void CursorExpandUp()
+        private void CursorExpandUp()
         {
             Cursor.DragableCoord.y = Math.Max(--Cursor.DragableCoord.y, 0);
         }
 
-        public void CursorExpandLeft()
+        private void CursorExpandLeft()
         {
             Cursor.DragableCoord.x = Math.Max(--Cursor.DragableCoord.x, 0);
         }
 
-        public void CursorExpandDown()
+        private void CursorExpandDown()
         {
             Cursor.DragableCoord.y = Math.Min(++Cursor.DragableCoord.y, Tablature.NStrings);
         }
 
-        public void CursorExpandRight()
+        private void CursorExpandRight()
         {
             Cursor.DragableCoord.x = Math.Min(++Cursor.DragableCoord.x, Tablature.Length - 1);
         }
 
-        public void SkipCursorUp()
+        private void SkipCursorUp()
         {
             int staffLenght = Tablature.StaffLength;
 
@@ -412,7 +368,7 @@ namespace PFE.Models
                 : Cursor.DragableCoord.x;
         }
 
-        public void SkipCursorDown()
+        private void SkipCursorDown()
         {
             int staffLenght = Tablature.StaffLength;
 
@@ -426,11 +382,6 @@ namespace PFE.Models
                 ? Cursor.DragableCoord.x + staffLenght
                 : Cursor.DragableCoord.x;
         }
-
-        // private
-        #endregion
-
-        #region private
 
         private void ApplyCursorMovementBaseOnInput(char ch)
         {
@@ -491,9 +442,72 @@ namespace PFE.Models
         {
             return Math.Min(Cursor.BaseCoord.x, Cursor.DragableCoord.x) <= 0;
         }
-
         #endregion
 
+        #region Ascii
+        public void ParseAscii(string ascii)
+        {
+            var startCoord = Cursor.TopLeftTabCoord();
+            var xLimit = TabLength;
+            var yLimit = NStrings;
+
+            var nReturn = 0;
+            var nCurCharPos = 0;
+
+            for (var i = 0; i <= ascii.Length - 1; i++)
+            {
+                // if we are trying to write on an unexisting string, stop
+                if (nReturn >= yLimit)
+                    break;
+
+                // if we are at a line return, we
+                if (ascii[i] == '\r')
+                {
+                    i++; // skipping the \n after the \r
+                    nCurCharPos = 0;
+                    nReturn++;
+                    continue;
+                }
+
+                // if we are about to write outsite the xLimit, we add a new staff before
+                // and get the new xLimit
+                if (startCoord.x + nCurCharPos >= xLimit)
+                {
+                    Tablature.AddNewStaff();
+                    xLimit = TabLength;
+                }
+
+                // write the clipboard current char on the tab
+                Tablature.AttemptSetCharAt(
+                    new TabCoord(startCoord.x + nCurCharPos, startCoord.y + nReturn),
+                    ascii[i]);
+
+                nCurCharPos++;
+            }
+            
+            NotifyObserver();
+        }
+
+        public string SelectionToAscii()
+        {
+            string ascii = "";
+
+            var topLeft = Cursor.TopLeftTabCoord();
+
+            for (var j = 0; j < Cursor.Height; j++)
+            {
+                for (var i = 0; i < Cursor.Width; i++)
+                {
+                    ascii += Tablature.GetCharAt(new TabCoord(topLeft.x + i, topLeft.y + j));
+                }
+                ascii += "\r\n";
+            }
+            ascii += "\r\n";
+
+            return ascii;
+        }
+        #endregion
+        
         #region observer
         private List<IObserver> observers = new List<IObserver>();
 

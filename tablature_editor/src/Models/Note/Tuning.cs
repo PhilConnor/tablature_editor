@@ -24,6 +24,18 @@ namespace PFE.Models
         }
 
         /// <summary>
+        /// Constructs a nString standard tuning with default E2 notes 
+        /// </summary>
+        public Tuning(int nString)
+        {
+            notes = new List<Note>(nString);
+            for (int i = 0; i < nString; i++)
+            {
+                notes.Add(new Note(2, Note.NotesEnum.E));
+            }
+        }
+
+        /// <summary>
         /// Returns the number of strings for this tuning.
         /// </summary>
         /// <returns></returns>
@@ -45,6 +57,32 @@ namespace PFE.Models
             notes.Add(new Note(3, Note.NotesEnum.G));
             notes.Add(new Note(3, Note.NotesEnum.B));
             notes.Add(new Note(4, Note.NotesEnum.E));
+        }
+
+        public bool Equals(Tuning tuning)
+        {
+            if (tuning.notes.Count != notes.Count)
+                return false;
+
+            for (int i = 0; i < notes.Count; i++)
+            {
+                if (!notes[i].Equals(tuning.notes[i]))
+                    return false;
+            }
+
+            return true;
+        }
+
+        public Tuning Clone()
+        {
+            Tuning clone = new Tuning(this.notes.Count);
+
+            for (int i = 0; i < notes.Count; i++)
+            {
+                clone.notes[i] = notes[i].Clone();
+            }
+
+            return clone;
         }
     }
 }

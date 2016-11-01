@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows;
 using tablature_editor.Utils;
 using PFE.Configs;
+using PFE.UndoRedo;
 
 namespace PFE.Controllers
 {
@@ -27,22 +28,46 @@ namespace PFE.Controllers
         /// <summary>
         /// The Editor instance.
         /// </summary>
-        private Editor _tablatureEditor;
+        private Editor _editor;
+
+        private MementoCareTaker mementoCareTaker;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="drawSurface">the surface on wich to draw the editor</param>
-        /// <param name="tablatureEditor">an editor instance</param>
-        public EditorController(Editor tablatureEditor, DrawSurface drawSurface)
+        /// <param name="editor">an editor instance</param>
+        public EditorController(Editor editor, DrawSurface drawSurface)
         {
-            _tablatureEditor = tablatureEditor;
+            _editor = editor;
             _drawSurface = drawSurface;
 
-            tablatureEditor.Subscribe(this);
+            mementoCareTaker = new MementoCareTaker(_editor.GetMemento());
+            editor.Subscribe(this);
             ReDrawTablature();
         }
-        
+
+        #region UndoRedo
+
+        public void Undo()
+        {
+            Memento memento = mementoCareTaker.Undo();
+            _editor.UpdateToMemento(memento);
+        }
+
+        public void Redo()
+        {
+            Memento memento = mementoCareTaker.Redo();
+            _editor.UpdateToMemento(memento);
+        }
+
+        public void UpdateMementoCareTaker()
+        {
+            mementoCareTaker.AddMemento(_editor.GetMemento());
+        }
+
+        #endregion
+
         /// <summary>
         /// Redraws the Editor objects on the DrawSurface.
         /// </summary>
@@ -64,9 +89,9 @@ namespace PFE.Controllers
         /// </summary>
         private void RedrawCursor()
         {
-            foreach (TabCoord tabCoord in _tablatureEditor.GetSelectedTabCoords())
+            foreach (TabCoord tabCoord in _editor.GetSelectedTabCoords())
             {
-                DrawSurfaceCoord canvasCoord = CoordConverter.ToDrawSurfaceCoord(tabCoord, _tablatureEditor);
+                DrawSurfaceCoord canvasCoord = CoordConverter.ToDrawSurfaceCoord(tabCoord, _editor);
                 _drawSurface.DrawRectangle(canvasCoord);
             }
         }
@@ -77,61 +102,108 @@ namespace PFE.Controllers
         private void RedrawElements()
         {
             //for each tab elements
-            for (int x = 0; x < _tablatureEditor.TabLength; ++x)
+            for (int x = 0; x < _editor.TabLength; ++x)
             {
-                for (int y = 0; y < _tablatureEditor.NStrings; ++y)
+                for (int y = 0; y < _editor.NStrings; ++y)
                 {
                     TabCoord tabCoord = new TabCoord(x, y);
-                    DrawSurfaceCoord canvasCoord = CoordConverter.ToDrawSurfaceCoord(tabCoord, _tablatureEditor);
-                    _drawSurface.DrawCharAtTabCoord(canvasCoord, _tablatureEditor.GetElementCharAt(tabCoord));                    
+                    DrawSurfaceCoord canvasCoord = CoordConverter.ToDrawSurfaceCoord(tabCoord, _editor);
+                    _drawSurface.DrawCharAtTabCoord(canvasCoord, _editor.GetElementCharAt(tabCoord));
                 }
             }
         }
-        
+
         #region User inputs
         public void KeyDown(KeyEventArgs e)
         {
             //shift + arrow
             if (Keyboard.IsKeyDown(Key.LeftShift) && e.Key == Key.Left)
-                _tablatureEditor.MoveCursor(CursorMovements.ExpandLeft);
+            {
+                _editor.MoveCursor(CursorMovements.ExpandLeft);
+                UpdateMementoCareTaker();
+            }
             else if (Keyboard.IsKeyDown(Key.LeftShift) && e.Key == Key.Up)
-                _tablatureEditor.MoveCursor(CursorMovements.ExpandUp);
+            {
+                _editor.MoveCursor(CursorMovements.ExpandUp);
+                UpdateMementoCareTaker();
+            }
             else if (Keyboard.IsKeyDown(Key.LeftShift) && e.Key == Key.Right)
-                _tablatureEditor.MoveCursor(CursorMovements.ExpandRight);
+            {
+                _editor.MoveCursor(CursorMovements.ExpandRight);
+                UpdateMementoCareTaker();
+            }
             else if (Keyboard.IsKeyDown(Key.LeftShift) && e.Key == Key.Down)
-                _tablatureEditor.MoveCursor(CursorMovements.ExpandDown);
+            {
+                _editor.MoveCursor(CursorMovements.ExpandDown);
+                UpdateMementoCareTaker();
+            }
 
             //arrow
             else if (e.Key == Key.Left)
-                _tablatureEditor.MoveCursor(CursorMovements.Left);
+            {
+                _editor.MoveCursor(CursorMovements.Left);
+                UpdateMementoCareTaker();
+            }
             else if (e.Key == Key.Up)
-                _tablatureEditor.MoveCursor(CursorMovements.Up);
+            {
+                _editor.MoveCursor(CursorMovements.Up);
+                UpdateMementoCareTaker();
+            }
             else if (e.Key == Key.Right)
-                _tablatureEditor.MoveCursor(CursorMovements.Right);
+            {
+                _editor.MoveCursor(CursorMovements.Right);
+                UpdateMementoCareTaker();
+            }
             else if (e.Key == Key.Down)
-                _tablatureEditor.MoveCursor(CursorMovements.Down);
+            {
+                _editor.MoveCursor(CursorMovements.Down);
+                UpdateMementoCareTaker();
+            }
 
             //backspace, delete
             else if (e.Key == Key.Back || e.Key == Key.Delete)
-                _tablatureEditor.ClearCharsAtCursor();
+            {
+                _editor.ClearCharsAtCursor();
+                UpdateMementoCareTaker();
+            }
 
             //enter
             else if (!Keyboard.IsKeyDown(Key.LeftCtrl) && e.Key == Key.Enter)
-                _tablatureEditor.MoveCursor(CursorMovements.SkipStaffDown);
+            {
+                _editor.MoveCursor(CursorMovements.SkipStaffDown);
+                UpdateMementoCareTaker();
+            }
             else if (Keyboard.IsKeyDown(Key.LeftCtrl) && e.Key == Key.Enter)
-                _tablatureEditor.MoveCursor(CursorMovements.SkipStaffUp);
+            {
+                _editor.MoveCursor(CursorMovements.SkipStaffUp);
+                UpdateMementoCareTaker();
+            }
 
             //copy
             else if (Keyboard.IsKeyDown(Key.LeftCtrl) && e.Key == Key.C)
-                System.Windows.Clipboard.SetText(_tablatureEditor.SelectionToAscii());
+                System.Windows.Clipboard.SetText(_editor.SelectionToAscii());
 
             //paste
             else if (Keyboard.IsKeyDown(Key.LeftCtrl) && e.Key == Key.V)
-                _tablatureEditor.ParseAscii(System.Windows.Clipboard.GetText());
+            {
+                _editor.ParseAscii(System.Windows.Clipboard.GetText());
+                UpdateMementoCareTaker();
+            }
+
+            //undo
+            else if (Keyboard.IsKeyDown(Key.LeftCtrl) && e.Key == Key.Z)
+            {
+                Debug.WriteLine("Undo " + DateTime.Now.ToString());
+                Undo();
+            }
+
+            //redo
+            else if (Keyboard.IsKeyDown(Key.LeftCtrl) && e.Key == Key.R)
+                Redo();
 
             //capslock to toggle write mode
             else if (e.Key == Key.CapsLock)
-                _tablatureEditor.ToggleWriteMode();
+                _editor.ToggleWriteMode();
 
         }
 
@@ -141,34 +213,43 @@ namespace PFE.Controllers
                 return;
 
             char charInput = e.Text.ToCharArray()[0];
-           
+
             //text
-            if (Char.IsLetterOrDigit(charInput))        
-                _tablatureEditor.WriteCharAtCursor(e.Text.ToCharArray()[0]);
+            if (Char.IsLetterOrDigit(charInput))
+            {
+                _editor.WriteCharAtCursor(e.Text.ToCharArray()[0]);
+                UpdateMementoCareTaker();
+            }
         }
 
         public void MouseDrag(object sender, System.Windows.Input.MouseEventArgs e)
         {
             Point point = e.GetPosition(sender as DrawSurface);
 
-            TabCoord tabCoord = CoordConverter.ToTabCoord(point, _tablatureEditor);
+            TabCoord tabCoord = CoordConverter.ToTabCoord(point, _editor);
 
             if (tabCoord == null)
                 return;
 
-            _tablatureEditor.SelectUpTo(tabCoord);
+            _editor.SelectUpTo(tabCoord);
         }
 
         public void MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             Point point = e.GetPosition(sender as DrawSurface);
 
-            TabCoord tabCoord = CoordConverter.ToTabCoord(point, _tablatureEditor);
+            TabCoord tabCoord = CoordConverter.ToTabCoord(point, _editor);
 
             if (tabCoord == null)
                 return;
 
-            _tablatureEditor.Select(tabCoord);
+            _editor.Select(tabCoord);
+        }
+
+        public void MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            UpdateMementoCareTaker();
+            Debug.WriteLine("Mouse up " + DateTime.Now.ToString());
         }
         #endregion
 

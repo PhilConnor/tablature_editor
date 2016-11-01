@@ -76,5 +76,11 @@ namespace PFE
         {
             editorController.MouseDown(sender, e);
         }
+
+        private void drawSurface_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            editorController.MouseUp(sender, e);
+
+        }
     } // 
 }

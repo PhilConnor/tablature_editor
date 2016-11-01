@@ -34,6 +34,6 @@
             HorizontalAlignment="Center"
             VerticalAlignment="Top"
             MouseDown="drawSurface_MouseDown"
-            MouseMove="drawSurface_MouseMove" />
+            MouseMove="drawSurface_MouseMove" MouseUp="drawSurface_MouseUp" />
     </Border>
 </Window>

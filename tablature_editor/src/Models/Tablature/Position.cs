@@ -48,5 +48,35 @@ namespace PFE.Models
                 elements.ElementAt(y).RightChar = tuning.notes.ElementAt(elements.Count() - 1 - y).GetNoteChar();
             }
         }
+
+        public bool Equals(Position position)
+        {
+            if (position.elements.Count != elements.Count)
+                return false;
+
+            for (int i = 0; i < elements.Count; i++)
+            {
+                if (!elements[i].Equals(position.elements[i]))
+                    return false;
+            }
+
+            return true;
+        }
+
+
+        public Position Clone()
+        {
+            Position clone = new Position(this.elements.Count);
+            for (int i = 0; i < elements.Count; i++)
+            {
+                clone.elements[i] = elements[i].Clone();
+            }
+
+            return clone;
+        }
+
     }
+
+
+
 }
