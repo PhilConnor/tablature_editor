@@ -58,11 +58,12 @@
     <Compile Include="src\Controllers\EditorController.cs" />
     <Compile Include="src\Interfaces\IObservable.cs" />
     <Compile Include="src\Interfaces\IObserver.cs" />
-    <Compile Include="src\Models\Clipboard\Clipboard.cs" />
     <Compile Include="src\Models\Coord\DrawSurfaceCoord.cs" />
     <Compile Include="src\Models\Coord\TabCoord.cs" />
     <Compile Include="src\Models\Note\Note.cs" />
     <Compile Include="src\Models\Note\Tuning.cs" />
+    <Compile Include="src\UndoRedo\Memento.cs" />
+    <Compile Include="src\UndoRedo\MementoCareTaker.cs" />
     <Compile Include="src\Utils\CoordConverter.cs" />
     <Compile Include="src\Views\DrawSurface.cs" />
     <Compile Include="src\Models\Editor.cs" />

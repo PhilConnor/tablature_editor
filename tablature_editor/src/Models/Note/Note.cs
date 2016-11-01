@@ -33,6 +33,16 @@ namespace PFE.Models
             return Enum.GetName(typeof(NotesEnum), Value)[0];
         }
 
+        public Note Clone()
+        {
+            return new Note(Octave,Value);
+        }
+
+        public bool Equals(Note note)
+        {
+            return note.Octave == Octave && Value == note.Value;
+        }
+
         public enum NotesEnum { A, As, B, C, Cs, D, Ds, E, F, Fs, G, Gs };
     }
 }

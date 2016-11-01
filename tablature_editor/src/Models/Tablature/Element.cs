@@ -38,5 +38,18 @@ namespace PFE.Models
         {
             return Util.IsNumber(RightChar) && !Util.IsNumber(LeftChar);
         }
+
+        public bool Equals(Element element)
+        {
+            return LeftChar == element.LeftChar && RightChar == element.RightChar;
+        }
+
+        public Element Clone()
+        {
+            Element clone = new Element();
+            clone.LeftChar = this.LeftChar;
+            clone.RightChar = this.RightChar;
+            return clone;
+        }
     }
 }
