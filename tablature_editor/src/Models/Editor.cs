@@ -140,7 +140,7 @@ namespace PFE.Models
             TabCoord topLeft = Cursor.TopLeftTabCoord();
             Tablature.InsertSpaceAt(topLeft);
 
-            NotifyObserver();
+            NotifyObserverRedraw();
         }
 
         public bool IsWriteModeActivated()
