@@ -105,19 +105,19 @@ namespace PFE.Models
         }
 
         /// <summary>
-        /// Set the non numerical char at tabCoord
+        /// Set the modifier (non-numerical char) at tabCoord
         /// </summary>
         /// <param name="tabCoord"></param>
-        /// <param name="ch"></param>
-        public void AttemptSetCharAt(TabCoord tabCoord, char ch)
+        /// <param name="modifierChar"></param>
+        public void AttemptSetModifierAt(TabCoord tabCoord, char modifierChar)
         {
             //exit if invalid coord
             if (tabCoord == null || !tabCoord.IsValid(this))
                 return;
 
-            if (Util.IsNumber(ch))
+            if (Util.IsNumber(modifierChar))
             {
-                AttemptSetNumericalCharAt(tabCoord, ch);
+                AttemptSetNoteAt(tabCoord, modifierChar);
                 return;
             }
 
@@ -132,29 +132,29 @@ namespace PFE.Models
                 lmntOnLeft.ClearText();
                 lmntOnLeft.RightChar = lmnt.LeftChar;
                 lmnt.ClearText();
-                lmnt.RightChar = ch;
+                lmnt.RightChar = modifierChar;
             }
             //if we are setting on the left char of a num over 9
             else if (lmntOnRight != null && lmntOnRight.IsNumberOver9())
             {
                 lmnt.ClearText();
-                lmnt.RightChar = ch;
+                lmnt.RightChar = modifierChar;
                 lmntOnRight.LeftChar = '-';
             }
             //if we are setting over a non-num char or a num under 9
             else if (!lmnt.IsNumber() || lmnt.IsNumberUnder9())
             {
                 lmnt.ClearText();
-                lmnt.RightChar = ch;
+                lmnt.RightChar = modifierChar;
             }
         }
 
         /// <summary>
-        /// Set the numerical char at tabCoord
+        /// Attempt to set the note (numerical char) at tabCoord
         /// </summary>
         /// <param name="tabCoord"></param>
-        /// <param name="ch"></param>
-        public void AttemptSetNumericalCharAt(TabCoord tabCoord, char ch)
+        /// <param name="noteChar"></param>
+        public void AttemptSetNoteAt(TabCoord tabCoord, char noteChar)
         {
             //exit if invalid coord
             if (tabCoord == null || !tabCoord.IsValid(this))
@@ -165,28 +165,28 @@ namespace PFE.Models
             Element lmntOnRight = ElementAt(tabCoord.CoordOnRight());
             Element lmntOnLeft = ElementAt(tabCoord.CoordOnLeft());
 
-            bool isANumCharOnLeft = isANumericalCharThere(tabCoord.CoordOnLeft());
-            bool isANumCharOnRight = isANumericalCharThere(tabCoord.CoordOnRight());
+            bool isANumCharOnLeft = isANoteCharThere(tabCoord.CoordOnLeft());
+            bool isANumCharOnRight = isANoteCharThere(tabCoord.CoordOnRight());
 
             //if no numerical chars are surrounding this coord
             if (!isANumCharOnLeft && !isANumCharOnRight)
             {
                 lmnt.ClearText();
-                lmnt.RightChar = ch;
+                lmnt.RightChar = noteChar;
             }
             //if there is no num char on left and a num under 9 on right
             else if (isElementOnRightUnder9(tabCoord)
                 && !isANumCharOnLeft)
             {
                 lmnt.ClearText();
-                lmntOnRight.LeftChar = ch;
+                lmntOnRight.LeftChar = noteChar;
             }
             //if there is no num char on left and a num over 9 on right
             else if (isElementOnRightOver9(tabCoord)
                 && !isANumCharOnLeft)
             {
                 lmnt.ClearText();
-                lmntOnRight.LeftChar = ch;
+                lmntOnRight.LeftChar = noteChar;
             }
             //if there is no num char on right and a num under 9 on left
             else if (!isANumCharOnRight
@@ -194,13 +194,13 @@ namespace PFE.Models
             {
                 lmnt.LeftChar = lmntOnLeft.RightChar;
                 lmntOnLeft.ClearText();
-                lmnt.RightChar = ch;
+                lmnt.RightChar = noteChar;
             }
             //if there is no num char on right and a num over 9 on this coord
             else if (!isANumCharOnRight
                 && lmnt.IsNumberOver9())
             {
-                lmnt.RightChar = ch;
+                lmnt.RightChar = noteChar;
             }
         }
 
@@ -208,7 +208,7 @@ namespace PFE.Models
         /// Change the element to the tabCoord as a numerical value under 100.
         /// It will add spaced at appropriates places if needed to accomodate 
         /// a numerical value changing from being 1 digit to 2 digits.
-        /// If there is no numerical value at the element pointed by tabCoord,
+        /// If there is no note (numerical char) at the element pointed by tabCoord,
         /// This method will do nothing.
         /// </summary>
         /// <param name="tabCoord"></param>
@@ -217,7 +217,7 @@ namespace PFE.Models
         /// Returns true if a space has been added to accomodate a newly 
         /// added digit.
         /// </returns>
-        public bool ChangeNumericalAt(TabCoord tabCoord, int note)
+        public bool ChangeNoteAt(TabCoord tabCoord, int note)
         {
             bool spaceHasBeenAdded = false;
 
@@ -225,27 +225,45 @@ namespace PFE.Models
             if (tabCoord == null || !tabCoord.IsValid(this))
                 return false;
 
+
+            Element lmnt = ElementAt(tabCoord);
+
+            //if the element did not contain a note, we cannot change 
+            // its numerical value so we do nothing          
+            if (!lmnt.IsNumber())
+                return false;
+
+
             //prevent adding notes higher than 99
             if (note >= 100)
                 note = 99;
 
-            Element lmnt = ElementAt(tabCoord);
+            //prevent adding notes lower than 0
+            if (note < 0)
+                note = 0;
+                
+            Element lmntAtLeft = ElementAt(tabCoord.CoordOnLeft());
+            Element lmntAtLeftLeft = ElementAt(tabCoord.CoordOnLeft().CoordOnLeft());
 
-            if (!lmnt.IsNumber())
-                return false;
+            //Verifying the if we need to add a spacing to accomodate a new char in the case that 
+            //something is already at the location of the new char to be added.
+            bool isAddingAChar = note > 9 && lmnt.IsNumberUnder9();
+            bool isSomethingAtLeft = lmntAtLeft == null || lmntAtLeft != null && !lmntAtLeft.IsEmpty();
+            bool isANoteBefore = lmntAtLeftLeft != null && lmntAtLeftLeft.IsNumber();
 
             //if a note was 1 digit and is about to become two digit
             //we add a space to accomodate it
-            if (note > 9 && lmnt.IsNumberUnder9())
+            if (isAddingAChar && isSomethingAtLeft || isAddingAChar && isANoteBefore)
             {
                 InsertSpaceAt(tabCoord);
                 spaceHasBeenAdded = true;
             }
-
+            
             lmnt.ParseInteger(note);
 
             return spaceHasBeenAdded;
         }
+
 
         /// <summary>
         /// Returns the char value of the element at tabCoord
@@ -276,7 +294,13 @@ namespace PFE.Models
             return false;
         }
 
-        public bool isANumericalCharThere(TabCoord tabCoord)
+        /// <summary>
+        /// Returns true if a char belonging to a note element 
+        /// is occupying the space at tabCoord.
+        /// </summary>
+        /// <param name="tabCoord"></param>
+        /// <returns></returns>
+        public bool isANoteCharThere(TabCoord tabCoord)
         {
             if (!tabCoord.IsValid(this))
                 return false;
@@ -331,7 +355,8 @@ namespace PFE.Models
         }
 
         /// <summary>
-        /// Returns the element at tabCoord
+        /// Returns the element at tabCoord. 
+        /// Returns Null if an invalid tabCoord has been provided.
         /// </summary>
         public Element ElementAt(TabCoord tabCoord)
         {

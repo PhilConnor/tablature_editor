@@ -11,11 +11,11 @@ namespace PFE.Models
     /// Acts like a facade, provides unified and simplified access 
     /// points to tablature and cursor models.
     /// </summary>
-    class Editor : IObservable
+    public class Editor : IObservable
     {
         #region properties
-        private Tablature Tablature;
-        private Cursor Cursor;
+        private Tablature _tablature;
+        private Cursor _cursor;
         private WriteModes WriteMode;
         private SkipModes SkipMode;
 
@@ -53,7 +53,23 @@ namespace PFE.Models
 
         public TabCoord CursorCoord
         {
-            get {return Cursor.DragableCoord; }
+            get { return _cursor.DragableCoord; }
+        }
+
+        public Tablature Tablature
+        {
+            get
+            {
+                return _tablature;
+            }
+        }
+
+        public Cursor Cursor
+        {
+            get
+            {
+                return _cursor;
+            }
         }
         #endregion
 
@@ -68,9 +84,15 @@ namespace PFE.Models
             WriteMode = WriteModes.Unity;
             SkipMode = SkipModes.One;
 
-            Tablature = tablature;
-            Cursor = cursor;
+            _tablature = tablature;
+            _cursor = cursor;
 
+            NotifyObserverRedraw();
+        }
+
+        public void TransposeSelection(int nSemiTones)
+        {
+            Algorithms.Transposition.TransposeSelection(this, nSemiTones);
             NotifyObserverRedraw();
         }
 
@@ -81,12 +103,12 @@ namespace PFE.Models
         /// <param name="chr"></param>
         public void WriteCharAtCursor(char chr)
         {
-            TabCoord cursorTopLeftCoord = Cursor.TopLeftTabCoord();
+            TabCoord cursorTopLeftCoord = _cursor.TopLeftTabCoord();
 
             // Fills the cursor selection with appropriate chr.
-            for (int x = cursorTopLeftCoord.x; x <= cursorTopLeftCoord.x + Cursor.Width - 1; ++x)
+            for (int x = cursorTopLeftCoord.x; x <= cursorTopLeftCoord.x + _cursor.Width - 1; ++x)
             {
-                for (int y = cursorTopLeftCoord.y; y <= cursorTopLeftCoord.y + Cursor.Height - 1; ++y)
+                for (int y = cursorTopLeftCoord.y; y <= cursorTopLeftCoord.y + _cursor.Height - 1; ++y)
                 {
                     TabCoord tabCoord = new TabCoord(x, y);
                     TabCoord tabCoordOnRight = tabCoord.CoordOnRight();
@@ -95,12 +117,12 @@ namespace PFE.Models
                     // if we are in 10th or 20th mode we write a 1 or 2 before the char.
                     if (Util.IsNumber(chr) && IsWriteModeActivated() && elementOnright != null)
                     {
-                        Tablature.AttemptSetCharAt(tabCoord, GetWriteModeCharacter().Value);
-                        Tablature.AttemptSetCharAt(tabCoordOnRight, chr);
+                        Tablature.AttemptSetModifierAt(tabCoord, GetWriteModeCharacter().Value);
+                        Tablature.AttemptSetModifierAt(tabCoordOnRight, chr);
                     }
                     else
                     {
-                        Tablature.AttemptSetCharAt(tabCoord, chr);
+                        Tablature.AttemptSetModifierAt(tabCoord, chr);
                     }
                 }
             }
@@ -116,12 +138,12 @@ namespace PFE.Models
         /// </summary>
         public void ClearCharsAtCursor()
         {
-            TabCoord cursorTopLeftCoord = Cursor.TopLeftTabCoord();
+            TabCoord cursorTopLeftCoord = _cursor.TopLeftTabCoord();
 
             // Fills the cursor selection with appropriate chr.
-            for (int x = cursorTopLeftCoord.x; x <= cursorTopLeftCoord.x + Cursor.Width - 1; ++x)
+            for (int x = cursorTopLeftCoord.x; x <= cursorTopLeftCoord.x + _cursor.Width - 1; ++x)
             {
-                for (int y = cursorTopLeftCoord.y; y <= cursorTopLeftCoord.y + Cursor.Height - 1; ++y)
+                for (int y = cursorTopLeftCoord.y; y <= cursorTopLeftCoord.y + _cursor.Height - 1; ++y)
                 {
                     TabCoord tabCoord = new TabCoord(x, y);
                     Element element = Tablature.ElementAt(tabCoord);
@@ -132,12 +154,34 @@ namespace PFE.Models
             NotifyObserverRedraw();
         }
 
+        public List<TabCoord> GetTabCoordOfNotesAtCursor()
+        {
+            List<TabCoord> tabCoords = new List<TabCoord>();
+
+            TabCoord cursorTopLeftCoord = _cursor.TopLeftTabCoord();
+
+            // Fills the cursor selection with appropriate chr.
+            for (int x = cursorTopLeftCoord.x; x <= cursorTopLeftCoord.x + _cursor.Width - 1; ++x)
+            {
+                for (int y = cursorTopLeftCoord.y; y <= cursorTopLeftCoord.y + _cursor.Height - 1; ++y)
+                {
+                    TabCoord tabCoord = new TabCoord(x, y);
+                    Element element = Tablature.ElementAt(tabCoord);
+
+                    if (element.IsNumber())
+                        tabCoords.Add(tabCoord);
+                }
+            }
+
+            return tabCoords;
+        }
+
         /// <summary>
         /// Instruct the editor to insert space at cursor.
         /// </summary>
         public void InsertSpaceAtCursor()
         {
-            TabCoord topLeft = Cursor.TopLeftTabCoord();
+            TabCoord topLeft = _cursor.TopLeftTabCoord();
             Tablature.InsertSpaceAt(topLeft);
 
             NotifyObserverRedraw();
@@ -221,12 +265,23 @@ namespace PFE.Models
             NotifyObserverRedraw();
         }
 
+        public void EnlargeCursorWidth(int widthIncrease)
+        {
+            if (widthIncrease < 0)
+                return;
+
+            if (Cursor.LastXValue() + widthIncrease >= TabLength - 1)
+                return;
+
+            Cursor.enlargeWidth(widthIncrease);
+        }
+
         /// <summary>
         /// Makes the cursor select the area at tabCoord
         /// </summary>
         public void Select(TabCoord tabCoord)
         {
-            Cursor.SetTabCoords(tabCoord);
+            _cursor.SetTabCoords(tabCoord);
 
             NotifyObserverRedraw();
         }
@@ -236,7 +291,7 @@ namespace PFE.Models
         /// </summary>
         public void SelectUpTo(TabCoord dragableCoord)
         {
-            Cursor.DragableCoord = dragableCoord;
+            _cursor.DragableCoord = dragableCoord;
 
             NotifyObserverRedraw();
         }
@@ -269,7 +324,7 @@ namespace PFE.Models
         /// </summary>
         public List<TabCoord> GetSelectedTabCoords()
         {
-            return Cursor.GetSelectedTabCoords();
+            return _cursor.GetSelectedTabCoords();
         }
         #endregion
 
@@ -300,8 +355,8 @@ namespace PFE.Models
             }
             else
             {
-                Cursor.BaseCoord.y--;
-                Cursor.DragableCoord.y--;
+                _cursor.BaseCoord.y--;
+                _cursor.DragableCoord.y--;
             }
         }
 
@@ -309,8 +364,8 @@ namespace PFE.Models
         {
             if (!IsCursorTouchingFirstPosition())
             {
-                Cursor.BaseCoord.x--;
-                Cursor.DragableCoord.x--;
+                _cursor.BaseCoord.x--;
+                _cursor.DragableCoord.x--;
             }
         }
 
@@ -328,8 +383,8 @@ namespace PFE.Models
             }
             else
             {
-                Cursor.BaseCoord.y++;
-                Cursor.DragableCoord.y++;
+                _cursor.BaseCoord.y++;
+                _cursor.DragableCoord.y++;
             }
         }
 
@@ -341,58 +396,58 @@ namespace PFE.Models
                 NotifyObserverNewStaffAdded();
             }
 
-            Cursor.BaseCoord.x++;
-            Cursor.DragableCoord.x++;
+            _cursor.BaseCoord.x++;
+            _cursor.DragableCoord.x++;
         }
 
         private void CursorExpandUp()
         {
-            Cursor.DragableCoord.y = Math.Max(--Cursor.DragableCoord.y, 0);
+            _cursor.DragableCoord.y = Math.Max(--_cursor.DragableCoord.y, 0);
         }
 
         private void CursorExpandLeft()
         {
-            Cursor.DragableCoord.x = Math.Max(--Cursor.DragableCoord.x, 0);
+            _cursor.DragableCoord.x = Math.Max(--_cursor.DragableCoord.x, 0);
         }
 
         private void CursorExpandDown()
         {
-            Cursor.DragableCoord.y = Math.Min(++Cursor.DragableCoord.y, Tablature.NStrings);
+            _cursor.DragableCoord.y = Math.Min(++_cursor.DragableCoord.y, Tablature.NStrings);
         }
 
         private void CursorExpandRight()
         {
-            Cursor.DragableCoord.x = Math.Min(++Cursor.DragableCoord.x, Tablature.Length - 1);
+            _cursor.DragableCoord.x = Math.Min(++_cursor.DragableCoord.x, Tablature.Length - 1);
         }
 
         private void SkipCursorUp()
         {
             int staffLenght = Tablature.StaffLength;
 
-            Cursor.BaseCoord.x
-                = Cursor.BaseCoord.x - staffLenght >= 0
-                ? Cursor.BaseCoord.x - staffLenght
-                : Cursor.BaseCoord.x;
+            _cursor.BaseCoord.x
+                = _cursor.BaseCoord.x - staffLenght >= 0
+                ? _cursor.BaseCoord.x - staffLenght
+                : _cursor.BaseCoord.x;
 
-            Cursor.DragableCoord.x
-                = Cursor.DragableCoord.x - staffLenght >= 0
-                ? Cursor.DragableCoord.x - staffLenght
-                : Cursor.DragableCoord.x;
+            _cursor.DragableCoord.x
+                = _cursor.DragableCoord.x - staffLenght >= 0
+                ? _cursor.DragableCoord.x - staffLenght
+                : _cursor.DragableCoord.x;
         }
 
         private void SkipCursorDown()
         {
             int staffLenght = Tablature.StaffLength;
 
-            Cursor.BaseCoord.x
-                = Cursor.BaseCoord.x + staffLenght < Tablature.Length
-                ? Cursor.BaseCoord.x + staffLenght
-                : Cursor.BaseCoord.x;
+            _cursor.BaseCoord.x
+                = _cursor.BaseCoord.x + staffLenght < Tablature.Length
+                ? _cursor.BaseCoord.x + staffLenght
+                : _cursor.BaseCoord.x;
 
-            Cursor.DragableCoord.x
-                = Cursor.DragableCoord.x + staffLenght < Tablature.Length
-                ? Cursor.DragableCoord.x + staffLenght
-                : Cursor.DragableCoord.x;
+            _cursor.DragableCoord.x
+                = _cursor.DragableCoord.x + staffLenght < Tablature.Length
+                ? _cursor.DragableCoord.x + staffLenght
+                : _cursor.DragableCoord.x;
         }
 
         private void ApplyCursorMovementBaseOnInput(char ch)
@@ -414,8 +469,8 @@ namespace PFE.Models
         private List<int> GetStaffsTouchingNumbers()
         {
             List<int> staffNumbers = new List<int>();
-            int firstX = Cursor.FirstXValue();
-            int lastX = Cursor.LastXValue();
+            int firstX = _cursor.FirstXValue();
+            int lastX = _cursor.LastXValue();
 
             for (var i = firstX; i <= lastX; i++)
             {
@@ -437,29 +492,29 @@ namespace PFE.Models
 
         private bool IsCursorTouchingLastString()
         {
-            return Math.Max(Cursor.BaseCoord.y, Cursor.DragableCoord.y) == Tablature.NStrings - 1;
+            return Math.Max(_cursor.BaseCoord.y, _cursor.DragableCoord.y) == Tablature.NStrings - 1;
         }
 
         private bool IsCursorTouchingFirstString()
         {
-            return Math.Min(Cursor.BaseCoord.y, Cursor.DragableCoord.y) == 0;
+            return Math.Min(_cursor.BaseCoord.y, _cursor.DragableCoord.y) == 0;
         }
 
         private bool IsCursorTouchingLastPosition()
         {
-            return Math.Max(Cursor.BaseCoord.x, Cursor.DragableCoord.x) == Tablature.Length - 1;
+            return Math.Max(_cursor.BaseCoord.x, _cursor.DragableCoord.x) == Tablature.Length - 1;
         }
 
         private bool IsCursorTouchingFirstPosition()
         {
-            return Math.Min(Cursor.BaseCoord.x, Cursor.DragableCoord.x) <= 0;
+            return Math.Min(_cursor.BaseCoord.x, _cursor.DragableCoord.x) <= 0;
         }
         #endregion
 
         #region Ascii
         public void ParseAscii(string ascii)
         {
-            var startCoord = Cursor.TopLeftTabCoord();
+            var startCoord = _cursor.TopLeftTabCoord();
             var xLimit = TabLength;
             var yLimit = NStrings;
 
@@ -490,13 +545,13 @@ namespace PFE.Models
                 }
 
                 // write the clipboard current char on the tab
-                Tablature.AttemptSetCharAt(
+                Tablature.AttemptSetModifierAt(
                     new TabCoord(startCoord.x + nCurCharPos, startCoord.y + nReturn),
                     ascii[i]);
 
                 nCurCharPos++;
             }
-            
+
             NotifyObserverRedraw();
         }
 
@@ -504,11 +559,11 @@ namespace PFE.Models
         {
             string ascii = "";
 
-            var topLeft = Cursor.TopLeftTabCoord();
+            var topLeft = _cursor.TopLeftTabCoord();
 
-            for (var j = 0; j < Cursor.Height; j++)
+            for (var j = 0; j < _cursor.Height; j++)
             {
-                for (var i = 0; i < Cursor.Width; i++)
+                for (var i = 0; i < _cursor.Width; i++)
                 {
                     ascii += Tablature.GetCharAt(new TabCoord(topLeft.x + i, topLeft.y + j));
                 }
@@ -519,7 +574,7 @@ namespace PFE.Models
             return ascii;
         }
         #endregion
-        
+
         #region observer
         private List<IObserver> observers = new List<IObserver>();
 
@@ -547,13 +602,13 @@ namespace PFE.Models
         #region Memento
         public Memento GetMemento()
         {
-            return new Memento(Cursor, Tablature);
+            return new Memento(_cursor, Tablature);
         }
 
         public void UpdateToMemento(Memento memento)
         {
-            this.Tablature = memento.Tablature;
-            this.Cursor = memento.Cursor;
+            _tablature = memento.Tablature;
+            _cursor = memento.Cursor;
 
             NotifyObserverRedraw();
         }

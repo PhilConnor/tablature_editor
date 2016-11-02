@@ -10,9 +10,9 @@ using PFE.Utils;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Controls;
-using tablature_editor.Utils;
 using PFE.Configs;
 using PFE.UndoRedo;
+using PFE.Algorithms;
 
 namespace PFE.Controllers
 {
@@ -214,6 +214,20 @@ namespace PFE.Controllers
             //redo
             else if (Keyboard.IsKeyDown(Key.LeftCtrl) && e.Key == Key.R)
                 Redo();
+
+            //increment
+            else if (Keyboard.IsKeyDown(Key.LeftCtrl) && e.Key == Key.Add)
+            {
+                _editor.TransposeSelection(1);
+                UpdateMementoCareTaker();
+            }
+
+            //decrement
+            else if (Keyboard.IsKeyDown(Key.LeftCtrl) && e.Key == Key.Subtract)
+            {
+                _editor.TransposeSelection(-1);
+                UpdateMementoCareTaker();
+            }
 
             //capslock to toggle write mode
             else if (e.Key == Key.CapsLock)

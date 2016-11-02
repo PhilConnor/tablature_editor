@@ -28,7 +28,7 @@ namespace PFE.Models
         {
             get { return Math.Abs(DragableCoord.x - BaseCoord.x) + 1; }
         }
-        
+
         /// <summary>
         /// The height of the cursor as calculated from coords.
         /// </summary>
@@ -55,7 +55,7 @@ namespace PFE.Models
             BaseCoord = tabCoord1;
             DragableCoord = tabCoord2;
         }
-        
+
         /// <summary>
         /// Sets both cursor tabCoords to clone of the input tabCoord.
         /// </summary>
@@ -85,6 +85,16 @@ namespace PFE.Models
             return Math.Max(BaseCoord.x, DragableCoord.x);
         }
 
+        public void enlargeWidth(int widthIncrease)
+        {
+            bool isBaseCoordOnLeft = BaseCoord.x < DragableCoord.x;
+
+            if (isBaseCoordOnLeft)
+                DragableCoord.x += widthIncrease;
+            else
+                BaseCoord.x += widthIncrease;
+        }
+
         /// <summary>
         /// Returns a clone instance.
         /// </summary>
@@ -93,7 +103,7 @@ namespace PFE.Models
             Cursor clone = new Cursor(BaseCoord.Clone(), DragableCoord.Clone());
             return clone;
         }
-        
+
         /// <summary>
         /// Returns true if the cursor has the same values.
         /// </summary>
