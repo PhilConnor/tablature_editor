@@ -91,7 +91,6 @@ namespace PFE.Models
 
             for (int i = x; i < Length; i++)
             {
-                bool isStaffEnd = (0 == i % StaffLength);
                 bool isTabEnd = (i == Length - 1);
 
                 if (isTabEnd && !positions[i].IsEmpty())
@@ -101,6 +100,7 @@ namespace PFE.Models
                 positions[i] = positionAtX;
                 positionAtX = tmpPosition;
             }
+            positions[x] = positions[x].Clone();
             positions[x].Clear();
         }
 
@@ -203,6 +203,76 @@ namespace PFE.Models
                 lmnt.RightChar = ch;
             }
         }
+
+        /// <summary>
+        /// Set the element to the tabCoord as a numerical value under 100.
+        /// It will add spaced at appropriates places if needed to accomodate 
+        /// a numerical value changing from being 1 digit to 2 digits.
+        /// </summary>
+        /// <param name="tabCoord"></param>
+        /// <param name="note"></param>
+        /// <returns>
+        /// Returns true if a space has been added to accomodate a newly 
+        /// added digit.
+        /// </returns>
+        //public bool AttemptSetNumericalAt(TabCoord tabCoord, int note)
+        //{
+        //    //exit if invalid coord
+        //    if (tabCoord == null || !tabCoord.IsValid(this))
+        //        return;
+
+        //    //prevent adding notes higher than 99
+        //    if (note >= 100)
+        //        note = 99;
+
+
+
+            //preparing work variables
+            //Element lmnt = ElementAt(tabCoord);
+            //Element lmntOnRight = ElementAt(tabCoord.CoordOnRight());
+            //Element lmntOnLeft = ElementAt(tabCoord.CoordOnLeft());
+
+            //bool isANumCharOnLeft = isANumericalCharThere(tabCoord.CoordOnLeft());
+            //bool isANumCharOnRight = isANumericalCharThere(tabCoord.CoordOnRight());
+
+            //if no numerical chars are surrounding this coord
+            //if (!isANumCharOnLeft && !isANumCharOnRight)
+            //{
+            //    lmnt.ClearText();
+            //    lmnt.RightChar = ch;
+            //}
+            //if there is no num char on left and a num under 9 on right
+            //else if (isElementOnRightUnder9(tabCoord)
+            //    && !isANumCharOnLeft)
+            //{
+            //    lmnt.ClearText();
+            //    lmntOnRight.LeftChar = ch;
+            //}
+            //if there is no num char on left and a num over 9 on right
+            //else if (isElementOnRightOver9(tabCoord)
+            //    && !isANumCharOnLeft)
+            //{
+            //    lmnt.ClearText();
+            //    lmntOnRight.LeftChar = ch;
+            //}
+            //if there is no num char on right and a num under 9 on left
+            //else if (!isANumCharOnRight
+            //    && isElementOnLeftUnder9(tabCoord))
+            //{
+            //    lmnt.LeftChar = lmntOnLeft.RightChar;
+            //    lmntOnLeft.ClearText();
+            //    lmnt.RightChar = ch;
+            //}
+            //if there is no num char on right and a num over 9 on this coord
+            //else if (!isANumCharOnRight
+            //    && lmnt.IsNumberOver9())
+            //{
+            //    lmnt.RightChar = ch;
+            //}
+      //  }
+
+
+
 
         /// <summary>
         /// Returns the char value of the element at tabCoord
