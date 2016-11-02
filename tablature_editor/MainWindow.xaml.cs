@@ -39,7 +39,7 @@ namespace PFE
             Cursor cursor = new Cursor();
             Models.Tablature tablature = new Models.Tablature();
             Editor editor = new Editor(tablature, cursor);
-            editorController = new EditorController(editor, drawSurface);
+            editorController = new EditorController(editor, drawSurface, _scrollViewer);
         }
 
         /// <summary>
@@ -47,9 +47,6 @@ namespace PFE
         /// </summary>
         public void Setup()
         {
-            drawSurface.Height = Config_DrawSurface.Inst().Height;
-            drawSurface.Width = Config_DrawSurface.Inst().Width;
-
             window.Width = Config_DrawSurface.Inst().Window_Width;
             window.Height = Config_DrawSurface.Inst().Window_Height;
             window.Background = new SolidColorBrush(Config_DrawSurface.Inst().BGColor);
@@ -80,7 +77,20 @@ namespace PFE
         private void drawSurface_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             editorController.MouseUp(sender, e);
-
         }
-    } // 
+
+        private void MenuPrincipal_Fichier_Quitter_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+        private void MenuPrincipal_Configs_Tablature_Click(object sender, RoutedEventArgs e)
+        {
+            ConfigsTuningWindow tuningWindow = new ConfigsTuningWindow();
+            if (tuningWindow.ShowDialog() == true)
+            {
+                MessageBox.Show("Vous avez choisi : " + tuningWindow.TuningTest);
+            }
+        }
+    }
 }

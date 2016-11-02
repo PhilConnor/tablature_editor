@@ -8,32 +8,41 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:PFE"
     xmlns:z="clr-namespace:PFE"
-    Height="517.125"
-    Width="Auto"
+    Height="770"
+    Width="1170"
     PreviewKeyDown="window_PreviewKeyDown"
     TextInput="window_TextInput"
-    WindowStartupLocation="CenterOwner"
+    WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
-    <!--
-        <Canvas
-        x:Name="canvas"
-        Height="300"
-        Width="500"
-        Margin="0,20,0,0"
-        HorizontalAlignment="Center"
-        VerticalAlignment="Top" />
-    -->
-    <Border
-        BorderBrush="Red"
-        BorderThickness="1">
-        <z:DrawSurface
-            x:Name="drawSurface"
-            Height="500"
-            Width="500"
-            Margin="0,20,0,0"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Top"
-            MouseDown="drawSurface_MouseDown"
-            MouseMove="drawSurface_MouseMove" MouseUp="drawSurface_MouseUp" />
-    </Border>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="21" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <DockPanel Grid.Row="0">
+            <Menu DockPanel.Dock="Top">
+                <MenuItem Header="_Fichier">
+                    <MenuItem Header="_Quitter" Click="MenuPrincipal_Fichier_Quitter_Click" />
+                </MenuItem>
+                <MenuItem Header="_Configs">
+                    <MenuItem Header="_Tablature" Click="MenuPrincipal_Configs_Tablature_Click" />
+                </MenuItem>
+            </Menu>
+            <TextBox AcceptsReturn="True" Margin="0,0,0,35" />
+        </DockPanel>
+
+        <Grid Grid.Row="1" Height="710">
+            <ScrollViewer Name="_scrollViewer" CanContentScroll="True">
+                <z:DrawSurface
+                x:Name="drawSurface"
+                Height="710"
+                Width="1138"
+                Margin="0,0,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                MouseDown="drawSurface_MouseDown"
+                MouseMove="drawSurface_MouseMove" />
+            </ScrollViewer>
+        </Grid>
+    </Grid>
 </Window>

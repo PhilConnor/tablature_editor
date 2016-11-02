@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 using PFE.Models;
 using PFE.Interfaces;
 using PFE.Utils;
-using System.Windows.Input;
 using System.Windows;
+using System.Windows.Input;
+using System.Windows.Controls;
 using tablature_editor.Utils;
 using PFE.Configs;
 using PFE.UndoRedo;
@@ -24,6 +25,7 @@ namespace PFE.Controllers
         /// The drawSurface instance.
         /// </summary>
         private DrawSurface _drawSurface;
+        private ScrollViewer _scrollViewer;
 
         /// <summary>
         /// The Editor instance.
@@ -37,10 +39,11 @@ namespace PFE.Controllers
         /// </summary>
         /// <param name="drawSurface">the surface on wich to draw the editor</param>
         /// <param name="editor">an editor instance</param>
-        public EditorController(Editor editor, DrawSurface drawSurface)
+        public EditorController(Editor editor, DrawSurface drawSurface, ScrollViewer scrollViewer)
         {
             _editor = editor;
             _drawSurface = drawSurface;
+            _scrollViewer = scrollViewer;
 
             mementoCareTaker = new MementoCareTaker(_editor.GetMemento());
             editor.Subscribe(this);
@@ -143,21 +146,25 @@ namespace PFE.Controllers
             {
                 _editor.MoveCursor(CursorMovements.Left);
                 UpdateMementoCareTaker();
+                e.Handled = true;
             }
             else if (e.Key == Key.Up)
             {
                 _editor.MoveCursor(CursorMovements.Up);
                 UpdateMementoCareTaker();
+                e.Handled = true;
             }
             else if (e.Key == Key.Right)
             {
                 _editor.MoveCursor(CursorMovements.Right);
                 UpdateMementoCareTaker();
+                e.Handled = true;
             }
             else if (e.Key == Key.Down)
             {
                 _editor.MoveCursor(CursorMovements.Down);
                 UpdateMementoCareTaker();
+                e.Handled = true;
             }
 
             //backspace, delete
@@ -260,9 +267,37 @@ namespace PFE.Controllers
         }
         #endregion
 
-        public void Notify()
+        public void NotifyRedraw()
         {
             ReDrawTablature();
+        }
+
+        /// <summary>
+        /// Increase the height of the DrawSurface when we add a staff.
+        /// </summary>
+        public void NotifyNewStaffAdded()
+        {
+            _drawSurface.Height = Math.Max(710, 710 + ((_editor.NStaff - 7) * 98));
+            _scrollViewer.ScrollToEnd();
+        }
+
+        /// <summary>
+        /// Scrolls up or down to follow the cursor's movement.
+        /// </summary>
+        public void NotifyScrollToCursor()
+        {
+            double ScreenTop = _scrollViewer.VerticalOffset;
+            int cursorPos = CoordConverter.ToDrawSurfaceCoord(_editor.CursorCoord, _editor).y;
+            double ScreenBottom = _scrollViewer.VerticalOffset + _scrollViewer.ViewportHeight;
+
+            if (cursorPos < ScreenTop)
+            {
+                _scrollViewer.ScrollToVerticalOffset(_scrollViewer.VerticalOffset - 98);
+            }
+            else if (cursorPos > ScreenBottom)
+            {
+                _scrollViewer.ScrollToVerticalOffset(_scrollViewer.VerticalOffset + 98);
+            }
         }
     }
 }
