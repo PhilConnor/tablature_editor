@@ -77,7 +77,7 @@ namespace PFE.Models
         }
 
         /// <summary>
-        /// Inserts a space at tabCoordX position and 
+        /// Inserts a space at tabCoord.X position and 
         /// shift all elements to the right.
         /// If this makes an elements getting out of bound of the tablature, 
         /// it will att a new staff to hold it.
@@ -102,6 +102,25 @@ namespace PFE.Models
             }
             positions[x] = positions[x].Clone();
             positions[x].Clear();
+        }
+
+        /// <summary>
+        /// Removes the space at tabCoord.X position
+        /// </summary>
+        /// <param name="tabCoord"></param>
+        public void RemoveSpaceAt(TabCoord tabCoord)
+        {
+            int x = tabCoord.x;
+            //Position positionAtX = positions[x];
+            //fdPosition tmpPosition;
+
+            for (int i = x; i < Length - 1; i++)
+            {
+                positions[i] = positions[i + 1];
+            }
+
+            positions[Length - 1] = positions[Length - 1].Clone();
+            positions[Length - 1].Clear();
         }
 
         /// <summary>
@@ -241,7 +260,7 @@ namespace PFE.Models
             //prevent adding notes lower than 0
             if (note < 0)
                 note = 0;
-                
+
             Element lmntAtLeft = ElementAt(tabCoord.CoordOnLeft());
             Element lmntAtLeftLeft = ElementAt(tabCoord.CoordOnLeft().CoordOnLeft());
 
@@ -258,7 +277,7 @@ namespace PFE.Models
                 InsertSpaceAt(tabCoord);
                 spaceHasBeenAdded = true;
             }
-            
+
             lmnt.ParseInteger(note);
 
             return spaceHasBeenAdded;

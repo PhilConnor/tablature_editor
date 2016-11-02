@@ -174,13 +174,20 @@ namespace PFE.Controllers
                 UpdateMementoCareTaker();
             }
 
-            //space
+            //space removal
+            else if (Keyboard.IsKeyDown(Key.LeftCtrl) && e.Key == Key.Space)
+            {
+                _editor.RemoveSpaceAtCursor();
+                UpdateMementoCareTaker();
+            }
+
+            //space insertion
             else if (e.Key == Key.Space)
             {
                 _editor.InsertSpaceAtCursor();
                 UpdateMementoCareTaker();
             }
-
+            
             //enter
             else if (!Keyboard.IsKeyDown(Key.LeftCtrl) && e.Key == Key.Enter)
             {

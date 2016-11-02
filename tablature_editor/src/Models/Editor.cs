@@ -187,6 +187,17 @@ namespace PFE.Models
             NotifyObserverRedraw();
         }
 
+        /// <summary>
+        /// Instruct the editor to remove space at cursor.
+        /// </summary>
+        public void RemoveSpaceAtCursor()
+        {
+            TabCoord topLeft = _cursor.TopLeftTabCoord();
+            Tablature.RemoveSpaceAt(topLeft);
+
+            NotifyObserverRedraw();
+        }
+
         public bool IsWriteModeActivated()
         {
             return WriteMode == WriteModes.Tenth || WriteMode == WriteModes.Twenyth;
