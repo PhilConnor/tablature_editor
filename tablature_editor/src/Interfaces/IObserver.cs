@@ -1,7 +1,9 @@
-﻿namespace TablatureEditor.Interfaces
+﻿namespace PFE.Interfaces
 {
     public interface IObserver
     {
-        void Notify();
+        void NotifyRedraw();
+        void NotifyNewStaffAdded();
+        void NotifyScrollToCursor();
     }
 }

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace TablatureEditor.Properties
+namespace PFE.Properties
 {
 
 
