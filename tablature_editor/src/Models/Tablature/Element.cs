@@ -44,6 +44,17 @@ namespace PFE.Models
             return Util.IsNumber(RightChar) && !Util.IsNumber(LeftChar);
         }
 
+        public void ParseInteger(int value)
+        {
+            this.ClearText();
+
+            string valueString = value.ToString();
+            RightChar = valueString[valueString.Length - 1];
+
+            if (valueString.Length > 1)
+                LeftChar = valueString[valueString.Length - 2];
+        }
+
         public bool Equals(Element element)
         {
             return LeftChar == element.LeftChar && RightChar == element.RightChar;

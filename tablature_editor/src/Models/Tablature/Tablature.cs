@@ -205,9 +205,11 @@ namespace PFE.Models
         }
 
         /// <summary>
-        /// Set the element to the tabCoord as a numerical value under 100.
+        /// Change the element to the tabCoord as a numerical value under 100.
         /// It will add spaced at appropriates places if needed to accomodate 
         /// a numerical value changing from being 1 digit to 2 digits.
+        /// If there is no numerical value at the element pointed by tabCoord,
+        /// This method will do nothing.
         /// </summary>
         /// <param name="tabCoord"></param>
         /// <param name="note"></param>
@@ -215,64 +217,35 @@ namespace PFE.Models
         /// Returns true if a space has been added to accomodate a newly 
         /// added digit.
         /// </returns>
-        //public bool AttemptSetNumericalAt(TabCoord tabCoord, int note)
-        //{
-        //    //exit if invalid coord
-        //    if (tabCoord == null || !tabCoord.IsValid(this))
-        //        return;
+        public bool ChangeNumericalAt(TabCoord tabCoord, int note)
+        {
+            bool spaceHasBeenAdded = false;
 
-        //    //prevent adding notes higher than 99
-        //    if (note >= 100)
-        //        note = 99;
+            //exit if invalid coord
+            if (tabCoord == null || !tabCoord.IsValid(this))
+                return false;
 
+            //prevent adding notes higher than 99
+            if (note >= 100)
+                note = 99;
 
+            Element lmnt = ElementAt(tabCoord);
 
-            //preparing work variables
-            //Element lmnt = ElementAt(tabCoord);
-            //Element lmntOnRight = ElementAt(tabCoord.CoordOnRight());
-            //Element lmntOnLeft = ElementAt(tabCoord.CoordOnLeft());
+            if (!lmnt.IsNumber())
+                return false;
 
-            //bool isANumCharOnLeft = isANumericalCharThere(tabCoord.CoordOnLeft());
-            //bool isANumCharOnRight = isANumericalCharThere(tabCoord.CoordOnRight());
+            //if a note was 1 digit and is about to become two digit
+            //we add a space to accomodate it
+            if (note > 9 && lmnt.IsNumberUnder9())
+            {
+                InsertSpaceAt(tabCoord);
+                spaceHasBeenAdded = true;
+            }
 
-            //if no numerical chars are surrounding this coord
-            //if (!isANumCharOnLeft && !isANumCharOnRight)
-            //{
-            //    lmnt.ClearText();
-            //    lmnt.RightChar = ch;
-            //}
-            //if there is no num char on left and a num under 9 on right
-            //else if (isElementOnRightUnder9(tabCoord)
-            //    && !isANumCharOnLeft)
-            //{
-            //    lmnt.ClearText();
-            //    lmntOnRight.LeftChar = ch;
-            //}
-            //if there is no num char on left and a num over 9 on right
-            //else if (isElementOnRightOver9(tabCoord)
-            //    && !isANumCharOnLeft)
-            //{
-            //    lmnt.ClearText();
-            //    lmntOnRight.LeftChar = ch;
-            //}
-            //if there is no num char on right and a num under 9 on left
-            //else if (!isANumCharOnRight
-            //    && isElementOnLeftUnder9(tabCoord))
-            //{
-            //    lmnt.LeftChar = lmntOnLeft.RightChar;
-            //    lmntOnLeft.ClearText();
-            //    lmnt.RightChar = ch;
-            //}
-            //if there is no num char on right and a num over 9 on this coord
-            //else if (!isANumCharOnRight
-            //    && lmnt.IsNumberOver9())
-            //{
-            //    lmnt.RightChar = ch;
-            //}
-      //  }
+            lmnt.ParseInteger(note);
 
-
-
+            return spaceHasBeenAdded;
+        }
 
         /// <summary>
         /// Returns the char value of the element at tabCoord
