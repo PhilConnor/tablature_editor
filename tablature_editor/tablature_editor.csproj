@@ -55,6 +55,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ConfigsTuningWindow.xaml.cs">
+      <DependentUpon>ConfigsTuningWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="src\Controllers\EditorController.cs" />
     <Compile Include="src\Interfaces\IObservable.cs" />
     <Compile Include="src\Interfaces\IObserver.cs" />
@@ -73,6 +76,10 @@
     <Compile Include="src\Models\Tablature\Element.cs" />
     <Compile Include="src\Models\Tablature\Position.cs" />
     <Compile Include="src\Utils\Util.cs" />
+    <Page Include="ConfigsTuningWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

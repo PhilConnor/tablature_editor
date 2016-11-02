@@ -60,10 +60,19 @@ namespace PFE.Configs
             GridUnitWidth = FontSize;
             GridUnitHeight = GridUnitWidth;
             SpacingBetweenStaff = 1;
+
+            /*
             Width = GridUnitWidth * 81;
             Height = GridUnitHeight * 200;
             Window_Width = GridUnitWidth * 83;
             Window_Height = GridUnitHeight * 200;
+            */
+
+            Width = 1138;
+            Height = 710;
+            Window_Width = 1170;
+            Window_Height = 770;
+
             CharWidth = 14;
             CharHeight = 14;
             LineThickness = 14;

@@ -50,6 +50,11 @@ namespace PFE.Models
         {
             get { return Tablature.Length; }
         }
+
+        public TabCoord CursorCoord
+        {
+            get {return Cursor.DragableCoord; }
+        }
         #endregion
 
         #region Public
@@ -66,7 +71,7 @@ namespace PFE.Models
             Tablature = tablature;
             Cursor = cursor;
 
-            NotifyObserver();
+            NotifyObserverRedraw();
         }
 
         /// <summary>
@@ -103,7 +108,7 @@ namespace PFE.Models
             //move the cursor to the next position.
             ApplyCursorMovementBaseOnInput(chr);
 
-            NotifyObserver();
+            NotifyObserverRedraw();
         }
 
         /// <summary>
@@ -124,7 +129,7 @@ namespace PFE.Models
                 }
             }
 
-            NotifyObserver();
+            NotifyObserverRedraw();
         }
 
         /// <summary>
@@ -201,6 +206,8 @@ namespace PFE.Models
                     CursorMoveStaffUp();
                     break;
             }
+
+            NotifyObserverScrollToCursor();
         }
 
         /// <summary>
@@ -211,7 +218,7 @@ namespace PFE.Models
         {
             MoveCursorWithoutNotifyingObservers(mouvement);
 
-            NotifyObserver();
+            NotifyObserverRedraw();
         }
 
         /// <summary>
@@ -221,7 +228,7 @@ namespace PFE.Models
         {
             Cursor.SetTabCoords(tabCoord);
 
-            NotifyObserver();
+            NotifyObserverRedraw();
         }
 
         /// <summary>
@@ -231,7 +238,7 @@ namespace PFE.Models
         {
             Cursor.DragableCoord = dragableCoord;
 
-            NotifyObserver();
+            NotifyObserverRedraw();
         }
 
         /// <summary>
@@ -246,7 +253,7 @@ namespace PFE.Models
                 case WriteModes.Twenyth: WriteMode = WriteModes.Unity; break;
             }
 
-            NotifyObserver();
+            NotifyObserverRedraw();
         }
 
         /// <summary>
@@ -265,18 +272,6 @@ namespace PFE.Models
             return Cursor.GetSelectedTabCoords();
         }
         #endregion
-        public Memento GetMemento()
-        {
-            return new Memento(Cursor, Tablature);
-        }
-
-        public void UpdateToMemento(Memento memento)
-        {
-            this.Tablature = memento.Tablature;
-            this.Cursor = memento.Cursor;
-
-            NotifyObserver();
-        }
 
         #region Private
 
@@ -289,7 +284,10 @@ namespace PFE.Models
         private void CursorMoveStaffDown()
         {
             if (IsCursorTouchingLastStaff())
+            {
                 Tablature.AddNewStaff();
+                NotifyObserverNewStaffAdded();
+            }
 
             SkipCursorDown();
         }
@@ -321,6 +319,7 @@ namespace PFE.Models
             if (IsCursorTouchingLastString() && IsCursorTouchingLastStaff())
             {
                 Tablature.AddNewStaff();
+                NotifyObserverNewStaffAdded();
                 SkipCursorDown();
             }
             else if (IsCursorTouchingLastString())
@@ -337,7 +336,10 @@ namespace PFE.Models
         private void CursorMoveRight()
         {
             if (IsCursorTouchingLastPosition())
+            {
                 Tablature.AddNewStaff();
+                NotifyObserverNewStaffAdded();
+            }
 
             Cursor.BaseCoord.x++;
             Cursor.DragableCoord.x++;
@@ -495,7 +497,7 @@ namespace PFE.Models
                 nCurCharPos++;
             }
             
-            NotifyObserver();
+            NotifyObserverRedraw();
         }
 
         public string SelectionToAscii()
@@ -521,9 +523,19 @@ namespace PFE.Models
         #region observer
         private List<IObserver> observers = new List<IObserver>();
 
-        public void NotifyObserver()
+        public void NotifyObserverRedraw()
         {
-            observers.ForEach(o => o.Notify());
+            observers.ForEach(o => o.NotifyRedraw());
+        }
+
+        public void NotifyObserverNewStaffAdded()
+        {
+            observers.ForEach(o => o.NotifyNewStaffAdded());
+        }
+
+        public void NotifyObserverScrollToCursor()
+        {
+            observers.ForEach(o => o.NotifyScrollToCursor());
         }
 
         public void Subscribe(IObserver observer)
@@ -532,6 +544,20 @@ namespace PFE.Models
         }
         #endregion
 
+        #region Memento
+        public Memento GetMemento()
+        {
+            return new Memento(Cursor, Tablature);
+        }
+
+        public void UpdateToMemento(Memento memento)
+        {
+            this.Tablature = memento.Tablature;
+            this.Cursor = memento.Cursor;
+
+            NotifyObserverRedraw();
+        }
+        #endregion
     }
 
     public enum WriteModes { Unity, Tenth, Twenyth };
