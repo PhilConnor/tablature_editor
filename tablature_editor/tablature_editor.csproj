@@ -58,6 +58,7 @@
     <Compile Include="ConfigsTuningWindow.xaml.cs">
       <DependentUpon>ConfigsTuningWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="src\Algorithms\Transposition.cs" />
     <Compile Include="src\Controllers\EditorController.cs" />
     <Compile Include="src\Interfaces\IObservable.cs" />
     <Compile Include="src\Interfaces\IObserver.cs" />

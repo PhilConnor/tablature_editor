@@ -9,7 +9,7 @@ namespace PFE.UndoRedo
 {
     public class MementoCareTaker
     {
-        private int capacity = 20;
+        private int capacity = 10;
         private int maxIndex;
         private int currentIndex;
         private int lastIndex;

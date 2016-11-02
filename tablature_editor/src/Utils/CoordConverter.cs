@@ -7,7 +7,7 @@ using PFE.Configs;
 using PFE.Models;
 using System.Windows;
 
-namespace tablature_editor.Utils
+namespace PFE.Utils
 {
     /// <summary>
     /// Provides method for coord format conversion.

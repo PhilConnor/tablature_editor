@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Media;
 using PFE.Models;
 using PFE.Configs;
-using tablature_editor.Utils;
+using PFE.Utils;
 
 namespace PFE
 {
