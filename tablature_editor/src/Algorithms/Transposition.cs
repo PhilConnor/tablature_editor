@@ -23,7 +23,7 @@ namespace PFE.Algorithms
             TabCoord cursorTopLeft = editor.Cursor.TopLeftTabCoord();
             int cursorWidth = editor.Cursor.Width;
             int cursorHeight = editor.Cursor.Height;
-            int noteAddedSpace = 0;
+            int nSpaceAdded = 0;
 
             //Preparing looping variables
             int cursorTopLeftX = cursorTopLeft.x;
@@ -42,12 +42,20 @@ namespace PFE.Algorithms
                     if (element.IsNumber())
                     {
                         int val = element.GetNumericalValue();
+
+                        //Add the nSemiTones to the current value of the note at tabCoord
                         bool spaceAdded = editor.Tablature.ChangeNoteAt(tabCoord, val + nSemiTones);
 
                         if (spaceAdded)
                         {
+                            //Keep track of the total of space added
+                            nSpaceAdded++;
+
+                            //We must skip to next currentCursorX in the loop to not increment the same element note twice
+                            //becasue adding a space shifted to the right the tabCoord of the current element.
                             currentCursorX++;
-                            noteAddedSpace++;
+
+                            //We must loop further, since a space has been added
                             cursorBottomRightX = Math.Min(editor.TabLength - 1, ++cursorBottomRightX);
                         }
                     }
@@ -55,7 +63,7 @@ namespace PFE.Algorithms
             }
 
             //Enlarge cursor by the amount of extra space added
-            editor.EnlargeCursorWidth(noteAddedSpace);
+            editor.EnlargeCursorWidth(nSpaceAdded);
         }
 
     }
