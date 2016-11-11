@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PFE.Models
 {
     //TODO commenting this class
     public class Note
     {
+        //List of all of the possible notes.
+        public enum NotesEnum { A, As, B, C, Cs, D, Ds, E, F, Fs, G, Gs };
+
         public int Octave = 0;
         public NotesEnum Value = NotesEnum.A;
         
@@ -28,9 +29,77 @@ namespace PFE.Models
             return Octave * 12 + (int)Value;
         }
 
-        public char GetNoteChar()
+        public void SetNumericalEquivalent(int value)
         {
-            return Enum.GetName(typeof(NotesEnum), Value)[0];
+            Octave = value / 12;
+            Value = (NotesEnum)(value % 12);
+        }
+
+        //Get note in display format with or without the octave number.
+        public string GetNoteDisplayFormat(bool withOctave)
+        {
+            string result = "";
+
+            //Get note in string format.
+            switch (Value)
+            {
+                case NotesEnum.A:
+                    result = "A";
+                    break;
+                case NotesEnum.As:
+                    result = "A#";
+                    break;
+                case NotesEnum.B:
+                    result = "B";
+                    break;
+                case NotesEnum.C:
+                    result = "C";
+                    break;
+                case NotesEnum.Cs:
+                    result = "C#";
+                    break;
+                case NotesEnum.D:
+                    result = "D";
+                    break;
+                case NotesEnum.Ds:
+                    result = "D#";
+                    break;
+                case NotesEnum.E:
+                    result = "E";
+                    break;
+                case NotesEnum.F:
+                    result = "F";
+                    break;
+                case NotesEnum.Fs:
+                    result = "F#";
+                    break;
+                case NotesEnum.G:
+                    result = "G";
+                    break;
+                case NotesEnum.Gs:
+                    result = "G#";
+                    break;
+            }
+
+            //Add octave value if needed.
+            if (withOctave)
+            {
+                result += Octave;
+            }
+
+            return result;
+        }
+
+        //Override of the ToString method.
+        public override string ToString()
+        {
+            return GetNoteDisplayFormat(false);
+        }
+
+        //ToString without the octave.
+        public string ToStringWithOctave()
+        {
+            return GetNoteDisplayFormat(true);
         }
 
         public Note Clone()
@@ -43,6 +112,26 @@ namespace PFE.Models
             return note.Octave == Octave && Value == note.Value;
         }
 
-        public enum NotesEnum { A, As, B, C, Cs, D, Ds, E, F, Fs, G, Gs };
+        //Get a list of all the possible notes (in string format) to build a combobox.
+        //The octave number is not important.
+        public static IEnumerable<Note> GetListNotes()
+        {
+            List<Note> notes = new List<Note>();
+
+            notes.Add(new Note(0, NotesEnum.A));
+            notes.Add(new Note(0, NotesEnum.As));
+            notes.Add(new Note(0, NotesEnum.B));
+            notes.Add(new Note(0, NotesEnum.C));
+            notes.Add(new Note(0, NotesEnum.Cs));
+            notes.Add(new Note(0, NotesEnum.D));
+            notes.Add(new Note(0, NotesEnum.Ds));
+            notes.Add(new Note(0, NotesEnum.E));
+            notes.Add(new Note(0, NotesEnum.F));
+            notes.Add(new Note(0, NotesEnum.Fs));
+            notes.Add(new Note(0, NotesEnum.G));
+            notes.Add(new Note(0, NotesEnum.Gs));
+
+            return notes.AsEnumerable<Note>();
+        }
     }
 }

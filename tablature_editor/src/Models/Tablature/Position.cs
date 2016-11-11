@@ -74,7 +74,7 @@ namespace PFE.Models
             for (int y = 0; y < tuning.notes.Count(); ++y)
             {
                 elements.ElementAt(y).ClearText();
-                elements.ElementAt(y).RightChar = tuning.notes.ElementAt(elements.Count() - 1 - y).GetNoteChar();
+                elements.ElementAt(y).RightChar = tuning.notes.ElementAt(elements.Count() - 1 - y).ToString()[0];
             }
         }
 
