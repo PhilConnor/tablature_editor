@@ -13,28 +13,79 @@ namespace PFE.Algorithms
         /// <summary>
         /// Move all notes from the first string to the second string if possible.
         /// Will do nothing if the move failed because of a string already under this one.
+        /// TODO: allow insertion and tabAdjustement if a note is already there.
         /// </summary>
         /// <param name="tablature"></param>
         public static void MoveFirstStringNotesDown(Tablature tablature)
         {
-            //if (tablature.NStrings < 2)
-            //    return;
+            if (tablature.NStrings < 2)
+                return;
 
-            //foreach(Position p in tablature.positions)
-            //{
-            //    Element FirstElem = p.elements[0];
-            //    Element SecondElem = p.elements[1];
-                
-            //}
+            Note firstStringTuning = tablature.Tuning.notes[0];
+            Note secondStringTuning = tablature.Tuning.notes[1];
+
+            int deltaSemiTones = secondStringTuning.GetNumericalEquivalent()
+                - firstStringTuning.GetNumericalEquivalent();
+
+            for (int x = 0; x < tablature.Length; x++)
+            {
+                TabCoord currentInitialStringTC = new TabCoord(x, 0);
+                TabCoord currentTargetStringTC = new TabCoord(x, 1);
+                Element elementThere = tablature.ElementAt(currentInitialStringTC);
+
+                if (elementThere.IsNumber())
+                {
+                    int newValue = elementThere.GetNumericalValue() + deltaSemiTones;
+
+                    if (!tablature.isACharThere(currentTargetStringTC) &&
+                        !tablature.isACharThere(currentTargetStringTC.CoordOnLeft()) &&
+                        !tablature.isACharThere(currentTargetStringTC.CoordOnLeft().CoordOnLeft()) &&
+                        !tablature.isACharThere(currentTargetStringTC.CoordOnRight())
+                        )
+                    {
+                        tablature.ElementAt(currentTargetStringTC).ParseInteger(newValue);
+                    }
+                }
+            }
         }
 
         /// <summary>
         /// Move all notes from the last string to the second-last string if possible.
         /// Will do nothing if the move failed because of a string already over this one.
+        /// TODO: allow insertion and tabAdjustement if a note is already there.
         /// </summary>
         /// <param name="tablature"></param>
         public static void MoveLastStringNotesUp(Tablature tablature)
         {
+            if (tablature.NStrings < 2)
+                return;
+
+            Note firstStringTuning = tablature.Tuning.notes[tablature.NStrings - 1];
+            Note secondStringTuning = tablature.Tuning.notes[tablature.NStrings - 2];
+
+            int deltaSemiTones = secondStringTuning.GetNumericalEquivalent()
+                - firstStringTuning.GetNumericalEquivalent();
+
+            for (int x = 0; x < tablature.Length; x++)
+            {
+                TabCoord currentInitialStringTC = new TabCoord(x, tablature.NStrings - 1);
+                TabCoord currentTargetStringTC = new TabCoord(x, tablature.NStrings - 2);
+                Element elementThere = tablature.ElementAt(currentInitialStringTC);
+
+                if (elementThere.IsNumber())
+                {
+                    int newValue = elementThere.GetNumericalValue() + deltaSemiTones;
+
+                    if (!tablature.isACharThere(currentTargetStringTC) &&
+                        !tablature.isACharThere(currentTargetStringTC.CoordOnLeft()) &&
+                        !tablature.isACharThere(currentTargetStringTC.CoordOnLeft().CoordOnLeft()) &&
+                        !tablature.isACharThere(currentTargetStringTC.CoordOnRight())
+                        )
+                    {
+                        tablature.ElementAt(currentTargetStringTC).ParseInteger(newValue);
+                    }
+                }
+            }
         }
 
         /// <summary>

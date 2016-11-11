@@ -2,6 +2,7 @@
 using System.Linq;
 using PFE.Configs;
 using PFE.Utils;
+using PFE.Algorithms;
 
 namespace PFE.Models
 {
@@ -231,7 +232,6 @@ namespace PFE.Models
             if (tabCoord == null || !tabCoord.IsValid(this))
                 return false;
 
-
             Element lmnt = ElementAt(tabCoord);
 
             //if the element did not contain a note, we cannot change 
@@ -422,10 +422,18 @@ namespace PFE.Models
             Tuning.AddString(atEnd, newStringNote);
         }
 
+        /// <summary>
+        /// Attempts removing a string and preserve notes by passing them to next string if possible.
+        /// </summary>
+        /// <param name="atEnd"></param>
+        /// <param name="attemptKeepingNotes"></param>
         public void RemoveString(bool atEnd, bool attemptKeepingNotes)
         {
-            //TODO implement attemptKeepingNotes
-            //if(attemptKeepingNotes)
+            if (attemptKeepingNotes && atEnd)
+                StringChanger.MoveLastStringNotesUp(this);
+
+            if (attemptKeepingNotes && !atEnd)
+                StringChanger.MoveFirstStringNotesDown(this);
 
             foreach (Position p in positions)
                 p.RemoveElement(atEnd);
