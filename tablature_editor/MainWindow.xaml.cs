@@ -129,10 +129,10 @@ namespace PFE
 
         private void MenuPrincipal_Strings_RemoveString_Click(object sender, RoutedEventArgs e)
         {
-            ChangeTuningDialog tuningWindow = new ChangeTuningDialog();
-            if (tuningWindow.ShowDialog() == true)
+            RemoveStringDialog removeStringDialog = new RemoveStringDialog();
+            if (removeStringDialog.ShowDialog() == true)
             {
-                MessageBox.Show("You picked : " + tuningWindow.TuningTest);
+                MessageBox.Show("You picked : " + "Bellow = " + removeStringDialog.RemoveBellow + " and Destructive : " + removeStringDialog.Destructive);
             }
         }
 

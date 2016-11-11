@@ -41,6 +41,8 @@ namespace PFE.MenuDialogs
             //Find the selected Note.
             int noteNumericalEquivalent = int.Parse(tb_Octave.Text) * 12 + (int)comboBoxNote.Value;
             Element.SetNumericalEquivalent(noteNumericalEquivalent);
+
+            //Close the dialog and return the values.
             DialogResult = true;
             this.Close();
         }
@@ -48,13 +50,15 @@ namespace PFE.MenuDialogs
         //Button Cancel.
         private void btn_cancel_Click(object sender, RoutedEventArgs e)
         {
+            //Close the dialog without returning the values.
             DialogResult = false;
             this.Close();
         }
 
-
+        //Filter on textbox.
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
         {
+            //Allows number between 0 and 99.
             Regex regex = new Regex("[^0-9]+");
             e.Handled = regex.IsMatch(e.Text);
         }
