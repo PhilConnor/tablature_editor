@@ -27,6 +27,10 @@
                     <MenuItem Header="_Save" Click="MenuPrincipal_File_Save_Click" />
                     <MenuItem Header="_Quitter" Click="MenuPrincipal_File_Quitter_Click" />
                 </MenuItem>
+                <MenuItem Header="_Strings">
+                    <MenuItem Header="_Add a string" Click="MenuPrincipal_Strings_AddString_Click" />
+                    <MenuItem Header="_Remove a string" Click="MenuPrincipal_Strings_RemoveString_Click" />
+                </MenuItem>
                 <MenuItem Header="_Configs">
                     <MenuItem Header="_Tablature" Click="MenuPrincipal_Configs_Tablature_Click" />
                 </MenuItem>
@@ -43,6 +47,17 @@
             <Button Name="btn_Save" ToolTip="Save to a .tabapp file." Click="MenuPrincipal_File_Save_Click">
                 <Button.Content>
                     <Image Source="images/Save.jpg" />
+                </Button.Content>
+            </Button>
+            <Separator Margin="0" Width="4" Visibility="Hidden"/>
+            <Button Name="btn_AddString" ToolTip="Add a string to the tablature." Click="MenuPrincipal_Strings_AddString_Click">
+                <Button.Content>
+                    <Image Source="images/AddString.jpg" />
+                </Button.Content>
+            </Button>
+            <Button Name="btn_RemoveString" ToolTip="Remove a string from the tablature." Click="MenuPrincipal_Strings_RemoveString_Click">
+                <Button.Content>
+                    <Image Source="images/RemoveString.jpg" />
                 </Button.Content>
             </Button>
         </WrapPanel>

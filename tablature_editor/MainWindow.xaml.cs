@@ -16,6 +16,7 @@ using PFE.Controllers;
 using PFE.Models;
 using PFE.Configs;
 using PFE.Utils;
+using PFE.MenuDialogs;
 
 namespace PFE
 {
@@ -83,8 +84,8 @@ namespace PFE
         private void MenuPrincipal_File_Open_Click(object sender, RoutedEventArgs e)
         {
             Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog();
-            openFileDialog.DefaultExt = ".apptab";                  //Default file extension.
-            openFileDialog.Filter = "Tablature (.apptab)|*.apptab"; //Filter by files extension.
+            openFileDialog.DefaultExt = ".tabapp";                  //Default file extension.
+            openFileDialog.Filter = "Tablature (*.tabapp)|*.tabapp"; //Filter by files extension.
 
             //Show open file dialog box.
             if (openFileDialog.ShowDialog() == true)
@@ -100,8 +101,8 @@ namespace PFE
         {
             Microsoft.Win32.SaveFileDialog saveFileDialog = new Microsoft.Win32.SaveFileDialog();
             saveFileDialog.FileName = "newtablature";               //Default file name.
-            saveFileDialog.DefaultExt = ".apptab";                  //Default file extension.
-            saveFileDialog.Filter = "Tablature (.apptab)|*.apptab"; //Filter by files extension.
+            saveFileDialog.DefaultExt = ".tabapp";                  //Default file extension.
+            saveFileDialog.Filter = "Tablature (*.tabapp)|*.tabapp"; //Filter by files extension.
 
             //Show save file dialog box.
             if (saveFileDialog.ShowDialog() == true)
@@ -117,9 +118,27 @@ namespace PFE
             this.Close();
         }
 
+        private void MenuPrincipal_Strings_AddString_Click(object sender, RoutedEventArgs e)
+        {
+            AddStringDialog addStringDialog = new AddStringDialog();
+            if (addStringDialog.ShowDialog() == true)
+            {
+                MessageBox.Show("You picked : " + addStringDialog.Element.ToStringWithOctave() + " and add bellow = " + addStringDialog.AddBellow);
+            }
+        }
+
+        private void MenuPrincipal_Strings_RemoveString_Click(object sender, RoutedEventArgs e)
+        {
+            RemoveStringDialog removeStringDialog = new RemoveStringDialog();
+            if (removeStringDialog.ShowDialog() == true)
+            {
+                MessageBox.Show("You picked : " + "Bellow = " + removeStringDialog.RemoveBellow + " and Destructive : " + removeStringDialog.Destructive);
+            }
+        }
+
         private void MenuPrincipal_Configs_Tablature_Click(object sender, RoutedEventArgs e)
         {
-            ConfigsTuningWindow tuningWindow = new ConfigsTuningWindow();
+            ChangeTuningDialog tuningWindow = new ChangeTuningDialog();
             if (tuningWindow.ShowDialog() == true)
             {
                 MessageBox.Show("You picked : " + tuningWindow.TuningTest);

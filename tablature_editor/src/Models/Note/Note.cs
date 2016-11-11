@@ -12,7 +12,13 @@ namespace PFE.Models
 
         public int Octave = 0;
         public NotesEnum Value = NotesEnum.A;
-        
+
+        public Note()
+        {
+            this.Octave = 0;
+            this.Value = NotesEnum.A;
+        }
+
         public Note(int Octave, NotesEnum NotesEnumValue)
         {
             this.Octave = Octave;

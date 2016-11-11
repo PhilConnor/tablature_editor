@@ -1,0 +1,25 @@
+﻿<Window x:Name="AddStringWindow" x:Class="PFE.MenuDialogs.AddStringDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PFE.MenuDialogs"
+        mc:Ignorable="d"
+        Title="Add string to tablature" Height="201.681" Width="300" ResizeMode="NoResize">
+    <Grid>
+        <GroupBox x:Name="gb_StringLocation" Header="New string location" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="272" Height="54">
+            <StackPanel HorizontalAlignment="Left" Height="34" VerticalAlignment="Top" Width="262" Margin="0,0,-2,0">
+                <RadioButton x:Name="radio_Above" GroupName="group1" Content="Above staff" IsChecked="True"/>
+                <RadioButton x:Name="radio_Bellow" GroupName="group1"  Content="Bellow staff"/>
+            </StackPanel>
+        </GroupBox>
+        <GroupBox x:Name="gb_StringLocation_Copy" Header="String note" HorizontalAlignment="Left" Margin="10,69,0,0" VerticalAlignment="Top" Width="272" Height="54">
+            <WrapPanel HorizontalAlignment="Left" Height="24" VerticalAlignment="Top" Width="262" Margin="0,10,-2,-2">
+                <ComboBox x:Name="cb_Note" HorizontalAlignment="Left" VerticalAlignment="Top" Width="32" SelectedIndex="0"/>
+                <TextBox x:Name="tb_Octave" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="2" MaxLength="2" VerticalAlignment="Top" Width="24" RenderTransformOrigin="-1.614,0.225" PreviewTextInput="NumberValidationTextBox"/>
+            </WrapPanel>
+        </GroupBox>
+        <Button x:Name="btn_ok" Content="Ok" HorizontalAlignment="Right" Margin="0,0,75,10" VerticalAlignment="Bottom" Width="60" Click="btn_ok_Click"/>
+        <Button x:Name="btn_cancel" Content="Cancel" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="60" Click="btn_cancel_Click"/>
+    </Grid>
+</Window>
