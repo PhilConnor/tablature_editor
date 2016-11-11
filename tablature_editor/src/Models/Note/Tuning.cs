@@ -43,6 +43,14 @@ namespace PFE.Models
                 notes.Insert(0, newStringNote);
         }
 
+        public void RemoveString(bool atEnd)
+        {
+            if (atEnd)
+                notes.Remove(notes.Last());
+            else
+                notes.Remove(notes.First());
+        }
+
         /// <summary>
         /// Returns the number of strings for this tuning.
         /// </summary>

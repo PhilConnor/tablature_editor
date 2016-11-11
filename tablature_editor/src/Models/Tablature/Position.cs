@@ -28,14 +28,50 @@ namespace PFE.Models
             }
         }
 
-        public void AddNewFirstElement(Element element)
+        public void AddBlankElement(bool atEnd)
         {
-            elements.Insert(0,element);
+            if (atEnd)
+                AddNewLastElement(new Element());
+            else
+                AddNewFirstElement(new Element());
         }
 
-        public void AddNewLastElement(Element element)
+        public void RemoveElement(bool atEnd)
+        {
+            if (atEnd)
+                elements.Remove(elements.Last());
+            else
+                elements.Remove(elements.First());
+        }
+
+        private void AddNewFirstElement(Element element)
+        {
+            elements.Insert(0, element);
+        }
+
+        private void AddNewLastElement(Element element)
         {
             elements.Add(element);
+        }
+
+        public void RemoveFirstElement()
+        {
+            elements.Remove(GetFirstElement());
+        }
+
+        public void RemoveLastElement()
+        {
+            elements.Add(GetLastElement());
+        }
+
+        public Element GetFirstElement()
+        {
+            return elements.First();
+        }
+
+        public Element GetLastElement()
+        {
+            return elements.Last();
         }
 
         public bool IsEmpty()

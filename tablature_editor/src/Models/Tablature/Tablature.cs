@@ -2,6 +2,7 @@
 using System.Linq;
 using PFE.Configs;
 using PFE.Utils;
+using PFE.Algorithms;
 
 namespace PFE.Models
 {
@@ -50,7 +51,7 @@ namespace PFE.Models
         /// </summary>
         public Tablature()
         {
-            Init(8, 80, new Tuning());
+            Init(5, 80, new Tuning());
         }
 
         /// <summary>
@@ -230,7 +231,6 @@ namespace PFE.Models
             //exit if invalid coord
             if (tabCoord == null || !tabCoord.IsValid(this))
                 return false;
-
 
             Element lmnt = ElementAt(tabCoord);
 
@@ -414,18 +414,31 @@ namespace PFE.Models
         /// </summary>
         /// <param name="atEnd"></param>
         /// <param name="newStringNote"></param>
-        public void AddNewString(bool atEnd, Note newStringNote)
+        public void AddString(bool atEnd, Note newStringNote)
         {
-            Element newElem = new Element();
-
-            if (atEnd)
-                foreach (Position p in positions)
-                    p.AddNewLastElement(newElem);
-            else
-                foreach (Position p in positions)
-                    p.AddNewFirstElement(newElem);
+            foreach (Position p in positions)
+                p.AddBlankElement(atEnd);
 
             Tuning.AddString(atEnd, newStringNote);
+        }
+
+        /// <summary>
+        /// Attempts removing a string and preserve notes by passing them to next string if possible.
+        /// </summary>
+        /// <param name="atEnd"></param>
+        /// <param name="attemptKeepingNotes"></param>
+        public void RemoveString(bool atEnd, bool attemptKeepingNotes)
+        {
+            if (attemptKeepingNotes && atEnd)
+                StringChanger.MoveLastStringNotesUp(this);
+
+            if (attemptKeepingNotes && !atEnd)
+                StringChanger.MoveFirstStringNotesDown(this);
+
+            foreach (Position p in positions)
+                p.RemoveElement(atEnd);
+
+            Tuning.RemoveString(atEnd);
         }
 
         /// <summary>
