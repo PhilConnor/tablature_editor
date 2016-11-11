@@ -14,6 +14,7 @@ namespace PFE.Algorithms
         /// Will increase the tablature number of staff and/or add spacings to 
         /// accomodate extra characters introduced in the tablature by a 1-digit
         /// note becoming a 2-digits
+        /// Will also increase cursor size so it will still be selecting the same notes.
         /// </summary>
         /// <param name="editor"></param>
         /// <param name="nSemiTones"></param>
@@ -64,6 +65,32 @@ namespace PFE.Algorithms
 
             //Enlarge cursor by the amount of extra space added
             editor.EnlargeCursorWidth(nSpaceAdded);
+        }
+
+        /// <summary>
+        /// Will transpose all notes on the string indicated by stringNumber by nSemiTones number of semitones.
+        /// Will do nothing to notes that are impossible to transpose on the same string.
+        /// Will increase staff size if new space is required because of added characters.
+        /// </summary>
+        /// <param name="tablature"></param>
+        /// <param name="stringNumber"></param>
+        /// <param name="nSemiTones"></param>
+        public void TransposeString(Tablature tablature, int stringNumber, int nSemiTones)
+        {
+
+
+        }
+
+        /// <summary>
+        /// Will transpose all notes in the tablature by nSemiTones number of semitones.
+        /// Will do nothing to notes that are impossible to transpose on the same string.
+        /// Will increase staff size if new space is required because of added characters.
+        /// </summary>
+        /// <param name="tablature"></param>
+        /// <param name="nSemiTones"></param>
+        public void TransposeTablature(Tablature tablature, int nSemiTones)
+        {
+            //uses TransposeString(Tablature tablature, int stringNumber, int nSemiTones) for all strings
         }
 
     }
