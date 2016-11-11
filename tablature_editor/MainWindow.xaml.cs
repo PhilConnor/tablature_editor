@@ -79,7 +79,40 @@ namespace PFE
             editorController.MouseUp(sender, e);
         }
 
-        private void MenuPrincipal_Fichier_Quitter_Click(object sender, RoutedEventArgs e)
+        //Show a dialog so the user can select a file to open.
+        private void MenuPrincipal_File_Open_Click(object sender, RoutedEventArgs e)
+        {
+            Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog();
+            openFileDialog.DefaultExt = ".apptab";                  //Default file extension.
+            openFileDialog.Filter = "Tablature (.apptab)|*.apptab"; //Filter by files extension.
+
+            //Show open file dialog box.
+            if (openFileDialog.ShowDialog() == true)
+            {
+                //Save tablature.
+                string filename = openFileDialog.FileName;
+                MessageBox.Show("Path of selected file : " + filename);
+            }
+        }
+
+        //Show a dialog so the user can select a file to save his tablature to.
+        private void MenuPrincipal_File_Save_Click(object sender, RoutedEventArgs e)
+        {
+            Microsoft.Win32.SaveFileDialog saveFileDialog = new Microsoft.Win32.SaveFileDialog();
+            saveFileDialog.FileName = "newtablature";               //Default file name.
+            saveFileDialog.DefaultExt = ".apptab";                  //Default file extension.
+            saveFileDialog.Filter = "Tablature (.apptab)|*.apptab"; //Filter by files extension.
+
+            //Show save file dialog box.
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                //Save tablature.
+                string filename = saveFileDialog.FileName;
+                MessageBox.Show("Path of selected file : " + filename);
+            }
+        }
+
+        private void MenuPrincipal_File_Quitter_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
         }
@@ -89,7 +122,7 @@ namespace PFE
             ConfigsTuningWindow tuningWindow = new ConfigsTuningWindow();
             if (tuningWindow.ShowDialog() == true)
             {
-                MessageBox.Show("Vous avez choisi : " + tuningWindow.TuningTest);
+                MessageBox.Show("You picked : " + tuningWindow.TuningTest);
             }
         }
     }
