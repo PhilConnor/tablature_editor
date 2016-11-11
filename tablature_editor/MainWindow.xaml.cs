@@ -16,6 +16,7 @@ using PFE.Controllers;
 using PFE.Models;
 using PFE.Configs;
 using PFE.Utils;
+using PFE.MenuDialogs;
 
 namespace PFE
 {
@@ -117,9 +118,27 @@ namespace PFE
             this.Close();
         }
 
+        private void MenuPrincipal_Strings_AddString_Click(object sender, RoutedEventArgs e)
+        {
+            AddStringDialog addStringDialog = new AddStringDialog();
+            if (addStringDialog.ShowDialog() == true)
+            {
+                MessageBox.Show("You picked : " + addStringDialog.Element.ToStringWithOctave() + " and add bellow = " + addStringDialog.AddBellow);
+            }
+        }
+
+        private void MenuPrincipal_Strings_RemoveString_Click(object sender, RoutedEventArgs e)
+        {
+            ChangeTuningDialog tuningWindow = new ChangeTuningDialog();
+            if (tuningWindow.ShowDialog() == true)
+            {
+                MessageBox.Show("You picked : " + tuningWindow.TuningTest);
+            }
+        }
+
         private void MenuPrincipal_Configs_Tablature_Click(object sender, RoutedEventArgs e)
         {
-            ConfigsTuningWindow tuningWindow = new ConfigsTuningWindow();
+            ChangeTuningDialog tuningWindow = new ChangeTuningDialog();
             if (tuningWindow.ShowDialog() == true)
             {
                 MessageBox.Show("You picked : " + tuningWindow.TuningTest);

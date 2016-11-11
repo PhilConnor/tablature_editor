@@ -1,27 +1,27 @@
 ﻿using System.Windows;
 using PFE.Models;
 
-namespace PFE
+namespace PFE.MenuDialogs
 {
     /// <summary>
     /// Interaction logic for Window1.xaml
     /// </summary>
-    public partial class ConfigsTuningWindow : Window
+    public partial class ChangeTuningDialog : Window
     {
         //Properties.
         public string TuningTest { get; set; }
 
         //Constructors.
-        public ConfigsTuningWindow()
+        public ChangeTuningDialog()
         {
             InitializeComponent();
-            cb_note.ItemsSource = Note.GetListNotes();
+            cb_Note.ItemsSource = Note.GetListNotes();
         }
 
         //Private methods.
         private void btn_ok_Click(object sender, RoutedEventArgs e)
         {
-            TuningTest = cb_note.SelectedValue.ToString();
+            TuningTest = cb_Note.SelectedValue.ToString();
             DialogResult = true;
             this.Close();
         }
