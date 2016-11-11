@@ -28,6 +28,16 @@ namespace PFE.Models
             }
         }
 
+        public void AddNewFirstElement(Element element)
+        {
+            elements.Insert(0,element);
+        }
+
+        public void AddNewLastElement(Element element)
+        {
+            elements.Add(element);
+        }
+
         public bool IsEmpty()
         {
             for (int i = 0; i < elements.Count; i++)

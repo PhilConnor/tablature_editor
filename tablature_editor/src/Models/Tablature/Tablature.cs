@@ -46,13 +46,19 @@ namespace PFE.Models
 
         #region public
         /// <summary>
-        /// Constructor
+        /// Default Constructor
         /// </summary>
         public Tablature()
         {
-            Init(3, 80, new Tuning());
+            Init(8, 80, new Tuning());
         }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="nStaff">Number of initial staffs</param>
+        /// <param name="staffLength">Initial lenght of staffs</param>
+        /// <param name="tuning">Initial tuning</param>
         public Tablature(int nStaff, int staffLength, Tuning tuning)
         {
             Init(nStaff, staffLength, tuning);
@@ -241,7 +247,7 @@ namespace PFE.Models
             //prevent adding notes lower than 0
             if (note < 0)
                 note = 0;
-                
+
             Element lmntAtLeft = ElementAt(tabCoord.CoordOnLeft());
             Element lmntAtLeftLeft = ElementAt(tabCoord.CoordOnLeft().CoordOnLeft());
 
@@ -258,12 +264,11 @@ namespace PFE.Models
                 InsertSpaceAt(tabCoord);
                 spaceHasBeenAdded = true;
             }
-            
+
             lmnt.ParseInteger(note);
 
             return spaceHasBeenAdded;
         }
-
 
         /// <summary>
         /// Returns the char value of the element at tabCoord
@@ -279,6 +284,11 @@ namespace PFE.Models
                 return lmnt.RightChar;
         }
 
+        /// <summary>
+        /// Returns true if an element if a note or modifier character is located at this tabCoord.
+        /// </summary>
+        /// <param name="tabCoord"></param>
+        /// <returns></returns>
         public bool isACharThere(TabCoord tabCoord)
         {
             if (ElementAt(tabCoord).RightChar != '-')
@@ -318,6 +328,11 @@ namespace PFE.Models
             return false;
         }
 
+        /// <summary>
+        /// Returns true of the element two positions to the right this tabCoord is a note of value under 9.
+        /// </summary>
+        /// <param name="tabCoord"></param>
+        /// <returns></returns>
         public bool isElementOnRightUnder9(TabCoord tabCoord)
         {
             TabCoord tabCoordOnRight = tabCoord.CoordOnRight();
@@ -327,6 +342,11 @@ namespace PFE.Models
             return false;
         }
 
+        /// <summary>
+        /// Returns true of the element to the right this tabCoord is a note of value over 9.
+        /// </summary>
+        /// <param name="tabCoord"></param>
+        /// <returns></returns>
         public bool isElementOnRightOver9(TabCoord tabCoord)
         {
             TabCoord tabCoordOnRight = tabCoord.CoordOnRight();
@@ -336,6 +356,11 @@ namespace PFE.Models
             return false;
         }
 
+        /// <summary>
+        /// Returns true of the element two positions to the right this tabCoord is a note of value over 9.
+        /// </summary>
+        /// <param name="tabCoord"></param>
+        /// <returns></returns>
         public bool isElementOnRightRightOver9(TabCoord tabCoord)
         {
             TabCoord tabCoordOnRightRight = tabCoord.CoordOnRight().CoordOnRight();
@@ -345,6 +370,11 @@ namespace PFE.Models
             return false;
         }
 
+        /// <summary>
+        /// Returns true of the element on the left of this tabCoord is a note of value under 9.
+        /// </summary>
+        /// <param name="tabCoord"></param>
+        /// <returns></returns>
         public bool isElementOnLeftUnder9(TabCoord tabCoord)
         {
             TabCoord tabCoordOnLeft = tabCoord.CoordOnLeft();
@@ -366,6 +396,9 @@ namespace PFE.Models
             return positions.ElementAt(tabCoord.x).elements.ElementAt(tabCoord.y);
         }
 
+        /// <summary>
+        /// Inserts a new blank staff at the end of the tablature.
+        /// </summary>
         public void AddNewStaff()
         {
             NStaff++;
@@ -375,6 +408,31 @@ namespace PFE.Models
             }
         }
 
+        /// <summary>
+        /// Add a new string as the new biggest string if atEnd is true.
+        /// Otherwise add the new string as the new smallest string.
+        /// </summary>
+        /// <param name="atEnd"></param>
+        /// <param name="newStringNote"></param>
+        public void AddNewString(bool atEnd, Note newStringNote)
+        {
+            Element newElem = new Element();
+
+            if (atEnd)
+                foreach (Position p in positions)
+                    p.AddNewLastElement(newElem);
+            else
+                foreach (Position p in positions)
+                    p.AddNewFirstElement(newElem);
+
+            Tuning.AddString(atEnd, newStringNote);
+        }
+
+        /// <summary>
+        /// Returns true if both tablatures are equivalent.
+        /// </summary>
+        /// <param name="tablature"></param>
+        /// <returns></returns>
         public bool Equals(Tablature tablature)
         {
             if (tablature.Tuning != Tuning)
@@ -395,6 +453,10 @@ namespace PFE.Models
             return true;
         }
 
+        /// <summary>
+        /// Returns a clone of this tablature.
+        /// </summary>
+        /// <returns></returns>
         public Tablature Clone()
         {
             Tablature clone = new Tablature(NStaff, StaffLength, Tuning.Clone());
