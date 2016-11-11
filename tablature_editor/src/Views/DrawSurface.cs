@@ -12,10 +12,10 @@ namespace PFE
     /// The surface on wich the tablature is drawn.
     /// Provites methods to draw the background, rectangles and text.
     /// </summary>
-    class DrawSurface : FrameworkElement
+    public class DrawSurface : FrameworkElement
     {
         protected VisualCollection visuals;
-        protected DrawingContext drawingContext;
+        public DrawingContext drawingContext;
         protected DrawingVisual drawingVisual;
 
         private bool isDrawing = false;
@@ -75,29 +75,14 @@ namespace PFE
                     Config_DrawSurface.Inst().GridUnitWidth)));
         }
 
-        public void DrawCharAtTabCoord(DrawSurfaceCoord canvasCoord, char chr)
+        public void DrawFormattedTextAtDrawSurfaceCoord(DrawSurfaceCoord drawSurfaceCoord, FormattedText chr)
         {
             if (!isDrawing)
                 throw new Exception("Something is wrong with the input text");
 
-            Point point = new Point(canvasCoord.x, canvasCoord.y);
-            DrawCharAtPoint(point, chr);
-        }
-
-        private void DrawCharAtPoint(Point point, char chr)
-        {
-            FormattedText formattedText =
-                new FormattedText(
-                    chr.ToString(),
-                    CultureInfo.GetCultureInfo("en-us"),
-                    FlowDirection.LeftToRight,
-                    Config_DrawSurface.Inst().TextFont,
-                    Config_DrawSurface.Inst().FontSize,
-                    Brushes.White);
-
             drawingContext.DrawText(
-                formattedText,
-                point);
+                chr,
+                drawSurfaceCoord.AsPoint());
         }
 
         protected override Visual GetVisualChild(int index)

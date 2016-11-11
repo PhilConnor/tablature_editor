@@ -110,8 +110,25 @@ namespace PFE.Controllers
                 for (int y = 0; y < _editor.NStrings; ++y)
                 {
                     TabCoord tabCoord = new TabCoord(x, y);
-                    DrawSurfaceCoord canvasCoord = CoordConverter.ToDrawSurfaceCoord(tabCoord, _editor);
-                    _drawSurface.DrawCharAtTabCoord(canvasCoord, _editor.GetElementCharAt(tabCoord));
+                    Element lmt = _editor.Tablature.ElementAt(tabCoord);
+
+                    // drawing right char
+                    _drawSurface.DrawFormattedTextAtDrawSurfaceCoord(
+                        CoordConverter.ToDrawSurfaceCoord(tabCoord, _editor)
+                        , lmt.RightCharFormattedText);
+
+                    lmt.HasRightCharChanged = false;
+
+
+                    // drawing left char if existing
+                    if (lmt.IsNumberOver9())
+                    {
+                        _drawSurface.DrawFormattedTextAtDrawSurfaceCoord(
+                            CoordConverter.ToDrawSurfaceCoord(tabCoord.CoordOnLeft(), _editor)
+                            , lmt.LeftCharFormattedText);
+
+                        lmt.HasLeftCharChanged = false;
+                    }
                 }
             }
         }
