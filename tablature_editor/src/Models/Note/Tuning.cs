@@ -35,6 +35,14 @@ namespace PFE.Models
             }
         }
 
+        public void AddString(bool atEnd, Note newStringNote)
+        {
+            if (atEnd)
+                notes.Add(newStringNote);
+            else
+                notes.Insert(0, newStringNote);
+        }
+
         /// <summary>
         /// Returns the number of strings for this tuning.
         /// </summary>
