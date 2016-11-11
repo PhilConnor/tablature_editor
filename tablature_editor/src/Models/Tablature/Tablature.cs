@@ -3,6 +3,7 @@ using System.Linq;
 using PFE.Configs;
 using PFE.Utils;
 using PFE.Algorithms;
+using System.Windows.Media;
 
 namespace PFE.Models
 {
@@ -51,7 +52,7 @@ namespace PFE.Models
         /// </summary>
         public Tablature()
         {
-            Init(5, 80, new Tuning());
+            Init(8, 80, new Tuning());
         }
 
         /// <summary>
@@ -118,10 +119,6 @@ namespace PFE.Models
         /// <param name="modifierChar"></param>
         public void AttemptSetModifierAt(TabCoord tabCoord, char modifierChar)
         {
-            //exit if invalid coord
-            if (tabCoord == null || !tabCoord.IsValid(this))
-                return;
-
             if (Util.IsNumber(modifierChar))
             {
                 AttemptSetNoteAt(tabCoord, modifierChar);
@@ -137,7 +134,7 @@ namespace PFE.Models
             if (lmnt.IsNumberOver9())
             {
                 lmntOnLeft.ClearText();
-                lmntOnLeft.RightChar = lmnt.LeftChar;
+                lmntOnLeft.RightChar = lmnt.LeftChar.Value;
                 lmnt.ClearText();
                 lmnt.RightChar = modifierChar;
             }
@@ -146,7 +143,7 @@ namespace PFE.Models
             {
                 lmnt.ClearText();
                 lmnt.RightChar = modifierChar;
-                lmntOnRight.LeftChar = '-';
+                lmntOnRight.LeftChar = null;
             }
             //if we are setting over a non-num char or a num under 9
             else if (!lmnt.IsNumber() || lmnt.IsNumberUnder9())
@@ -163,10 +160,6 @@ namespace PFE.Models
         /// <param name="noteChar"></param>
         public void AttemptSetNoteAt(TabCoord tabCoord, char noteChar)
         {
-            //exit if invalid coord
-            if (tabCoord == null || !tabCoord.IsValid(this))
-                return;
-
             //preparing work variables
             Element lmnt = ElementAt(tabCoord);
             Element lmntOnRight = ElementAt(tabCoord.CoordOnRight());
@@ -228,17 +221,12 @@ namespace PFE.Models
         {
             bool spaceHasBeenAdded = false;
 
-            //exit if invalid coord
-            if (tabCoord == null || !tabCoord.IsValid(this))
-                return false;
-
             Element lmnt = ElementAt(tabCoord);
 
             //if the element did not contain a note, we cannot change 
             // its numerical value so we do nothing          
             if (!lmnt.IsNumber())
                 return false;
-
 
             //prevent adding notes higher than 99
             if (note >= 100)
@@ -279,9 +267,20 @@ namespace PFE.Models
             Element lmntOnRight = ElementAt(tabCoord.CoordOnRight());
 
             if (lmntOnRight != null && lmntOnRight.IsNumberOver9())
-                return lmntOnRight.LeftChar;
+                return lmntOnRight.LeftChar.Value;
             else
                 return lmnt.RightChar;
+        }
+
+        public FormattedText FormattedTextAt(TabCoord tabCoord)
+        {
+            Element lmnt = ElementAt(tabCoord);
+            Element lmntOnRight = ElementAt(tabCoord.CoordOnRight());
+
+            if (lmntOnRight != null && lmntOnRight.IsNumberOver9())
+                return lmntOnRight.LeftCharFormattedText;
+            else
+                return lmnt.RightCharFormattedText;
         }
 
         /// <summary>

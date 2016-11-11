@@ -4,6 +4,7 @@ using PFE.Controllers;
 using PFE.Interfaces;
 using PFE.Utils;
 using PFE.UndoRedo;
+using System.Windows.Media;
 
 namespace PFE.Models
 {
@@ -309,14 +310,6 @@ namespace PFE.Models
             }
 
             NotifyObserverRedraw();
-        }
-
-        /// <summary>
-        /// Returns the TablatureElement at tabCoord.
-        /// </summary>
-        public char GetElementCharAt(TabCoord tabCoord)
-        {
-            return Tablature.GetCharAt(tabCoord);
         }
 
         /// <summary>

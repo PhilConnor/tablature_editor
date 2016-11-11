@@ -1,4 +1,8 @@
-﻿using PFE.Utils;
+﻿using PFE.Configs;
+using PFE.Utils;
+using System.Globalization;
+using System.Windows;
+using System.Windows.Media;
 
 namespace PFE.Models
 {
@@ -10,8 +14,68 @@ namespace PFE.Models
     /// </summary>
     public class Element
     {
-        public char RightChar { get; set; } // the main char, if its a number over9 the second digit is stored in leftchar
-        public char LeftChar { get; set; }
+        #region draw related
+        /// <summary>
+        /// Code in this region has been added to prevent unecessary creation of FormattedText object at each redraw
+        /// </summary>
+
+        public bool HasRightCharChanged { get; set; }
+
+        private FormattedText rightCharFormattedText;
+        public FormattedText RightCharFormattedText
+        {
+            get
+            {
+                if (HasRightCharChanged)
+                    rightCharFormattedText = new FormattedText(
+                        RightChar.ToString(),
+                        CultureInfo.GetCultureInfo("en-us"),
+                        FlowDirection.LeftToRight,
+                        Config_DrawSurface.Inst().TextFont,
+                        Config_DrawSurface.Inst().FontSize,
+                        Config_DrawSurface.Inst().TextColor);
+
+                return rightCharFormattedText;
+            }
+        }
+
+
+        public bool HasLeftCharChanged { get; set; }
+
+        private FormattedText leftCharFormattedText;
+        public FormattedText LeftCharFormattedText
+        {
+            get
+            {
+                if (HasLeftCharChanged)
+                    leftCharFormattedText = new FormattedText(
+                        LeftChar.ToString(),
+                        CultureInfo.GetCultureInfo("en-us"),
+                        FlowDirection.LeftToRight,
+                        Config_DrawSurface.Inst().TextFont,
+                        Config_DrawSurface.Inst().FontSize,
+                        Config_DrawSurface.Inst().TextColor);
+
+                return leftCharFormattedText;
+            }
+        }
+        #endregion
+
+        // the main char, if it's a number over9 the second digit is stored in leftchar
+        private char rightChar;
+        public char RightChar
+        {
+            get { return this.rightChar; }
+            set { this.rightChar = value; HasRightCharChanged = true; }
+        }
+
+        private char? leftChar;
+        public char? LeftChar
+        {
+            get { return this.leftChar; }
+            set { this.leftChar = value; HasLeftCharChanged = true; }
+        }
+
 
         public Element()
         {
@@ -20,13 +84,13 @@ namespace PFE.Models
 
         public void ClearText()
         {
-            LeftChar = '-';
+            LeftChar = null;
             RightChar = '-';
         }
 
         public bool IsEmpty()
         {
-            return LeftChar == '-' && RightChar == '-';
+            return LeftChar == null && RightChar == '-';
         }
 
         public bool IsNumber()
@@ -36,12 +100,12 @@ namespace PFE.Models
 
         public bool IsNumberOver9()
         {
-            return Util.IsNumber(LeftChar);
+            return LeftChar != null;
         }
 
         public bool IsNumberUnder9()
         {
-            return Util.IsNumber(RightChar) && !Util.IsNumber(LeftChar);
+            return Util.IsNumber(RightChar) && LeftChar == null;
         }
 
         public void ParseInteger(int value)
