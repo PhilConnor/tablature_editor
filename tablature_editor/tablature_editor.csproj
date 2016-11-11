@@ -58,6 +58,7 @@
     <Compile Include="ConfigsTuningWindow.xaml.cs">
       <DependentUpon>ConfigsTuningWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="src\Algorithms\StringChanging.cs" />
     <Compile Include="src\Algorithms\Transposition.cs" />
     <Compile Include="src\Controllers\EditorController.cs" />
     <Compile Include="src\Interfaces\IObservable.cs" />
@@ -122,7 +123,12 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="images\Open.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\Save.jpg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
