@@ -32,6 +32,7 @@ namespace PFE.Configs
         // Colors
         public Color BGColor { get; set; }
         public Brush TextColor { get; set; }
+        public Brush CursorColor { get; set; }
 
         // Fonts
         public Typeface TextFont { get; set; }
@@ -81,6 +82,9 @@ namespace PFE.Configs
 
             BGColor = Colors.LightGray;
             TextColor = Brushes.White;
+            TextColor.Freeze();
+            CursorColor = Brushes.DarkRed;
+            CursorColor.Freeze();
             TextFont = new Typeface("Verdana");
         }        
     }

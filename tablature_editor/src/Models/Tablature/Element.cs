@@ -15,6 +15,10 @@ namespace PFE.Models
     public class Element
     {
         #region draw related
+        /// <summary>
+        /// Code in this region has been added to prevent unecessary creation of FormattedText object at each redraw
+        /// </summary>
+
         public bool HasRightCharChanged { get; set; }
 
         private FormattedText rightCharFormattedText;
@@ -29,7 +33,7 @@ namespace PFE.Models
                         FlowDirection.LeftToRight,
                         Config_DrawSurface.Inst().TextFont,
                         Config_DrawSurface.Inst().FontSize,
-                        Brushes.White);
+                        Config_DrawSurface.Inst().TextColor);
 
                 return rightCharFormattedText;
             }
@@ -50,12 +54,11 @@ namespace PFE.Models
                         FlowDirection.LeftToRight,
                         Config_DrawSurface.Inst().TextFont,
                         Config_DrawSurface.Inst().FontSize,
-                        Brushes.White);
+                        Config_DrawSurface.Inst().TextColor);
 
                 return leftCharFormattedText;
             }
         }
-
         #endregion
 
         // the main char, if it's a number over9 the second digit is stored in leftchar

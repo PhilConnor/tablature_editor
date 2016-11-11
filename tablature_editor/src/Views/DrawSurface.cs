@@ -67,7 +67,7 @@ namespace PFE
             Point point = new Point(canvasCoord.x, canvasCoord.y);
 
             drawingContext.DrawRectangle(
-                Brushes.LightBlue,
+                Config_DrawSurface.Inst().CursorColor,
                 null,
                 new Rect(
                     point, 
