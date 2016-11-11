@@ -85,7 +85,7 @@ namespace PFE
         {
             Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog();
             openFileDialog.DefaultExt = ".apptab";                  //Default file extension.
-            openFileDialog.Filter = "Tablature (.apptab)|*.apptab"; //Filter by files extension.
+            openFileDialog.Filter = "Tablature (*.tabapp)|*.tabapp"; //Filter by files extension.
 
             //Show open file dialog box.
             if (openFileDialog.ShowDialog() == true)
@@ -102,7 +102,7 @@ namespace PFE
             Microsoft.Win32.SaveFileDialog saveFileDialog = new Microsoft.Win32.SaveFileDialog();
             saveFileDialog.FileName = "newtablature";               //Default file name.
             saveFileDialog.DefaultExt = ".apptab";                  //Default file extension.
-            saveFileDialog.Filter = "Tablature (.apptab)|*.apptab"; //Filter by files extension.
+            saveFileDialog.Filter = "Tablature (*.tabapp)|*.tabapp"; //Filter by files extension.
 
             //Show save file dialog box.
             if (saveFileDialog.ShowDialog() == true)
