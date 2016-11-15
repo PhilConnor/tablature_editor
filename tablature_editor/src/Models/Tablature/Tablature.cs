@@ -269,6 +269,31 @@ namespace PFE.Models
 
         }
 
+        public bool CanSetNoteOver9At(TabCoord tabCoord)
+        {
+            bool can = false;
+            
+
+
+            return can;
+        }
+
+        public bool CanSetNoteUnder9At(TabCoord tabCoord)
+        {
+            bool can = false;
+
+
+            return can;
+        }
+        
+        public bool IsDiagonalBlockedAt(TabCoord tabCoord)
+        {
+            bool can = false;
+            
+
+            return can;
+        }
+
         /// <summary>
         /// Returns the char value of the element at tabCoord
         /// </summary>
@@ -281,17 +306,6 @@ namespace PFE.Models
                 return lmntOnRight.LeftChar.Value;
             else
                 return lmnt.RightChar;
-        }
-
-        public FormattedText FormattedTextAt(TabCoord tabCoord)
-        {
-            Element lmnt = ElementAt(tabCoord);
-            Element lmntOnRight = ElementAt(tabCoord.CoordOnRight());
-
-            if (lmntOnRight != null && lmntOnRight.IsNumberOver9())
-                return lmntOnRight.LeftCharFormattedText;
-            else
-                return lmnt.RightCharFormattedText;
         }
 
         /// <summary>
@@ -324,6 +338,14 @@ namespace PFE.Models
                 return null;
 
             return positions.ElementAt(tabCoord.x).elements.ElementAt(tabCoord.y);
+        }
+
+        public Position PositionAt(TabCoord tabCoord)
+        {
+            if (tabCoord == null || !tabCoord.IsValid(this))
+                return null;
+
+            return positions.ElementAt(tabCoord.x);
         }
 
         /// <summary>
