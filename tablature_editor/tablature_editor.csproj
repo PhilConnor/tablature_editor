@@ -73,6 +73,7 @@
     <Compile Include="src\Models\Coord\TabCoord.cs" />
     <Compile Include="src\Models\Note\Note.cs" />
     <Compile Include="src\Models\Note\Tuning.cs" />
+    <Compile Include="src\Models\Tablature\TablatureAnalysis.cs" />
     <Compile Include="src\UndoRedo\Memento.cs" />
     <Compile Include="src\UndoRedo\MementoCareTaker.cs" />
     <Compile Include="src\Utils\CoordConverter.cs" />

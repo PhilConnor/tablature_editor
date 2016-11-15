@@ -37,10 +37,10 @@ namespace PFE.Algorithms
                 {
                     int newValue = elementThere.GetNumericalValue() + deltaSemiTones;
 
-                    if (!tablature.isACharThere(currentTargetStringTC) &&
-                        !tablature.isACharThere(currentTargetStringTC.CoordOnLeft()) &&
-                        !tablature.isACharThere(currentTargetStringTC.CoordOnLeft().CoordOnLeft()) &&
-                        !tablature.isACharThere(currentTargetStringTC.CoordOnRight())
+                    if (!tablature.IsACharThere(currentTargetStringTC) &&
+                        !tablature.IsACharThere(currentTargetStringTC.CoordOnLeft()) &&
+                        !tablature.IsACharThere(currentTargetStringTC.CoordOnLeft().CoordOnLeft()) &&
+                        !tablature.IsACharThere(currentTargetStringTC.CoordOnRight())
                         )
                     {
                         tablature.ElementAt(currentTargetStringTC).ParseInteger(newValue);
@@ -76,10 +76,10 @@ namespace PFE.Algorithms
                 {
                     int newValue = elementThere.GetNumericalValue() + deltaSemiTones;
 
-                    if (!tablature.isACharThere(currentTargetStringTC) &&
-                        !tablature.isACharThere(currentTargetStringTC.CoordOnLeft()) &&
-                        !tablature.isACharThere(currentTargetStringTC.CoordOnLeft().CoordOnLeft()) &&
-                        !tablature.isACharThere(currentTargetStringTC.CoordOnRight())
+                    if (!tablature.IsACharThere(currentTargetStringTC) &&
+                        !tablature.IsACharThere(currentTargetStringTC.CoordOnLeft()) &&
+                        !tablature.IsACharThere(currentTargetStringTC.CoordOnLeft().CoordOnLeft()) &&
+                        !tablature.IsACharThere(currentTargetStringTC.CoordOnRight())
                         )
                     {
                         tablature.ElementAt(currentTargetStringTC).ParseInteger(newValue);

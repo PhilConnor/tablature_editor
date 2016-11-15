@@ -111,15 +111,18 @@ namespace PFE.Controllers
                 {
                     TabCoord tabCoord = new TabCoord(x, y);
                     Element lmt = _editor.Tablature.ElementAt(tabCoord);
+                    Element lmtRight = _editor.Tablature.ElementAt(tabCoord.CoordOnRight());
 
                     // drawing right char
-                    _drawSurface.DrawFormattedTextAtDrawSurfaceCoord(
-                        CoordConverter.ToDrawSurfaceCoord(tabCoord, _editor)
-                        , lmt.RightCharFormattedText);
+                    if (lmtRight != null && !lmtRight.IsNumberOver9())
+                    {
+                        _drawSurface.DrawFormattedTextAtDrawSurfaceCoord(
+                            CoordConverter.ToDrawSurfaceCoord(tabCoord, _editor)
+                            , lmt.RightCharFormattedText);
 
-                    lmt.HasRightCharChanged = false;
-
-
+                        lmt.HasRightCharChanged = false;
+                    }
+                    
                     // drawing left char if existing
                     if (lmt.IsNumberOver9())
                     {
@@ -233,7 +236,7 @@ namespace PFE.Controllers
                 Redo();
 
             //increment
-            else if (Keyboard.IsKeyDown(Key.LeftCtrl) && e.Key == Key.Add 
+            else if (Keyboard.IsKeyDown(Key.LeftCtrl) && e.Key == Key.Add
                 || Keyboard.IsKeyDown(Key.LeftCtrl) && e.Key == Key.OemPlus)
             {
                 _editor.TransposeSelection(1);
