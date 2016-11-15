@@ -10,6 +10,9 @@ namespace PFE.Models
     /// <summary>
     /// Represents the tablature itself. 
     /// Contains all tab elements and the tuning.
+    /// Provided public methods protects the integretigy ot the tablature. 
+    /// Example 1), trying to insert a 1234 note will result in nothing being inserted. 
+    /// Example 2) Trying to insert a  4 next to a 12 will result in nothing.
     /// </summary>
     public class Tablature
     {
@@ -52,7 +55,7 @@ namespace PFE.Models
         /// </summary>
         public Tablature()
         {
-            Init(8, 80, new Tuning());
+            Init(3, 80, new Tuning());
         }
 
         /// <summary>
@@ -117,11 +120,11 @@ namespace PFE.Models
         /// </summary>
         /// <param name="tabCoord"></param>
         /// <param name="modifierChar"></param>
-        public void AttemptSetModifierAt(TabCoord tabCoord, char modifierChar)
+        public void AttemptSetModifierCharAt(TabCoord tabCoord, char modifierChar)
         {
             if (Util.IsNumber(modifierChar))
             {
-                AttemptSetNoteAt(tabCoord, modifierChar);
+                AttemptSetNoteCharAt(tabCoord, modifierChar);
                 return;
             }
 
@@ -158,7 +161,7 @@ namespace PFE.Models
         /// </summary>
         /// <param name="tabCoord"></param>
         /// <param name="noteChar"></param>
-        public void AttemptSetNoteAt(TabCoord tabCoord, char noteChar)
+        public void AttemptSetNoteCharAt(TabCoord tabCoord, char noteChar)
         {
             //preparing work variables
             Element lmnt = ElementAt(tabCoord);
@@ -259,6 +262,14 @@ namespace PFE.Models
         }
 
         /// <summary>
+        /// Insert a note at tabCoord if there is space available for it.
+        /// </summary>
+        public void SetNoteAt()
+        {
+
+        }
+
+        /// <summary>
         /// Returns the char value of the element at tabCoord
         /// </summary>
         public char GetCharAt(TabCoord tabCoord)
@@ -284,7 +295,7 @@ namespace PFE.Models
         }
 
         /// <summary>
-        /// Returns true if an element if a note or modifier character is located at this tabCoord.
+        /// Returns true if an element is a note or modifier character is located at this tabCoord.
         /// </summary>
         /// <param name="tabCoord"></param>
         /// <returns></returns>
@@ -299,86 +310,6 @@ namespace PFE.Models
                 if (ElementAt(tabCoordOnRight).IsNumberOver9())
                     return true;
             }
-
-            return false;
-        }
-
-        /// <summary>
-        /// Returns true if a char belonging to a note element 
-        /// is occupying the space at tabCoord.
-        /// </summary>
-        /// <param name="tabCoord"></param>
-        /// <returns></returns>
-        public bool isANoteCharThere(TabCoord tabCoord)
-        {
-            if (!tabCoord.IsValid(this))
-                return false;
-
-            if (ElementAt(tabCoord).IsNumber())
-                return true;
-
-            if (!tabCoord.IsOnRightEdge(this))
-            {
-                TabCoord tabCoordOnRight = tabCoord.CoordOnRight();
-                if (ElementAt(tabCoordOnRight).IsNumberOver9())
-                    return true;
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        /// Returns true of the element two positions to the right this tabCoord is a note of value under 9.
-        /// </summary>
-        /// <param name="tabCoord"></param>
-        /// <returns></returns>
-        public bool isElementOnRightUnder9(TabCoord tabCoord)
-        {
-            TabCoord tabCoordOnRight = tabCoord.CoordOnRight();
-            if (tabCoordOnRight.IsValid(this) && ElementAt(tabCoordOnRight).IsNumberUnder9())
-                return true;
-
-            return false;
-        }
-
-        /// <summary>
-        /// Returns true of the element to the right this tabCoord is a note of value over 9.
-        /// </summary>
-        /// <param name="tabCoord"></param>
-        /// <returns></returns>
-        public bool isElementOnRightOver9(TabCoord tabCoord)
-        {
-            TabCoord tabCoordOnRight = tabCoord.CoordOnRight();
-            if (tabCoordOnRight.IsValid(this) && ElementAt(tabCoordOnRight).IsNumberOver9())
-                return true;
-
-            return false;
-        }
-
-        /// <summary>
-        /// Returns true of the element two positions to the right this tabCoord is a note of value over 9.
-        /// </summary>
-        /// <param name="tabCoord"></param>
-        /// <returns></returns>
-        public bool isElementOnRightRightOver9(TabCoord tabCoord)
-        {
-            TabCoord tabCoordOnRightRight = tabCoord.CoordOnRight().CoordOnRight();
-            if (tabCoordOnRightRight.IsValid(this) && ElementAt(tabCoordOnRightRight).IsNumberOver9())
-                return true;
-
-            return false;
-        }
-
-        /// <summary>
-        /// Returns true of the element on the left of this tabCoord is a note of value under 9.
-        /// </summary>
-        /// <param name="tabCoord"></param>
-        /// <returns></returns>
-        public bool isElementOnLeftUnder9(TabCoord tabCoord)
-        {
-            TabCoord tabCoordOnLeft = tabCoord.CoordOnLeft();
-            if (tabCoordOnLeft.IsValid(this) && ElementAt(tabCoordOnLeft).IsNumberUnder9())
-                return true;
 
             return false;
         }
@@ -440,6 +371,7 @@ namespace PFE.Models
             Tuning.RemoveString(atEnd);
         }
 
+
         /// <summary>
         /// Returns true if both tablatures are equivalent.
         /// </summary>
@@ -484,7 +416,85 @@ namespace PFE.Models
         #endregion
 
         #region private
+        /// <summary>
+        /// Returns true if a char belonging to a note element 
+        /// is occupying the space at tabCoord.
+        /// </summary>
+        /// <param name="tabCoord"></param>
+        /// <returns></returns>
+        private bool isANoteCharThere(TabCoord tabCoord)
+        {
+            if (!tabCoord.IsValid(this))
+                return false;
 
+            if (ElementAt(tabCoord).IsNumber())
+                return true;
+
+            if (!tabCoord.IsOnRightEdge(this))
+            {
+                TabCoord tabCoordOnRight = tabCoord.CoordOnRight();
+                if (ElementAt(tabCoordOnRight).IsNumberOver9())
+                    return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Returns true of the element two positions to the right this tabCoord is a note of value under 9.
+        /// </summary>
+        /// <param name="tabCoord"></param>
+        /// <returns></returns>
+        private bool isElementOnRightUnder9(TabCoord tabCoord)
+        {
+            TabCoord tabCoordOnRight = tabCoord.CoordOnRight();
+            if (tabCoordOnRight.IsValid(this) && ElementAt(tabCoordOnRight).IsNumberUnder9())
+                return true;
+
+            return false;
+        }
+
+        /// <summary>
+        /// Returns true of the element to the right this tabCoord is a note of value over 9.
+        /// </summary>
+        /// <param name="tabCoord"></param>
+        /// <returns></returns>
+        private bool isElementOnRightOver9(TabCoord tabCoord)
+        {
+            TabCoord tabCoordOnRight = tabCoord.CoordOnRight();
+            if (tabCoordOnRight.IsValid(this) && ElementAt(tabCoordOnRight).IsNumberOver9())
+                return true;
+
+            return false;
+        }
+
+        /// <summary>
+        /// Returns true of the element two positions to the right this tabCoord is a note of value over 9.
+        /// </summary>
+        /// <param name="tabCoord"></param>
+        /// <returns></returns>
+        private bool isElementOnRightRightOver9(TabCoord tabCoord)
+        {
+            TabCoord tabCoordOnRightRight = tabCoord.CoordOnRight().CoordOnRight();
+            if (tabCoordOnRightRight.IsValid(this) && ElementAt(tabCoordOnRightRight).IsNumberOver9())
+                return true;
+
+            return false;
+        }
+
+        /// <summary>
+        /// Returns true of the element on the left of this tabCoord is a note of value under 9.
+        /// </summary>
+        /// <param name="tabCoord"></param>
+        /// <returns></returns>
+        private bool isElementOnLeftUnder9(TabCoord tabCoord)
+        {
+            TabCoord tabCoordOnLeft = tabCoord.CoordOnLeft();
+            if (tabCoordOnLeft.IsValid(this) && ElementAt(tabCoordOnLeft).IsNumberUnder9())
+                return true;
+
+            return false;
+        }
         #endregion
     }
 }

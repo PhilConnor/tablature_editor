@@ -118,12 +118,12 @@ namespace PFE.Models
                     // if we are in 10th or 20th mode we write a 1 or 2 before the char.
                     if (Util.IsNumber(chr) && IsWriteModeActivated() && elementOnright != null)
                     {
-                        Tablature.AttemptSetModifierAt(tabCoord, GetWriteModeCharacter().Value);
-                        Tablature.AttemptSetModifierAt(tabCoordOnRight, chr);
+                        Tablature.AttemptSetModifierCharAt(tabCoord, GetWriteModeCharacter().Value);
+                        Tablature.AttemptSetModifierCharAt(tabCoordOnRight, chr);
                     }
                     else
                     {
-                        Tablature.AttemptSetModifierAt(tabCoord, chr);
+                        Tablature.AttemptSetModifierCharAt(tabCoord, chr);
                     }
                 }
             }
@@ -538,7 +538,7 @@ namespace PFE.Models
                 }
 
                 // write the clipboard current char on the tab
-                Tablature.AttemptSetModifierAt(
+                Tablature.AttemptSetModifierCharAt(
                     new TabCoord(startCoord.x + nCurCharPos, startCoord.y + nReturn),
                     ascii[i]);
 

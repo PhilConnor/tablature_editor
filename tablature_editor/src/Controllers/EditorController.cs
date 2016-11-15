@@ -233,14 +233,16 @@ namespace PFE.Controllers
                 Redo();
 
             //increment
-            else if (Keyboard.IsKeyDown(Key.LeftCtrl) && e.Key == Key.Add)
+            else if (Keyboard.IsKeyDown(Key.LeftCtrl) && e.Key == Key.Add 
+                || Keyboard.IsKeyDown(Key.LeftCtrl) && e.Key == Key.OemPlus)
             {
                 _editor.TransposeSelection(1);
                 UpdateMementoCareTaker();
             }
 
             //decrement
-            else if (Keyboard.IsKeyDown(Key.LeftCtrl) && e.Key == Key.Subtract)
+            else if (Keyboard.IsKeyDown(Key.LeftCtrl) && e.Key == Key.Subtract
+                || Keyboard.IsKeyDown(Key.LeftCtrl) && e.Key == Key.OemMinus)
             {
                 _editor.TransposeSelection(-1);
                 UpdateMementoCareTaker();
