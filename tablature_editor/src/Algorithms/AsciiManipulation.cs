@@ -2,6 +2,7 @@
 using PFE.Utils;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,7 +16,114 @@ namespace PFE.Algorithms
     {
         public static Tablature TablatureFromAscii(string ascii)
         {
-            return null;
+            List<string> strList = new List<string>();
+            StringReader strReader = new StringReader(ascii);
+            string line;
+
+            while (true)
+            {
+                line = strReader.ReadLine();
+
+                if (line != null)
+                    strList.Add(line);
+                else if (line == null)
+                    break;
+                else if (line == "\r\n")
+                    strList.Add("\r\n");
+            }
+
+            return TablatureFromStringList(strList);
+        }
+
+        public static Tablature TablatureFromStringList(List<string> sl)
+        {
+            string tt = sl[3].Split(new[] { ": " }, StringSplitOptions.None)[1].TrimEnd(new[] { '\r' });
+            Tuning tuning = Tuning.ParseString(tt);
+            SongInfo songInfo = SongInfo.FromStringList(sl.GetRange(0, 3));
+            
+            sl.RemoveRange(0, 5);
+
+            int nStaff = (sl.Count - 1) / tuning.notes.Count();
+            Tablature tablature = new Tablature(nStaff, 80, tuning, songInfo);
+
+            TabCoord tc;
+            int y = 0;
+            int nS = 0;
+
+            foreach (string l in sl)
+            {
+                if (l != "")
+                {
+                    for (int x = 0; x < 80; x++)
+                    {
+                        tablature.AttemptSetCharAt(new TabCoord(x + (nS * 80), y), l[x]);
+                    }
+
+                    y++;
+                }
+                else
+                {
+                    y = 0;
+                    nS++;
+                }
+            }
+
+            return tablature;
+        }
+
+        public static string AsciiFromTablature(Tablature tablature)
+        {
+            int x = 0;
+            int s = 0;
+            int y = 0;
+
+            string ascii = "";
+
+            List<string> listString = new List<string>();
+
+            for (; s < tablature.NStaff; s++)
+            {
+                for (; y < tablature.NStrings; y++)
+                {
+                    string str = "";
+                    for (; x < tablature.StaffLength; x++)
+                    {
+                        str += tablature.GetCharAt(new TabCoord(s * tablature.StaffLength + x, y));
+                    }
+                    x = 0;
+                    ascii += str + "\r\n";
+                }
+                y = 0;
+                ascii += "\r\n";
+            }
+
+            return ascii;
+        }
+
+        public static List<string> StringListFromTablature(Tablature tablature)
+        {
+            int x = 0;
+            int s = 0;
+            int y = 0;
+
+            List<string> listString = new List<string>();
+
+            for (; s < tablature.NStaff; s++)
+            {
+                for (; y < tablature.NStrings; y++)
+                {
+                    string str = "";
+                    for (; x < tablature.StaffLength; x++)
+                    {
+                        str += tablature.GetCharAt(new TabCoord(s * tablature.StaffLength + x, y));
+                    }
+                    x = 0;
+                    listString.Add(str);
+                }
+                y = 0;
+            }
+
+            return listString;
         }
 
         public static void PasteAsciiAtCursor(Editor editor, string ascii)

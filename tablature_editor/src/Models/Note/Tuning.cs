@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PFE.Utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -117,6 +118,40 @@ namespace PFE.Models
             }
 
             return clone;
+        }
+
+        public string ToString()
+        {
+            string ascii = "";
+
+            foreach (Note n in notes)
+                ascii += n.ToStringWithOctave();
+
+            return ascii;
+        }
+
+        public static Tuning ParseString(string str)
+        {
+            Tuning tuning = new Tuning();
+            tuning.notes.Clear();
+
+            char[] cs = str.ToCharArray();
+            string tmp = "";
+            foreach (char c in cs)
+            {
+                if (!Util.IsNumber(c))
+                {
+                    tmp += c.ToString();
+                }
+                else if (Util.IsNumber(c))
+                {
+                    tmp += c.ToString();
+                    tuning.AddString(true, Note.ParseStringWithOctave(tmp));
+                    tmp = "";
+                }
+            }
+
+            return tuning;
         }
     }
 }

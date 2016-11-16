@@ -92,7 +92,8 @@ namespace PFE
             {
                 //Save tablature.
                 string filename = openFileDialog.FileName;
-                MessageBox.Show("Path of selected file : " + filename);
+                string text = System.IO.File.ReadAllText(filename);
+                editorController.Import(text);
             }
         }
 
@@ -108,8 +109,8 @@ namespace PFE
             if (saveFileDialog.ShowDialog() == true)
             {
                 //Save tablature.
-                string filename = saveFileDialog.FileName;
-                MessageBox.Show("Path of selected file : " + filename);
+                string filePath = saveFileDialog.FileName;
+                editorController.Export(filePath);
             }
         }
 

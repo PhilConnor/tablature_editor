@@ -536,6 +536,24 @@ namespace PFE.Models
         {
             return AsciiManipulation.SelectionToAscii(this);
         }
+
+        public string ToAscii()
+        {
+            string ascii = "";
+            ascii += Tablature.SongInfo.ToString();
+            ascii += "Tuning\t\t: " + Tablature.Tuning.ToString();
+            ascii += "\r\n\r\n";
+            ascii += AsciiManipulation.AsciiFromTablature(Tablature);
+            return ascii;
+        }
+
+        public void FromAscii(string ascii)
+        {
+            Cursor.Reset();
+            _tablature = AsciiManipulation.TablatureFromAscii(ascii);
+
+            NotifyObserverRedraw();
+        }
         #endregion
 
         #region Observer

@@ -28,6 +28,8 @@ namespace PFE.Models
         /// </summary>
         public Tuning Tuning { get; set; }
 
+        public SongInfo SongInfo { get; set; }
+
         /// <summary>
         /// The number of strings.
         /// </summary>
@@ -55,7 +57,7 @@ namespace PFE.Models
         /// </summary>
         public Tablature()
         {
-            Init(4, 80, new Tuning());
+            Init(4, 80, new Tuning(), new SongInfo());
         }
 
         /// <summary>
@@ -66,14 +68,19 @@ namespace PFE.Models
         /// <param name="tuning">Initial tuning</param>
         public Tablature(int nStaff, int staffLength, Tuning tuning)
         {
-            Init(nStaff, staffLength, tuning);
+            Init(nStaff, staffLength, tuning, new SongInfo());
+        }
+
+        public Tablature(int nStaff, int staffLength, Tuning tuning, SongInfo songInfo)
+        {
+            Init(nStaff, staffLength, tuning, songInfo);
         }
 
         /// <summary>
         /// Inits the tablature to a black tablature with standard
         /// tuning and some other default values.
         /// </summary>
-        public void Init(int nStaff, int staffLength, Tuning tuning)
+        public void Init(int nStaff, int staffLength, Tuning tuning, SongInfo songInfo)
         {
             Tuning = tuning;
             StaffLength = staffLength;
@@ -85,6 +92,8 @@ namespace PFE.Models
                 positions.Add(new Position(NStrings));
 
             positions.ElementAt(0).ParseTuning(Tuning);
+
+            SongInfo = new SongInfo();
         }
 
         /// <summary>
@@ -174,6 +183,7 @@ namespace PFE.Models
             //if no numerical chars are surrounding this coord
             if (!isANumCharOnLeft && !isANumCharOnRight)
             {
+
                 lmnt.ClearText();
                 lmnt.RightChar = noteChar;
             }
@@ -204,6 +214,19 @@ namespace PFE.Models
                 && lmnt.IsNoteOver9())
             {
                 lmnt.RightChar = noteChar;
+            }
+        }
+
+
+        public void AttemptSetCharAt(TabCoord tabCoord, char chr)
+        {
+            if (Util.IsNumber(chr))
+            {
+                AttemptSetModifierCharAt(tabCoord, chr);
+            }
+            else
+            {
+                AttemptSetModifierCharAt(tabCoord, chr);
             }
         }
 
@@ -369,5 +392,7 @@ namespace PFE.Models
             return spaceHasBeenAdded;
         }
         #endregion
+
+
     }
 }

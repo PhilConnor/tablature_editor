@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PFE.Utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -113,6 +114,56 @@ namespace PFE.Models
             return result;
         }
 
+
+        public static NotesEnum StringToNoteEnum(string str)
+        {
+            NotesEnum result = NotesEnum.A;
+
+            //Get note in string format.
+            switch (str)
+            {
+                case "A":
+                    result = NotesEnum.A;
+                    break;
+                case "A#":
+                    result = NotesEnum.As;
+                    break;
+                case "B":
+                    result = NotesEnum.B;
+                    break;
+                case "C":
+                    result = NotesEnum.C;
+                    break;
+                case "C#":
+                    result = NotesEnum.Cs;
+                    break;
+                case "D":
+                    result = NotesEnum.D;
+                    break;
+                case "D#":
+                    result = NotesEnum.Ds;
+                    break;
+                case "E":
+                    result = NotesEnum.E;
+                    break;
+                case "F":
+                    result = NotesEnum.F;
+                    break;
+                case "F#":
+                    result = NotesEnum.Fs;
+                    break;
+                case "G":
+                    result = NotesEnum.G;
+                    break;
+                case "G#":
+                    result = NotesEnum.Gs;
+                    break;
+            }
+
+            return result;
+        }
+
+
         /// <summary>
         /// String reprentation without octave number included.
         /// </summary>
@@ -122,7 +173,6 @@ namespace PFE.Models
             return GetNoteDisplayFormat(false);
         }
 
-
         /// <summary>
         /// String reprentation with octave number included.
         /// </summary>
@@ -130,6 +180,31 @@ namespace PFE.Models
         public string ToStringWithOctave()
         {
             return GetNoteDisplayFormat(true);
+
+        }
+
+        public static Note ParseStringWithOctave(string str)
+        {
+            Note note = new Note();
+            char[] cs = str.ToCharArray();
+
+            string noteString = "";
+            string sharpString = "";
+            string octaveString = "";
+
+            foreach (char c in cs)
+            {
+                if (!Util.IsNumber(c) && c != '#')
+                    noteString = c.ToString();
+                else if (c == '#')
+                    sharpString = c.ToString();
+                else if (Util.IsNumber(c))
+                    octaveString = c.ToString();
+            }
+
+            note.Value = StringToNoteEnum(noteString + sharpString);
+            note.Octave = int.Parse(octaveString.ToString());
+            return note;
         }
 
         /// <summary>

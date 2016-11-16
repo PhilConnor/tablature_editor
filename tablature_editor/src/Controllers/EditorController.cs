@@ -324,6 +324,17 @@ namespace PFE.Controllers
         }
         #endregion
 
+        public void Export(string filePath)
+        {
+            System.IO.File.WriteAllText(filePath, _editor.ToAscii());
+        }
+
+        public void Import(string ascii)
+        {
+            _editor.FromAscii(ascii);
+            UpdateMementoCareTaker();
+        }
+
         public void NotifyRedraw()
         {
             ReDrawTablature();
