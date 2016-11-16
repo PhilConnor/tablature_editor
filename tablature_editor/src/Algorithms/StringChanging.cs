@@ -7,12 +7,21 @@ using System.Threading.Tasks;
 
 namespace PFE.Algorithms
 {
-    // in progress
+    /// <summary>
+    /// String change related algorithms
+    /// </summary>
     public class StringChanging
     {
-
+        /// <summary>
+        /// Attemps to move the notes from the initial string to the target string by transposing their pitch.
+        /// Will not move the note if there is already something on the target string that prevents placing the note there.
+        /// </summary>
+        /// <param name="tablature"></param>
+        /// <param name="initialStringIndex"></param>
+        /// <param name="targetStringIndex"></param>
         public static void MoveStringNotesToOtherString(Tablature tablature, int initialStringIndex, int targetStringIndex)
         {
+            //protection against bad input for debuging purpose
             if (tablature.NStrings < 2
                 || initialStringIndex < 0
                 || initialStringIndex >= tablature.Length
@@ -23,23 +32,25 @@ namespace PFE.Algorithms
             Note initialStringTuning = tablature.Tuning.notes[initialStringIndex];
             Note targetStringTuning = tablature.Tuning.notes[targetStringIndex];
 
+            //for element on the string
             for (int x = 0; x < tablature.Length; x++)
             {
                 TabCoord currentInitialStringTC = new TabCoord(x, initialStringIndex);
                 TabCoord currentTargetStringTC = new TabCoord(x, targetStringIndex);
                 Element elementThere = tablature.ElementAt(currentInitialStringTC);
 
-                if (elementThere.IsNumber())
+                //is the element is a number
+                if (elementThere.IsNote())
                 {
                     int? newFretNumberTarget = Retuning.AttemptRetuneFret(
-                        elementThere.GetNumericalValue(),
+                        elementThere.GetNoteNumericalValue(),
                         initialStringTuning,
                         targetStringTuning);
 
                     if (newFretNumberTarget.HasValue &&
-                        tablature.CanAddNoteAt(currentTargetStringTC, newFretNumberTarget.Value))
+                        tablature.CanSetNoteAt(currentTargetStringTC, newFretNumberTarget.Value))
                     {
-                        tablature.ElementAt(currentTargetStringTC).ParseInteger(newFretNumberTarget.Value);
+                        tablature.ElementAt(currentTargetStringTC).ParseInt(newFretNumberTarget.Value);
                     }
                 }
             }

@@ -91,6 +91,10 @@ namespace PFE.Models
             NotifyObserverRedraw();
         }
 
+        /// <summary>
+        /// Transpose the selection by nSemiTones.
+        /// </summary>
+        /// <param name="nSemiTones"></param>
         public void TransposeSelection(int nSemiTones)
         {
             Algorithms.Transposition.TransposeSelection(this, nSemiTones);
@@ -155,28 +159,6 @@ namespace PFE.Models
             NotifyObserverRedraw();
         }
 
-        public List<TabCoord> GetTabCoordOfNotesAtCursor()
-        {
-            List<TabCoord> tabCoords = new List<TabCoord>();
-
-            TabCoord cursorTopLeftCoord = _cursor.TopLeftTabCoord();
-
-            // Fills the cursor selection with appropriate chr.
-            for (int x = cursorTopLeftCoord.x; x <= cursorTopLeftCoord.x + _cursor.Width - 1; ++x)
-            {
-                for (int y = cursorTopLeftCoord.y; y <= cursorTopLeftCoord.y + _cursor.Height - 1; ++y)
-                {
-                    TabCoord tabCoord = new TabCoord(x, y);
-                    Element element = Tablature.ElementAt(tabCoord);
-
-                    if (element.IsNumber())
-                        tabCoords.Add(tabCoord);
-                }
-            }
-
-            return tabCoords;
-        }
-
         /// <summary>
         /// Instruct the editor to insert space at cursor.
         /// </summary>
@@ -188,12 +170,20 @@ namespace PFE.Models
             NotifyObserverRedraw();
         }
 
-        public bool IsWriteModeActivated()
+        /// <summary>
+        /// True if write mode is activated.
+        /// </summary>
+        /// <returns></returns>
+        private bool IsWriteModeActivated()
         {
             return WriteMode == WriteModes.Tenth || WriteMode == WriteModes.Twenyth;
         }
 
-        public char? GetWriteModeCharacter()
+        /// <summary>
+        /// Returns the character to add depending of the write mode.
+        /// </summary>
+        /// <returns></returns>
+        private char? GetWriteModeCharacter()
         {
             if (WriteMode == WriteModes.Tenth)
                 return '1';
@@ -207,7 +197,7 @@ namespace PFE.Models
         /// Applies the movementType to the cursor without notifiying observers of the editor.
         /// </summary>
         /// <param name="mouvementType"></param>
-        public void MoveCursorWithoutNotifyingObservers(CursorMovements mouvementType)
+        private void MoveCursorWithoutNotifyingObservers(CursorMovements mouvementType)
         {
             switch (mouvementType)
             {
@@ -266,6 +256,11 @@ namespace PFE.Models
             NotifyObserverRedraw();
         }
 
+        /// <summary>
+        /// Enlarge the cursor by widthIncrease without going out of 
+        /// bound of the tablature.
+        /// </summary>
+        /// <param name="widthIncrease"></param>
         public void EnlargeCursorWidth(int widthIncrease)
         {
             if (widthIncrease < 0)
@@ -277,6 +272,11 @@ namespace PFE.Models
             Cursor.enlargeWidth(widthIncrease);
         }
 
+        /// <summary>
+        /// see Tablature.AddString(...) for details.
+        /// </summary>
+        /// <param name="note"></param>
+        /// <param name="addBellow"></param>
         internal void AddString(Note note, bool addBellow)
         {
             Tablature.AddString(addBellow, note);
@@ -284,6 +284,11 @@ namespace PFE.Models
             NotifyObserverRedraw();
         }
 
+        /// <summary>
+        /// See tablature.RemoveString(...) for details.
+        /// </summary>
+        /// <param name="atEnd"></param>
+        /// <param name="destructive"></param>
         internal void RemoveString(bool atEnd, bool destructive)
         {
             Tablature.RemoveString(atEnd, destructive);
@@ -582,7 +587,7 @@ namespace PFE.Models
         }
         #endregion
 
-        #region observer
+        #region Observer
         private List<IObserver> observers = new List<IObserver>();
 
         public void NotifyObserverRedraw()
@@ -620,8 +625,8 @@ namespace PFE.Models
             NotifyObserverRedraw();
         }
         #endregion
-    }
 
-    public enum WriteModes { Unity, Tenth, Twenyth };
-    public enum SkipModes { Zero, One };
+        private enum WriteModes { Unity, Tenth, Twenyth };
+        private enum SkipModes { Zero, One };
+    }
 }

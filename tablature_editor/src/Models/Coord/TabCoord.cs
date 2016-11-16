@@ -8,17 +8,25 @@ namespace PFE.Models
     /// </summary>
     public class TabCoord : Coord
     {
-        //Constructors.
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
         public TabCoord(int x, int y)
         {
             this.x = x;
             this.y = y;
         }
 
+        /// <summary>
+        /// Returns a clone.
+        /// </summary>
+        /// <returns></returns>
         public TabCoord Clone()
         {
             return new TabCoord(x, y);
-        }        
+        }
 
         /// <summary>
         /// Returns the TabCoord that is appart from one unit on the left of this one.
@@ -27,7 +35,7 @@ namespace PFE.Models
         {
             return new TabCoord(x - 1, y);
         }
-        
+
         /// <summary>
         /// Returns the TabCoord that is appart from one unit on the right of this one.
         /// </summary>

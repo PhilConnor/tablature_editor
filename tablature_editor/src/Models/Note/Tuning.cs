@@ -35,6 +35,11 @@ namespace PFE.Models
             }
         }
 
+        /// <summary>
+        /// Add a string to the tuning.
+        /// </summary>
+        /// <param name="atEnd"></param>
+        /// <param name="newStringNote"></param>
         public void AddString(bool atEnd, Note newStringNote)
         {
             if (atEnd)
@@ -43,6 +48,10 @@ namespace PFE.Models
                 notes.Insert(0, newStringNote);
         }
 
+        /// <summary>
+        /// Remove a string from the tuning.
+        /// </summary>
+        /// <param name="atEnd"></param>
         public void RemoveString(bool atEnd)
         {
             if (atEnd)
@@ -75,6 +84,11 @@ namespace PFE.Models
             notes.Add(new Note(2, Note.NotesEnum.E));
         }
 
+        /// <summary>
+        /// True if equivalent.
+        /// </summary>
+        /// <param name="tuning"></param>
+        /// <returns></returns>
         public bool Equals(Tuning tuning)
         {
             if (tuning.notes.Count != notes.Count)
@@ -89,6 +103,10 @@ namespace PFE.Models
             return true;
         }
 
+        /// <summary>
+        /// Returns a clone.
+        /// </summary>
+        /// <returns></returns>
         public Tuning Clone()
         {
             Tuning clone = new Tuning(this.notes.Count);

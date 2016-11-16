@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace PFE.Algorithms
 {
+    /// <summary>
+    /// Transposition related algorithms.
+    /// </summary>
     public class Transposition
     {
         /// <summary>
@@ -40,9 +43,9 @@ namespace PFE.Algorithms
                     TabCoord tabCoord = new TabCoord(currentCursorX, currentCursorY);
                     Element element = editor.Tablature.ElementAt(tabCoord);
 
-                    if (element.IsNumber())
+                    if (element.IsNote())
                     {
-                        int val = element.GetNumericalValue();
+                        int val = element.GetNoteNumericalValue();
 
                         //Add the nSemiTones to the current value of the note at tabCoord
                         bool spaceAdded = editor.Tablature.ChangeNoteAt(tabCoord, val + nSemiTones);

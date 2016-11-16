@@ -18,6 +18,10 @@ namespace PFE.Models
         /// </summary>
         public List<Element> elements;
 
+        /// <summary>
+        /// Construct a possition of nStrings elements
+        /// </summary>
+        /// <param name="nStrings"></param>
         public Position(int nStrings)
         {
             elements = new List<Element>(nStrings);
@@ -28,52 +32,86 @@ namespace PFE.Models
             }
         }
 
-        public void AddBlankElement(bool atEnd)
+        /// <summary>
+        /// Add a blank element at first or last.
+        /// </summary>
+        /// <param name="atLast"></param>
+        public void AddBlankElement(bool atLast)
         {
-            if (atEnd)
+            if (atLast)
                 AddNewLastElement(new Element());
             else
                 AddNewFirstElement(new Element());
         }
 
-        public void RemoveElement(bool atEnd)
+        /// <summary>
+        /// Remove first or last element.
+        /// </summary>
+        /// <param name="atLast"></param>
+        public void RemoveElement(bool atLast)
         {
-            if (atEnd)
+            if (atLast)
                 elements.Remove(elements.Last());
             else
                 elements.Remove(elements.First());
         }
 
+        /// <summary>
+        /// Adds a blank first element.
+        /// </summary>
+        /// <param name="element"></param>
         private void AddNewFirstElement(Element element)
         {
             elements.Insert(0, element);
         }
 
+        /// <summary>
+        /// Adds a blank last element.
+        /// </summary>
+        /// <param name="element"></param>
         private void AddNewLastElement(Element element)
         {
             elements.Add(element);
         }
 
+        /// <summary>
+        /// Remove first element.
+        /// </summary>
         public void RemoveFirstElement()
         {
             elements.Remove(GetFirstElement());
         }
 
+        /// <summary>
+        /// Remove last element.
+        /// </summary>
         public void RemoveLastElement()
         {
             elements.Add(GetLastElement());
         }
 
+        /// <summary>
+        /// Gets the first element.
+        /// </summary>
+        /// <returns></returns>
         public Element GetFirstElement()
         {
             return elements.First();
         }
 
+        /// <summary>
+        /// Gets the last element.
+        /// </summary>
+        /// <returns></returns>
         public Element GetLastElement()
         {
             return elements.Last();
         }
 
+        /// <summary>
+        /// True if all elements are empty.
+        /// </summary>
+        /// <returns></returns>
         public bool IsEmpty()
         {
             for (int i = 0; i < elements.Count; i++)
@@ -85,6 +123,9 @@ namespace PFE.Models
             return true;
         }
 
+        /// <summary>
+        /// Clears all elements. (sets them all to "-").
+        /// </summary>
         public void Clear()
         {
             for (int i = 0; i < elements.Count; i++)
@@ -93,18 +134,10 @@ namespace PFE.Models
             }
         }
 
-        public void ParseString(string stringTabElements)
-        {
-            string[] separators = { ":" };
-            string[] c = stringTabElements.Split(separators, StringSplitOptions.RemoveEmptyEntries);
-
-            for (int y = 0; y < elements.Count(); ++y)
-            {
-                elements.ElementAt(y).ClearText();
-                elements.ElementAt(y).RightChar = c.ElementAt(elements.Count() - 1 - y).ToCharArray()[0];
-            }
-        }
-
+        /// <summary>
+        /// Sets elements characters to this tuning characters.
+        /// </summary>
+        /// <param name="tuning"></param>
         public void ParseTuning(Tuning tuning)
         {
             for (int y = 0; y < tuning.notes.Count(); ++y)
@@ -114,6 +147,11 @@ namespace PFE.Models
             }
         }
 
+        /// <summary>
+        /// True if equivalent.
+        /// </summary>
+        /// <param name="position"></param>
+        /// <returns></returns>
         public bool Equals(Position position)
         {
             if (position.elements.Count != elements.Count)
@@ -128,7 +166,10 @@ namespace PFE.Models
             return true;
         }
 
-
+        /// <summary>
+        /// Returns a clone.
+        /// </summary>
+        /// <returns></returns>
         public Position Clone()
         {
             Position clone = new Position(this.elements.Count);
@@ -139,9 +180,5 @@ namespace PFE.Models
 
             return clone;
         }
-
     }
-
-
-
 }

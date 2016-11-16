@@ -55,7 +55,7 @@ namespace PFE.Models
         /// </summary>
         public Tablature()
         {
-            Init(3, 80, new Tuning());
+            Init(4, 80, new Tuning());
         }
 
         /// <summary>
@@ -134,7 +134,7 @@ namespace PFE.Models
             Element lmntOnLeft = ElementAt(tabCoord.CoordOnLeft());
 
             //if we are setting on the right char of num over 9
-            if (lmnt.IsNumberOver9())
+            if (lmnt.IsNoteOver9())
             {
                 lmntOnLeft.ClearText();
                 lmntOnLeft.RightChar = lmnt.LeftChar.Value;
@@ -142,14 +142,14 @@ namespace PFE.Models
                 lmnt.RightChar = modifierChar;
             }
             //if we are setting on the left char of a num over 9
-            else if (lmntOnRight != null && lmntOnRight.IsNumberOver9())
+            else if (lmntOnRight != null && lmntOnRight.IsNoteOver9())
             {
                 lmnt.ClearText();
                 lmnt.RightChar = modifierChar;
                 lmntOnRight.LeftChar = null;
             }
             //if we are setting over a non-num char or a num under 9
-            else if (!lmnt.IsNumber() || lmnt.IsNumberUnder9())
+            else if (!lmnt.IsNote() || lmnt.IsNoteUnder10())
             {
                 lmnt.ClearText();
                 lmnt.RightChar = modifierChar;
@@ -178,14 +178,14 @@ namespace PFE.Models
                 lmnt.RightChar = noteChar;
             }
             //if there is no num char on left and a num under 9 on right
-            else if (isElementOnRightUnder9(tabCoord)
+            else if (IsElementOnRightUnder10(tabCoord)
                 && !isANumCharOnLeft)
             {
                 lmnt.ClearText();
                 lmntOnRight.LeftChar = noteChar;
             }
             //if there is no num char on left and a num over 9 on right
-            else if (isElementOnRightOver9(tabCoord)
+            else if (IsElementOnRightOver9(tabCoord)
                 && !isANumCharOnLeft)
             {
                 lmnt.ClearText();
@@ -193,7 +193,7 @@ namespace PFE.Models
             }
             //if there is no num char on right and a num under 9 on left
             else if (!isANumCharOnRight
-                && isElementOnLeftUnder9(tabCoord))
+                && IsElementOnLeftUnder10(tabCoord))
             {
                 lmnt.LeftChar = lmntOnLeft.RightChar;
                 lmntOnLeft.ClearText();
@@ -201,18 +201,10 @@ namespace PFE.Models
             }
             //if there is no num char on right and a num over 9 on this coord
             else if (!isANumCharOnRight
-                && lmnt.IsNumberOver9())
+                && lmnt.IsNoteOver9())
             {
                 lmnt.RightChar = noteChar;
             }
-        }
-
-        /// <summary>
-        /// Insert a note at tabCoord if there is space available for it.
-        /// </summary>
-        public void SetNoteAt()
-        {
-
         }
 
         /// <summary>
@@ -223,7 +215,7 @@ namespace PFE.Models
             Element lmnt = ElementAt(tabCoord);
             Element lmntOnRight = ElementAt(tabCoord.CoordOnRight());
 
-            if (lmntOnRight != null && lmntOnRight.IsNumberOver9())
+            if (lmntOnRight != null && lmntOnRight.IsNoteOver9())
                 return lmntOnRight.LeftChar.Value;
             else
                 return lmnt.RightChar;
@@ -240,14 +232,6 @@ namespace PFE.Models
                 return null;
 
             return positions.ElementAt(tabCoord.x).elements.ElementAt(tabCoord.y);
-        }
-
-        public Position PositionAt(TabCoord tabCoord)
-        {
-            if (tabCoord == null || !IsValid(tabCoord))
-                return null;
-
-            return positions.ElementAt(tabCoord.x);
         }
 
         /// <summary>
@@ -336,8 +320,6 @@ namespace PFE.Models
             return clone;
         }
 
-        #endregion
-
         /// <summary>
         /// Change the element to the tabCoord as a numerical value under 100.
         /// It will add spaced at appropriates places if needed to accomodate 
@@ -359,25 +341,20 @@ namespace PFE.Models
 
             //if the element did not contain a note, we cannot change 
             // its numerical value so we do nothing          
-            if (!lmnt.IsNumber())
+            if (!lmnt.IsNote())
                 return false;
 
-            //prevent adding notes higher than 99
-            if (note >= 100)
-                note = 99;
-
-            //prevent adding notes lower than 0
-            if (note < 0)
-                note = 0;
+            //prevent adding notes higher than 99 or notes lower than 0.
+            note = Util.Clamp(note, 0, 99);
 
             Element lmntAtLeft = ElementAt(tabCoord.CoordOnLeft());
             Element lmntAtLeftLeft = ElementAt(tabCoord.CoordOnLeft().CoordOnLeft());
 
             //Verifying the if we need to add a spacing to accomodate a new char in the case that 
             //something is already at the location of the new char to be added.
-            bool isAddingAChar = note > 9 && lmnt.IsNumberUnder9();
+            bool isAddingAChar = note > 9 && lmnt.IsNoteUnder10();
             bool isSomethingAtLeft = lmntAtLeft == null || lmntAtLeft != null && !lmntAtLeft.IsEmpty();
-            bool isANoteBefore = lmntAtLeftLeft != null && lmntAtLeftLeft.IsNumber();
+            bool isANoteBefore = lmntAtLeftLeft != null && lmntAtLeftLeft.IsNote();
 
             //if a note was 1 digit and is about to become two digit
             //we add a space to accomodate it
@@ -387,9 +364,10 @@ namespace PFE.Models
                 spaceHasBeenAdded = true;
             }
 
-            lmnt.ParseInteger(note);
+            lmnt.ParseInt(note);
 
             return spaceHasBeenAdded;
         }
+        #endregion
     }
 }

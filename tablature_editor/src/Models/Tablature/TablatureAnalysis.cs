@@ -13,19 +13,32 @@ namespace PFE.Models
     /// </summary>
     public partial class Tablature
     {
-
-        public bool CanAddNoteAt(TabCoord tabCoord, int note)
+        #region Elements analysis related.
+        /// <summary>
+        /// Returns true if a the note can be setted at this position.
+        /// </summary>
+        /// <param name="tc"></param>
+        /// <param name="note"></param>
+        /// <returns></returns>
+        public bool CanSetNoteAt(TabCoord tc, int note)
         {
             if (note > 9)
-                return CanAddNoteOver9At(tabCoord, note);
+                return CanSetNoteOver9At(tc, note);
             else
-                return CanAddNoteUnder9At(tabCoord, note);
+                return CanSetNoteUnder10At(tc, note);
         }
 
-        public bool CanAddNoteOver9At(TabCoord tc, int note)
+        /// <summary>
+        /// Returns true if a note over 9 can be setted at tc.
+        /// Is there is no room to place it there, returns false.
+        /// </summary>
+        /// <param name="tc"></param>
+        /// <param name="note"></param>
+        /// <returns></returns>
+        public bool CanSetNoteOver9At(TabCoord tc, int note)
         {
             if (!IsACharThere(tc)
-                && !IsOnLeftEdge(tc)
+                && !IsOnFirstPosition(tc)
                 && !IsACharThere(tc.CoordOnLeft())
                 && !IsANoteCharThere(tc.CoordOnLeft().CoordOnLeft())
                 && !IsANoteCharThere(tc.CoordOnRight()))
@@ -34,7 +47,14 @@ namespace PFE.Models
                 return false;
         }
 
-        public bool CanAddNoteUnder9At(TabCoord tc, int note)
+        /// <summary>
+        /// Returns true if a note under 10 can be setted at tc.
+        /// Is there is no room to place it there, returns false.
+        /// </summary>
+        /// <param name="tc"></param>
+        /// <param name="note"></param>
+        /// <returns></returns>
+        public bool CanSetNoteUnder10At(TabCoord tc, int note)
         {
             if (!IsACharThere(tc)
                 && !IsANoteCharThere(tc.CoordOnLeft())
@@ -43,46 +63,45 @@ namespace PFE.Models
             else
                 return false;
         }
-        
+
         /// <summary>
         /// Returns true if an element is a note or modifier character is located at this tabCoord.
         /// </summary>
-        /// <param name="tabCoord"></param>
+        /// <param name="tc"></param>
         /// <returns></returns>
-        public bool IsACharThere(TabCoord tabCoord)
+        public bool IsACharThere(TabCoord tc)
         {
-            if (ElementAt(tabCoord).RightChar != '-')
+            if (ElementAt(tc).RightChar != '-')
                 return true;
 
-            if (!IsOnRightEdge(tabCoord))
+            if (!IsOnLastPosition(tc))
             {
-                TabCoord tabCoordOnRight = tabCoord.CoordOnRight();
-                if (ElementAt(tabCoordOnRight).IsNumberOver9())
+                TabCoord tabCoordOnRight = tc.CoordOnRight();
+                if (ElementAt(tabCoordOnRight).IsNoteOver9())
                     return true;
             }
 
             return false;
         }
 
-        #region private
         /// <summary>
         /// Returns true if a char belonging to a note element 
         /// is occupying the space at tabCoord.
         /// </summary>
-        /// <param name="tabCoord"></param>
+        /// <param name="tc"></param>
         /// <returns></returns>
-        private bool IsANoteCharThere(TabCoord tabCoord)
+        private bool IsANoteCharThere(TabCoord tc)
         {
-            if (!IsValid(tabCoord))
+            if (!IsValid(tc))
                 return false;
 
-            if (ElementAt(tabCoord).IsNumber())
+            if (ElementAt(tc).IsNote())
                 return true;
 
-            if (!IsOnRightEdge(tabCoord))
+            if (!IsOnLastPosition(tc))
             {
-                TabCoord tabCoordOnRight = tabCoord.CoordOnRight();
-                if (ElementAt(tabCoordOnRight).IsNumberOver9())
+                TabCoord tabCoordOnRight = tc.CoordOnRight();
+                if (ElementAt(tabCoordOnRight).IsNoteOver9())
                     return true;
             }
 
@@ -90,14 +109,14 @@ namespace PFE.Models
         }
 
         /// <summary>
-        /// Returns true of the element two positions to the right this tabCoord is a note of value under 9.
+        /// Returns true of the element two positions to the right this tabCoord is a note of value under 10.
         /// </summary>
-        /// <param name="tabCoord"></param>
+        /// <param name="tc"></param>
         /// <returns></returns>
-        private bool isElementOnRightUnder9(TabCoord tabCoord)
+        private bool IsElementOnRightUnder10(TabCoord tc)
         {
-            TabCoord tabCoordOnRight = tabCoord.CoordOnRight();
-            if (IsValid(tabCoordOnRight) && ElementAt(tabCoordOnRight).IsNumberUnder9())
+            TabCoord tabCoordOnRight = tc.CoordOnRight();
+            if (IsValid(tabCoordOnRight) && ElementAt(tabCoordOnRight).IsNoteUnder10())
                 return true;
 
             return false;
@@ -106,12 +125,12 @@ namespace PFE.Models
         /// <summary>
         /// Returns true of the element to the right this tabCoord is a note of value over 9.
         /// </summary>
-        /// <param name="tabCoord"></param>
+        /// <param name="tc"></param>
         /// <returns></returns>
-        private bool isElementOnRightOver9(TabCoord tabCoord)
+        private bool IsElementOnRightOver9(TabCoord tc)
         {
-            TabCoord tabCoordOnRight = tabCoord.CoordOnRight();
-            if (IsValid(tabCoordOnRight) && ElementAt(tabCoordOnRight).IsNumberOver9())
+            TabCoord tabCoordOnRight = tc.CoordOnRight();
+            if (IsValid(tabCoordOnRight) && ElementAt(tabCoordOnRight).IsNoteOver9())
                 return true;
 
             return false;
@@ -120,34 +139,39 @@ namespace PFE.Models
         /// <summary>
         /// Returns true of the element two positions to the right this tabCoord is a note of value over 9.
         /// </summary>
-        /// <param name="tabCoord"></param>
+        /// <param name="tc"></param>
         /// <returns></returns>
-        private bool isElementOnRightRightOver9(TabCoord tabCoord)
+        private bool IsElementOnRightRightOver9(TabCoord tc)
         {
-            TabCoord tabCoordOnRightRight = tabCoord.CoordOnRight().CoordOnRight();
-            if (IsValid(tabCoordOnRightRight) && ElementAt(tabCoordOnRightRight).IsNumberOver9())
+            TabCoord tabCoordOnRightRight = tc.CoordOnRight().CoordOnRight();
+            if (IsValid(tabCoordOnRightRight) && ElementAt(tabCoordOnRightRight).IsNoteOver9())
                 return true;
 
             return false;
         }
 
         /// <summary>
-        /// Returns true of the element on the left of this tabCoord is a note of value under 9.
+        /// Returns true of the element on the left of this tabCoord is a note of value under 10.
         /// </summary>
-        /// <param name="tabCoord"></param>
+        /// <param name="tc"></param>
         /// <returns></returns>
-        private bool isElementOnLeftUnder9(TabCoord tabCoord)
+        private bool IsElementOnLeftUnder10(TabCoord tc)
         {
-            TabCoord tabCoordOnLeft = tabCoord.CoordOnLeft();
-            if (IsValid(tabCoordOnLeft) && ElementAt(tabCoordOnLeft).IsNumberUnder9())
+            TabCoord tabCoordOnLeft = tc.CoordOnLeft();
+            if (IsValid(tabCoordOnLeft) && ElementAt(tabCoordOnLeft).IsNoteUnder10())
                 return true;
 
             return false;
         }
         #endregion
 
-        #region TabCoord verification
-        public bool IsOnRightEdge(TabCoord tc)
+        #region TabCoord analysis related
+        /// <summary>
+        /// True if this tabCoord is at the right edge of the tablature.
+        /// </summary>
+        /// <param name="tc"></param>
+        /// <returns></returns>
+        public bool IsOnLastPosition(TabCoord tc)
         {
             if (!IsValid(tc))
                 return false;
@@ -171,7 +195,12 @@ namespace PFE.Models
             return c1 && c2 && c3;
         }
 
-        public bool IsOnLeftEdge(TabCoord tc)
+        /// <summary>
+        /// True if this tabCoord is at the first position of the tablature.
+        /// </summary>
+        /// <param name="tc"></param>
+        /// <returns></returns>
+        public bool IsOnFirstPosition(TabCoord tc)
         {
             if (!IsValid(tc))
                 return false;
@@ -182,6 +211,5 @@ namespace PFE.Models
             return false;
         }
         #endregion
-
     }
 }

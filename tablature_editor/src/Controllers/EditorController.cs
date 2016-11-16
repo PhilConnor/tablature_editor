@@ -114,7 +114,7 @@ namespace PFE.Controllers
                     Element lmtRight = _editor.Tablature.ElementAt(tabCoord.CoordOnRight());
 
                     // drawing right char
-                    if (lmtRight != null && !lmtRight.IsNumberOver9())
+                    if (lmtRight != null && !lmtRight.IsNoteOver9())
                     {
                         _drawSurface.DrawFormattedTextAtDrawSurfaceCoord(
                             CoordConverter.ToDrawSurfaceCoord(tabCoord, _editor)
@@ -132,7 +132,7 @@ namespace PFE.Controllers
                     }
 
                     // drawing left char if existing
-                    if (lmt.IsNumberOver9())
+                    if (lmt.IsNoteOver9())
                     {
                         _drawSurface.DrawFormattedTextAtDrawSurfaceCoord(
                             CoordConverter.ToDrawSurfaceCoord(tabCoord.CoordOnLeft(), _editor)
