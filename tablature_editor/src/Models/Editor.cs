@@ -5,6 +5,7 @@ using PFE.Interfaces;
 using PFE.Utils;
 using PFE.UndoRedo;
 using System.Windows.Media;
+using PFE.Algorithms;
 
 namespace PFE.Models
 {
@@ -526,64 +527,14 @@ namespace PFE.Models
         #region Ascii
         public void ParseAscii(string ascii)
         {
-            var startCoord = _cursor.TopLeftTabCoord();
-            var xLimit = TabLength;
-            var yLimit = NStrings;
-
-            var nReturn = 0;
-            var nCurCharPos = 0;
-
-            for (var i = 0; i <= ascii.Length - 1; i++)
-            {
-                // if we are trying to write on an unexisting string, stop
-                if (nReturn >= yLimit)
-                    break;
-
-                // if we are at a line return, we
-                if (ascii[i] == '\r')
-                {
-                    i++; // skipping the \n after the \r
-                    nCurCharPos = 0;
-                    nReturn++;
-                    continue;
-                }
-
-                // if we are about to write outsite the xLimit, we add a new staff before
-                // and get the new xLimit
-                if (startCoord.x + nCurCharPos >= xLimit)
-                {
-                    Tablature.AddNewStaff();
-                    xLimit = TabLength;
-                }
-
-                // write the clipboard current char on the tab
-                Tablature.AttemptSetModifierCharAt(
-                    new TabCoord(startCoord.x + nCurCharPos, startCoord.y + nReturn),
-                    ascii[i]);
-
-                nCurCharPos++;
-            }
+            AsciiManipulation.PasteAsciiAtCursor(this, ascii);
 
             NotifyObserverRedraw();
         }
 
         public string SelectionToAscii()
         {
-            string ascii = "";
-
-            var topLeft = _cursor.TopLeftTabCoord();
-
-            for (var j = 0; j < _cursor.Height; j++)
-            {
-                for (var i = 0; i < _cursor.Width; i++)
-                {
-                    ascii += Tablature.GetCharAt(new TabCoord(topLeft.x + i, topLeft.y + j));
-                }
-                ascii += "\r\n";
-            }
-            ascii += "\r\n";
-
-            return ascii;
+            return AsciiManipulation.SelectionToAscii(this);
         }
         #endregion
 

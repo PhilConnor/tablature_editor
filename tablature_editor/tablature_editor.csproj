@@ -64,6 +64,7 @@
     <Compile Include="MenuDialogs\RemoveStringDialog.xaml.cs">
       <DependentUpon>RemoveStringDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="src\Algorithms\AsciiManipulation.cs" />
     <Compile Include="src\Algorithms\Retuning.cs" />
     <Compile Include="src\Algorithms\StringChanging.cs" />
     <Compile Include="src\Algorithms\Transposition.cs" />
