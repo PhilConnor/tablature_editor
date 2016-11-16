@@ -1,25 +1,82 @@
-﻿<Window x:Name="RemoveStringWindow" x:Class="PFE.MenuDialogs.RemoveStringDialog"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:PFE.MenuDialogs"
-        mc:Ignorable="d"
-        Title="Add string to tablature" Height="201.681" Width="300" ResizeMode="NoResize">
+﻿<Window
+    x:Class="PFE.MenuDialogs.RemoveStringDialog"
+    x:Name="RemoveStringWindow"
+    Title="Add string to tablature"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:PFE.MenuDialogs"
+    Height="201.681"
+    Width="300"
+    ResizeMode="NoResize"
+    mc:Ignorable="d">
     <Grid>
-        <GroupBox x:Name="gb_StringLocation" Header="New string location" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="272" Height="54">
-            <StackPanel HorizontalAlignment="Left" Height="34" VerticalAlignment="Top" Width="262" Margin="0,0,-2,0">
-                <RadioButton x:Name="radio_Above" GroupName="group1" Content="Above staff" IsChecked="True"/>
-                <RadioButton x:Name="radio_Bellow" GroupName="group1"  Content="Bellow staff"/>
+        <GroupBox
+            x:Name="gb_StringLocation"
+            Height="54"
+            Width="272"
+            Margin="10,10,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Header="New string location">
+            <StackPanel
+                Height="34"
+                Width="262"
+                Margin="0,0,-2,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top">
+                <RadioButton
+                    x:Name="radio_Above"
+                    Content="Above staff"
+                    GroupName="group1" />
+                <RadioButton
+                    x:Name="radio_AtEnd"
+                    Content="Bellow staff"
+                    GroupName="group1"
+                    IsChecked="True" />
             </StackPanel>
         </GroupBox>
-        <GroupBox x:Name="gb_Destructive" Header="Fate of notes on the removed string" HorizontalAlignment="Left" Margin="10,69,0,0" VerticalAlignment="Top" Width="272" Height="54">
-            <StackPanel HorizontalAlignment="Left" Height="34" VerticalAlignment="Top" Width="262" Margin="0,0,-2,0">
-                <RadioButton x:Name="radio_Destructive" GroupName="group2" Content="Destroy them" IsChecked="True"/>
-                <RadioButton x:Name="radio_NonDestructive" GroupName="group2"  Content="Keep them"/>
+        <GroupBox
+            x:Name="gb_Destructive"
+            Height="54"
+            Width="272"
+            Margin="10,69,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Header="Fate of notes on the removed string">
+            <StackPanel
+                Height="34"
+                Width="262"
+                Margin="0,0,-2,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top">
+                <RadioButton
+                    x:Name="radio_Destructive"
+                    Content="Destroy them"
+                    GroupName="group2"
+                    IsChecked="True" />
+                <RadioButton
+                    x:Name="radio_NonDestructive"
+                    Content="Keep them"
+                    GroupName="group2" />
             </StackPanel>
         </GroupBox>
-        <Button x:Name="btn_ok" Content="Ok" HorizontalAlignment="Right" Margin="0,0,75,10" VerticalAlignment="Bottom" Width="60" Click="btn_ok_Click"/>
-        <Button x:Name="btn_cancel" Content="Cancel" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="60" Click="btn_cancel_Click"/>
+        <Button
+            x:Name="btn_ok"
+            Width="60"
+            Margin="0,0,75,10"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Bottom"
+            Click="btn_ok_Click"
+            Content="Ok" />
+        <Button
+            x:Name="btn_cancel"
+            Width="60"
+            Margin="0,0,10,10"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Bottom"
+            Click="btn_cancel_Click"
+            Content="Cancel" />
     </Grid>
 </Window>

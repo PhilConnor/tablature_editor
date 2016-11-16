@@ -281,20 +281,19 @@ namespace PFE.Models
         /// </summary>
         /// <param name="atEnd"></param>
         /// <param name="attemptKeepingNotes"></param>
-        public void RemoveString(bool atEnd, bool attemptKeepingNotes)
+        public void RemoveString(bool atEnd, bool desctructive)
         {
-            if (attemptKeepingNotes && atEnd)
-                StringChanger.MoveLastStringNotesUp(this);
+            if (!desctructive && atEnd)
+                StringChanging.MoveLastStringNotesUp(this);
 
-            if (attemptKeepingNotes && !atEnd)
-                StringChanger.MoveFirstStringNotesDown(this);
+            if (!desctructive && !atEnd)
+                StringChanging.MoveFirstStringNotesDown(this);
 
             foreach (Position p in positions)
                 p.RemoveElement(atEnd);
 
             Tuning.RemoveString(atEnd);
         }
-
 
         /// <summary>
         /// Returns true if both tablatures are equivalent.

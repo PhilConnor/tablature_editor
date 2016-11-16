@@ -8,15 +8,15 @@ namespace PFE.Models
     public class Note
     {
         //List of all of the possible notes.
-        public enum NotesEnum { A, As, B, C, Cs, D, Ds, E, F, Fs, G, Gs };
+        public enum NotesEnum { C, Cs, D, Ds, E, F, Fs, G, Gs, A, As, B, };
 
         public int Octave = 0;
-        public NotesEnum Value = NotesEnum.A;
+        public NotesEnum Value = NotesEnum.C;
 
         public Note()
         {
             this.Octave = 0;
-            this.Value = NotesEnum.A;
+            this.Value = NotesEnum.C;
         }
 
         public Note(int Octave, NotesEnum NotesEnumValue)
@@ -40,7 +40,7 @@ namespace PFE.Models
             Octave = value / 12;
             Value = (NotesEnum)(value % 12);
         }
-
+        
         //Get note in display format with or without the octave number.
         public string GetNoteDisplayFormat(bool withOctave)
         {
@@ -124,9 +124,6 @@ namespace PFE.Models
         {
             List<Note> notes = new List<Note>();
 
-            notes.Add(new Note(0, NotesEnum.A));
-            notes.Add(new Note(0, NotesEnum.As));
-            notes.Add(new Note(0, NotesEnum.B));
             notes.Add(new Note(0, NotesEnum.C));
             notes.Add(new Note(0, NotesEnum.Cs));
             notes.Add(new Note(0, NotesEnum.D));
@@ -136,6 +133,9 @@ namespace PFE.Models
             notes.Add(new Note(0, NotesEnum.Fs));
             notes.Add(new Note(0, NotesEnum.G));
             notes.Add(new Note(0, NotesEnum.Gs));
+            notes.Add(new Note(0, NotesEnum.A));
+            notes.Add(new Note(0, NotesEnum.As));
+            notes.Add(new Note(0, NotesEnum.B));
 
             return notes.AsEnumerable<Note>();
         }

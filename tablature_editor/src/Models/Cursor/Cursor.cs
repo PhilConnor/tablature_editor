@@ -44,6 +44,11 @@ namespace PFE.Models
         /// </summary>
         public Cursor()
         {
+            Reset();
+        }
+
+        public void Reset()
+        {
             SetTabCoords(new TabCoord(1, 0));
         }
 

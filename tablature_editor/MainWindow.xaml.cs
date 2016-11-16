@@ -123,7 +123,9 @@ namespace PFE
             AddStringDialog addStringDialog = new AddStringDialog();
             if (addStringDialog.ShowDialog() == true)
             {
-                MessageBox.Show("You picked : " + addStringDialog.Element.ToStringWithOctave() + " and add bellow = " + addStringDialog.AddBellow);
+                editorController.AddString(addStringDialog.NewStringNote, addStringDialog.AddBellow);
+
+
             }
         }
 
@@ -132,7 +134,7 @@ namespace PFE
             RemoveStringDialog removeStringDialog = new RemoveStringDialog();
             if (removeStringDialog.ShowDialog() == true)
             {
-                MessageBox.Show("You picked : " + "Bellow = " + removeStringDialog.RemoveBellow + " and Destructive : " + removeStringDialog.Destructive);
+                editorController.RemoveString(removeStringDialog.AtEnd, removeStringDialog.Destructive);
             }
         }
 

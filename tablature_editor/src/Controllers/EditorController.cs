@@ -122,7 +122,15 @@ namespace PFE.Controllers
 
                         lmt.HasRightCharChanged = false;
                     }
-                    
+                    else if (lmtRight == null)
+                    {
+                        _drawSurface.DrawFormattedTextAtDrawSurfaceCoord(
+                            CoordConverter.ToDrawSurfaceCoord(tabCoord, _editor)
+                            , lmt.RightCharFormattedText);
+
+                        lmt.HasRightCharChanged = false;
+                    }
+
                     // drawing left char if existing
                     if (lmt.IsNumberOver9())
                     {
@@ -255,6 +263,19 @@ namespace PFE.Controllers
             else if (e.Key == Key.CapsLock)
                 _editor.ToggleWriteMode();
 
+        }
+
+        internal void RemoveString(bool removeBellow, bool destructive)
+        {
+            _editor.RemoveString(removeBellow, destructive);
+            
+            UpdateMementoCareTaker();
+        }
+
+        internal void AddString(Note newStringNote, bool addBellow)
+        {
+            _editor.AddString(newStringNote, addBellow);
+            UpdateMementoCareTaker();
         }
 
         public void TextInput(TextCompositionEventArgs e)

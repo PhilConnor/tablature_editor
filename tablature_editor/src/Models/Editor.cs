@@ -277,6 +277,20 @@ namespace PFE.Models
             Cursor.enlargeWidth(widthIncrease);
         }
 
+        internal void AddString(Note note, bool addBellow)
+        {
+            Tablature.AddString(addBellow, note);
+
+            NotifyObserverRedraw();
+        }
+
+        internal void RemoveString(bool atEnd, bool destructive)
+        {
+            Tablature.RemoveString(atEnd, destructive);
+            Cursor.Reset();
+            NotifyObserverRedraw();
+        }
+
         /// <summary>
         /// Makes the cursor select the area at tabCoord
         /// </summary>

@@ -67,12 +67,12 @@ namespace PFE.Models
         public void SetToStandard()
         {
             notes = new List<Note>();
-            notes.Add(new Note(2, Note.NotesEnum.E));
-            notes.Add(new Note(2, Note.NotesEnum.A));
-            notes.Add(new Note(3, Note.NotesEnum.D));
-            notes.Add(new Note(3, Note.NotesEnum.G));
-            notes.Add(new Note(3, Note.NotesEnum.B));
             notes.Add(new Note(4, Note.NotesEnum.E));
+            notes.Add(new Note(3, Note.NotesEnum.B));
+            notes.Add(new Note(3, Note.NotesEnum.G));
+            notes.Add(new Note(3, Note.NotesEnum.D));
+            notes.Add(new Note(2, Note.NotesEnum.A));
+            notes.Add(new Note(2, Note.NotesEnum.E));
         }
 
         public bool Equals(Tuning tuning)
