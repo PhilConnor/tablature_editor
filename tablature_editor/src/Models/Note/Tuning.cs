@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PFE.Utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -35,6 +36,11 @@ namespace PFE.Models
             }
         }
 
+        /// <summary>
+        /// Add a string to the tuning.
+        /// </summary>
+        /// <param name="atEnd"></param>
+        /// <param name="newStringNote"></param>
         public void AddString(bool atEnd, Note newStringNote)
         {
             if (atEnd)
@@ -43,6 +49,10 @@ namespace PFE.Models
                 notes.Insert(0, newStringNote);
         }
 
+        /// <summary>
+        /// Remove a string from the tuning.
+        /// </summary>
+        /// <param name="atEnd"></param>
         public void RemoveString(bool atEnd)
         {
             if (atEnd)
@@ -67,14 +77,19 @@ namespace PFE.Models
         public void SetToStandard()
         {
             notes = new List<Note>();
-            notes.Add(new Note(2, Note.NotesEnum.E));
-            notes.Add(new Note(2, Note.NotesEnum.A));
-            notes.Add(new Note(3, Note.NotesEnum.D));
-            notes.Add(new Note(3, Note.NotesEnum.G));
-            notes.Add(new Note(3, Note.NotesEnum.B));
             notes.Add(new Note(4, Note.NotesEnum.E));
+            notes.Add(new Note(3, Note.NotesEnum.B));
+            notes.Add(new Note(3, Note.NotesEnum.G));
+            notes.Add(new Note(3, Note.NotesEnum.D));
+            notes.Add(new Note(2, Note.NotesEnum.A));
+            notes.Add(new Note(2, Note.NotesEnum.E));
         }
 
+        /// <summary>
+        /// True if equivalent.
+        /// </summary>
+        /// <param name="tuning"></param>
+        /// <returns></returns>
         public bool Equals(Tuning tuning)
         {
             if (tuning.notes.Count != notes.Count)
@@ -89,6 +104,10 @@ namespace PFE.Models
             return true;
         }
 
+        /// <summary>
+        /// Returns a clone.
+        /// </summary>
+        /// <returns></returns>
         public Tuning Clone()
         {
             Tuning clone = new Tuning(this.notes.Count);
@@ -99,6 +118,40 @@ namespace PFE.Models
             }
 
             return clone;
+        }
+
+        public string ToString()
+        {
+            string ascii = "";
+
+            foreach (Note n in notes)
+                ascii += n.ToStringWithOctave();
+
+            return ascii;
+        }
+
+        public static Tuning ParseString(string str)
+        {
+            Tuning tuning = new Tuning();
+            tuning.notes.Clear();
+
+            char[] cs = str.ToCharArray();
+            string tmp = "";
+            foreach (char c in cs)
+            {
+                if (!Util.IsNumber(c))
+                {
+                    tmp += c.ToString();
+                }
+                else if (Util.IsNumber(c))
+                {
+                    tmp += c.ToString();
+                    tuning.AddString(true, Note.ParseStringWithOctave(tmp));
+                    tmp = "";
+                }
+            }
+
+            return tuning;
         }
     }
 }

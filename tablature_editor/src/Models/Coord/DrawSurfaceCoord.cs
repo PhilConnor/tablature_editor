@@ -9,12 +9,21 @@ namespace PFE.Models
     /// </summary>
     public class DrawSurfaceCoord : Coord
     {
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
         public DrawSurfaceCoord(int x, int y)
         {
             this.x = x;
             this.y = y;
         }
 
+        /// <summary>
+        /// Returns a clone.
+        /// </summary>
+        /// <returns></returns>
         public DrawSurfaceCoord Clone()
         {
             return new DrawSurfaceCoord(x, y);

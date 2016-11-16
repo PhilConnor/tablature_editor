@@ -20,7 +20,7 @@ namespace PFE.MenuDialogs
     public partial class RemoveStringDialog : Window
     {
         //Properties.
-        public bool RemoveBellow { get; set; }
+        public bool AtEnd { get; set; }
         public bool Destructive { get; set; }
 
         //Constructors.
@@ -34,7 +34,7 @@ namespace PFE.MenuDialogs
         private void btn_ok_Click(object sender, RoutedEventArgs e)
         {
             //Put radio button selection in AddBellow.
-            RemoveBellow = (bool)radio_Bellow.IsChecked;
+            AtEnd = (bool)radio_AtEnd.IsChecked;
             Destructive = (bool)radio_Destructive.IsChecked;
 
             //Close the dialog and return the values.

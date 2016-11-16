@@ -5,6 +5,7 @@ using PFE.Interfaces;
 using PFE.Utils;
 using PFE.UndoRedo;
 using System.Windows.Media;
+using PFE.Algorithms;
 
 namespace PFE.Models
 {
@@ -91,6 +92,10 @@ namespace PFE.Models
             NotifyObserverRedraw();
         }
 
+        /// <summary>
+        /// Transpose the selection by nSemiTones.
+        /// </summary>
+        /// <param name="nSemiTones"></param>
         public void TransposeSelection(int nSemiTones)
         {
             Algorithms.Transposition.TransposeSelection(this, nSemiTones);
@@ -118,12 +123,12 @@ namespace PFE.Models
                     // if we are in 10th or 20th mode we write a 1 or 2 before the char.
                     if (Util.IsNumber(chr) && IsWriteModeActivated() && elementOnright != null)
                     {
-                        Tablature.AttemptSetModifierAt(tabCoord, GetWriteModeCharacter().Value);
-                        Tablature.AttemptSetModifierAt(tabCoordOnRight, chr);
+                        Tablature.AttemptSetModifierCharAt(tabCoord, GetWriteModeCharacter().Value);
+                        Tablature.AttemptSetModifierCharAt(tabCoordOnRight, chr);
                     }
                     else
                     {
-                        Tablature.AttemptSetModifierAt(tabCoord, chr);
+                        Tablature.AttemptSetModifierCharAt(tabCoord, chr);
                     }
                 }
             }
@@ -155,28 +160,6 @@ namespace PFE.Models
             NotifyObserverRedraw();
         }
 
-        public List<TabCoord> GetTabCoordOfNotesAtCursor()
-        {
-            List<TabCoord> tabCoords = new List<TabCoord>();
-
-            TabCoord cursorTopLeftCoord = _cursor.TopLeftTabCoord();
-
-            // Fills the cursor selection with appropriate chr.
-            for (int x = cursorTopLeftCoord.x; x <= cursorTopLeftCoord.x + _cursor.Width - 1; ++x)
-            {
-                for (int y = cursorTopLeftCoord.y; y <= cursorTopLeftCoord.y + _cursor.Height - 1; ++y)
-                {
-                    TabCoord tabCoord = new TabCoord(x, y);
-                    Element element = Tablature.ElementAt(tabCoord);
-
-                    if (element.IsNumber())
-                        tabCoords.Add(tabCoord);
-                }
-            }
-
-            return tabCoords;
-        }
-
         /// <summary>
         /// Instruct the editor to insert space at cursor.
         /// </summary>
@@ -188,12 +171,20 @@ namespace PFE.Models
             NotifyObserverRedraw();
         }
 
-        public bool IsWriteModeActivated()
+        /// <summary>
+        /// True if write mode is activated.
+        /// </summary>
+        /// <returns></returns>
+        private bool IsWriteModeActivated()
         {
             return WriteMode == WriteModes.Tenth || WriteMode == WriteModes.Twenyth;
         }
 
-        public char? GetWriteModeCharacter()
+        /// <summary>
+        /// Returns the character to add depending of the write mode.
+        /// </summary>
+        /// <returns></returns>
+        private char? GetWriteModeCharacter()
         {
             if (WriteMode == WriteModes.Tenth)
                 return '1';
@@ -207,7 +198,7 @@ namespace PFE.Models
         /// Applies the movementType to the cursor without notifiying observers of the editor.
         /// </summary>
         /// <param name="mouvementType"></param>
-        public void MoveCursorWithoutNotifyingObservers(CursorMovements mouvementType)
+        private void MoveCursorWithoutNotifyingObservers(CursorMovements mouvementType)
         {
             switch (mouvementType)
             {
@@ -266,6 +257,11 @@ namespace PFE.Models
             NotifyObserverRedraw();
         }
 
+        /// <summary>
+        /// Enlarge the cursor by widthIncrease without going out of 
+        /// bound of the tablature.
+        /// </summary>
+        /// <param name="widthIncrease"></param>
         public void EnlargeCursorWidth(int widthIncrease)
         {
             if (widthIncrease < 0)
@@ -275,6 +271,30 @@ namespace PFE.Models
                 return;
 
             Cursor.enlargeWidth(widthIncrease);
+        }
+
+        /// <summary>
+        /// see Tablature.AddString(...) for details.
+        /// </summary>
+        /// <param name="note"></param>
+        /// <param name="addBellow"></param>
+        internal void AddString(Note note, bool addBellow)
+        {
+            Tablature.AddString(addBellow, note);
+
+            NotifyObserverRedraw();
+        }
+
+        /// <summary>
+        /// See tablature.RemoveString(...) for details.
+        /// </summary>
+        /// <param name="atEnd"></param>
+        /// <param name="destructive"></param>
+        internal void RemoveString(bool atEnd, bool destructive)
+        {
+            Tablature.RemoveString(atEnd, destructive);
+            Cursor.Reset();
+            NotifyObserverRedraw();
         }
 
         /// <summary>
@@ -507,68 +527,36 @@ namespace PFE.Models
         #region Ascii
         public void ParseAscii(string ascii)
         {
-            var startCoord = _cursor.TopLeftTabCoord();
-            var xLimit = TabLength;
-            var yLimit = NStrings;
-
-            var nReturn = 0;
-            var nCurCharPos = 0;
-
-            for (var i = 0; i <= ascii.Length - 1; i++)
-            {
-                // if we are trying to write on an unexisting string, stop
-                if (nReturn >= yLimit)
-                    break;
-
-                // if we are at a line return, we
-                if (ascii[i] == '\r')
-                {
-                    i++; // skipping the \n after the \r
-                    nCurCharPos = 0;
-                    nReturn++;
-                    continue;
-                }
-
-                // if we are about to write outsite the xLimit, we add a new staff before
-                // and get the new xLimit
-                if (startCoord.x + nCurCharPos >= xLimit)
-                {
-                    Tablature.AddNewStaff();
-                    xLimit = TabLength;
-                }
-
-                // write the clipboard current char on the tab
-                Tablature.AttemptSetModifierAt(
-                    new TabCoord(startCoord.x + nCurCharPos, startCoord.y + nReturn),
-                    ascii[i]);
-
-                nCurCharPos++;
-            }
+            AsciiManipulation.PasteAsciiAtCursor(this, ascii);
 
             NotifyObserverRedraw();
         }
 
         public string SelectionToAscii()
         {
+            return AsciiManipulation.SelectionToAscii(this);
+        }
+
+        public string ToAscii()
+        {
             string ascii = "";
-
-            var topLeft = _cursor.TopLeftTabCoord();
-
-            for (var j = 0; j < _cursor.Height; j++)
-            {
-                for (var i = 0; i < _cursor.Width; i++)
-                {
-                    ascii += Tablature.GetCharAt(new TabCoord(topLeft.x + i, topLeft.y + j));
-                }
-                ascii += "\r\n";
-            }
-            ascii += "\r\n";
-
+            ascii += Tablature.SongInfo.ToString();
+            ascii += "Tuning\t\t: " + Tablature.Tuning.ToString();
+            ascii += "\r\n\r\n";
+            ascii += AsciiManipulation.AsciiFromTablature(Tablature);
             return ascii;
+        }
+
+        public void FromAscii(string ascii)
+        {
+            Cursor.Reset();
+            _tablature = AsciiManipulation.TablatureFromAscii(ascii);
+
+            NotifyObserverRedraw();
         }
         #endregion
 
-        #region observer
+        #region Observer
         private List<IObserver> observers = new List<IObserver>();
 
         public void NotifyObserverRedraw()
@@ -606,8 +594,8 @@ namespace PFE.Models
             NotifyObserverRedraw();
         }
         #endregion
-    }
 
-    public enum WriteModes { Unity, Tenth, Twenyth };
-    public enum SkipModes { Zero, One };
+        private enum WriteModes { Unity, Tenth, Twenyth };
+        private enum SkipModes { Zero, One };
+    }
 }

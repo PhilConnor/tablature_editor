@@ -92,7 +92,8 @@ namespace PFE
             {
                 //Save tablature.
                 string filename = openFileDialog.FileName;
-                MessageBox.Show("Path of selected file : " + filename);
+                string text = System.IO.File.ReadAllText(filename);
+                editorController.Import(text);
             }
         }
 
@@ -108,8 +109,8 @@ namespace PFE
             if (saveFileDialog.ShowDialog() == true)
             {
                 //Save tablature.
-                string filename = saveFileDialog.FileName;
-                MessageBox.Show("Path of selected file : " + filename);
+                string filePath = saveFileDialog.FileName;
+                editorController.Export(filePath);
             }
         }
 
@@ -123,7 +124,9 @@ namespace PFE
             AddStringDialog addStringDialog = new AddStringDialog();
             if (addStringDialog.ShowDialog() == true)
             {
-                MessageBox.Show("You picked : " + addStringDialog.Element.ToStringWithOctave() + " and add bellow = " + addStringDialog.AddBellow);
+                editorController.AddString(addStringDialog.NewStringNote, addStringDialog.AddBellow);
+
+
             }
         }
 
@@ -132,7 +135,7 @@ namespace PFE
             RemoveStringDialog removeStringDialog = new RemoveStringDialog();
             if (removeStringDialog.ShowDialog() == true)
             {
-                MessageBox.Show("You picked : " + "Bellow = " + removeStringDialog.RemoveBellow + " and Destructive : " + removeStringDialog.Destructive);
+                editorController.RemoveString(removeStringDialog.AtEnd, removeStringDialog.Destructive);
             }
         }
 

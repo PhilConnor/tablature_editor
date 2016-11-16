@@ -9,19 +9,30 @@ namespace PFE.Models
     {
         public int x, y;
 
+        /// <summary>
+        /// True if equivalent.
+        /// </summary>
+        /// <param name="coord"></param>
+        /// <returns></returns>
         public bool Equals(Coord coord)
         {
             return coord.x == x && coord.y == y;
         }
 
+        /// <summary>
+        /// Convert as point.
+        /// </summary>
+        /// <returns></returns>
         public Point AsPoint()
         {
             return new Point(x, y);
         }
-
-#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+        
+        /// <summary>
+        /// String reprentation.
+        /// </summary>
+        /// <returns></returns>
         public string ToString()
-#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
         {
             return "[" + x + "," + y + "]";
         }

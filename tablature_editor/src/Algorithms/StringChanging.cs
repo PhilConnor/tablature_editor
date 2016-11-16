@@ -7,9 +7,56 @@ using System.Threading.Tasks;
 
 namespace PFE.Algorithms
 {
-    // in progress
-    public class StringChanger
+    /// <summary>
+    /// String change related algorithms
+    /// </summary>
+    public class StringChanging
     {
+        /// <summary>
+        /// Attemps to move the notes from the initial string to the target string by transposing their pitch.
+        /// Will not move the note if there is already something on the target string that prevents placing the note there.
+        /// </summary>
+        /// <param name="tablature"></param>
+        /// <param name="initialStringIndex"></param>
+        /// <param name="targetStringIndex"></param>
+        public static void MoveStringNotesToOtherString(Tablature tablature, int initialStringIndex, int targetStringIndex)
+        {
+            //protection against bad input for debuging purpose
+            if (tablature.NStrings < 2
+                || initialStringIndex < 0
+                || initialStringIndex >= tablature.Length
+                || targetStringIndex < 0
+                || targetStringIndex >= tablature.Length)
+                throw new Exception("Debug");
+
+            Note initialStringTuning = tablature.Tuning.notes[initialStringIndex];
+            Note targetStringTuning = tablature.Tuning.notes[targetStringIndex];
+
+            //for element on the string
+            for (int x = 0; x < tablature.Length; x++)
+            {
+                TabCoord currentInitialStringTC = new TabCoord(x, initialStringIndex);
+                TabCoord currentTargetStringTC = new TabCoord(x, targetStringIndex);
+                Element elementThere = tablature.ElementAt(currentInitialStringTC);
+
+                //is the element is a number
+                if (elementThere.IsNote())
+                {
+                    int? newFretNumberTarget = Retuning.AttemptRetuneFret(
+                        elementThere.GetNoteNumericalValue(),
+                        initialStringTuning,
+                        targetStringTuning);
+
+                    if (newFretNumberTarget.HasValue &&
+                        tablature.CanSetNoteAt(currentTargetStringTC, newFretNumberTarget.Value))
+                    {
+                        tablature.ElementAt(currentTargetStringTC).ParseInt(newFretNumberTarget.Value);
+                    }
+                }
+            }
+        }
+
+
         /// <summary>
         /// Move all notes from the first string to the second string if possible.
         /// Will do nothing if the move failed because of a string already under this one.
@@ -18,35 +65,7 @@ namespace PFE.Algorithms
         /// <param name="tablature"></param>
         public static void MoveFirstStringNotesDown(Tablature tablature)
         {
-            if (tablature.NStrings < 2)
-                return;
-
-            Note firstStringTuning = tablature.Tuning.notes[0];
-            Note secondStringTuning = tablature.Tuning.notes[1];
-
-            int deltaSemiTones = secondStringTuning.GetNumericalEquivalent()
-                - firstStringTuning.GetNumericalEquivalent();
-
-            for (int x = 0; x < tablature.Length; x++)
-            {
-                TabCoord currentInitialStringTC = new TabCoord(x, 0);
-                TabCoord currentTargetStringTC = new TabCoord(x, 1);
-                Element elementThere = tablature.ElementAt(currentInitialStringTC);
-
-                if (elementThere.IsNumber())
-                {
-                    int newValue = elementThere.GetNumericalValue() + deltaSemiTones;
-
-                    if (!tablature.isACharThere(currentTargetStringTC) &&
-                        !tablature.isACharThere(currentTargetStringTC.CoordOnLeft()) &&
-                        !tablature.isACharThere(currentTargetStringTC.CoordOnLeft().CoordOnLeft()) &&
-                        !tablature.isACharThere(currentTargetStringTC.CoordOnRight())
-                        )
-                    {
-                        tablature.ElementAt(currentTargetStringTC).ParseInteger(newValue);
-                    }
-                }
-            }
+            MoveStringNotesToOtherString(tablature, 0, 1);
         }
 
         /// <summary>
@@ -57,35 +76,7 @@ namespace PFE.Algorithms
         /// <param name="tablature"></param>
         public static void MoveLastStringNotesUp(Tablature tablature)
         {
-            if (tablature.NStrings < 2)
-                return;
-
-            Note firstStringTuning = tablature.Tuning.notes[tablature.NStrings - 1];
-            Note secondStringTuning = tablature.Tuning.notes[tablature.NStrings - 2];
-
-            int deltaSemiTones = secondStringTuning.GetNumericalEquivalent()
-                - firstStringTuning.GetNumericalEquivalent();
-
-            for (int x = 0; x < tablature.Length; x++)
-            {
-                TabCoord currentInitialStringTC = new TabCoord(x, tablature.NStrings - 1);
-                TabCoord currentTargetStringTC = new TabCoord(x, tablature.NStrings - 2);
-                Element elementThere = tablature.ElementAt(currentInitialStringTC);
-
-                if (elementThere.IsNumber())
-                {
-                    int newValue = elementThere.GetNumericalValue() + deltaSemiTones;
-
-                    if (!tablature.isACharThere(currentTargetStringTC) &&
-                        !tablature.isACharThere(currentTargetStringTC.CoordOnLeft()) &&
-                        !tablature.isACharThere(currentTargetStringTC.CoordOnLeft().CoordOnLeft()) &&
-                        !tablature.isACharThere(currentTargetStringTC.CoordOnRight())
-                        )
-                    {
-                        tablature.ElementAt(currentTargetStringTC).ParseInteger(newValue);
-                    }
-                }
-            }
+            MoveStringNotesToOtherString(tablature, tablature.NStrings - 1, tablature.NStrings - 2);
         }
 
         /// <summary>

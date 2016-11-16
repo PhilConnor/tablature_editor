@@ -44,6 +44,11 @@ namespace PFE.Models
         /// </summary>
         public Cursor()
         {
+            Reset();
+        }
+
+        public void Reset()
+        {
             SetTabCoords(new TabCoord(1, 0));
         }
 
@@ -75,16 +80,28 @@ namespace PFE.Models
             return new TabCoord(x, y);
         }
 
+        /// <summary>
+        /// Returns this cursor lowest x coord value.
+        /// </summary>
+        /// <returns></returns>
         public int FirstXValue()
         {
             return Math.Min(BaseCoord.x, DragableCoord.x);
         }
 
+        /// <summary>
+        /// Returns this cursor highest x coord value.
+        /// </summary>
+        /// <returns></returns>
         public int LastXValue()
         {
             return Math.Max(BaseCoord.x, DragableCoord.x);
         }
 
+        /// <summary>
+        /// Enlarge this cursor width by widthIncrease to the right.
+        /// </summary>
+        /// <param name="widthIncrease"></param>
         public void enlargeWidth(int widthIncrease)
         {
             bool isBaseCoordOnLeft = BaseCoord.x < DragableCoord.x;
@@ -112,7 +129,6 @@ namespace PFE.Models
             return BaseCoord.Equals(c.BaseCoord) && DragableCoord.Equals(c.DragableCoord);
         }
 
-
         /// <summary>
         /// Returns all tabCoords in located in the cursor area.
         /// </summary>
@@ -135,7 +151,8 @@ namespace PFE.Models
             return touchingTabCoords;
         }
         #endregion
-    }
 
+    }
     public enum CursorMovements { Left, Up, Right, Down, ExpandLeft, ExpandUp, ExpandRight, ExpandDown, SkipStaffDown, SkipStaffUp };
+
 }

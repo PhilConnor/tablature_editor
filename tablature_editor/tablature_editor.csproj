@@ -64,6 +64,8 @@
     <Compile Include="MenuDialogs\RemoveStringDialog.xaml.cs">
       <DependentUpon>RemoveStringDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="src\Algorithms\AsciiManipulation.cs" />
+    <Compile Include="src\Algorithms\Retuning.cs" />
     <Compile Include="src\Algorithms\StringChanging.cs" />
     <Compile Include="src\Algorithms\Transposition.cs" />
     <Compile Include="src\Controllers\EditorController.cs" />
@@ -73,6 +75,8 @@
     <Compile Include="src\Models\Coord\TabCoord.cs" />
     <Compile Include="src\Models\Note\Note.cs" />
     <Compile Include="src\Models\Note\Tuning.cs" />
+    <Compile Include="src\Models\Tablature\SongInfo.cs" />
+    <Compile Include="src\Models\Tablature\TablatureAnalysis.cs" />
     <Compile Include="src\UndoRedo\Memento.cs" />
     <Compile Include="src\UndoRedo\MementoCareTaker.cs" />
     <Compile Include="src\Utils\CoordConverter.cs" />

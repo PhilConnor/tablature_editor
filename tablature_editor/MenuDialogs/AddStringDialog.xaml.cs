@@ -18,14 +18,14 @@ namespace PFE.MenuDialogs
     {
         //Properties.
         public bool AddBellow { get; set; }
-        public Note Element { get; set; }
+        public Note NewStringNote { get; set; }
 
         //Constructors.
         public AddStringDialog()
         {
             InitializeComponent();
 
-            Element = new Note();
+            NewStringNote = new Note();
             cb_Note.ItemsSource = Note.GetListNotes();
         }
 
@@ -40,7 +40,7 @@ namespace PFE.MenuDialogs
 
             //Find the selected Note.
             int noteNumericalEquivalent = int.Parse(tb_Octave.Text) * 12 + (int)comboBoxNote.Value;
-            Element.SetNumericalEquivalent(noteNumericalEquivalent);
+            NewStringNote.SetNumericalEquivalent(noteNumericalEquivalent);
 
             //Close the dialog and return the values.
             DialogResult = true;
