@@ -68,6 +68,9 @@
     <Compile Include="menu dialogs\RemoveStringDialog.xaml.cs">
       <DependentUpon>RemoveStringDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="menu dialogs\TransposeDialog.xaml.cs">
+      <DependentUpon>TransposeDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="src\Algorithms\NoteToFret.cs" />
     <Compile Include="src\Algorithms\AsciiManipulation.cs" />
     <Compile Include="src\Algorithms\Retuning.cs" />
@@ -82,13 +85,12 @@
     <Compile Include="src\Models\Note\Tuning.cs" />
     <Compile Include="src\Models\Tablature\SongInfo.cs" />
     <Compile Include="src\Models\Tablature\TablatureAnalysis.cs" />
-    <Compile Include="src\Interfaces\SignalParser.cs" />
     <Compile Include="src\NoteDetection\PitchTracker\CircularBuffer.cs" />
     <Compile Include="src\NoteDetection\PitchTracker\Extensions.cs" />
     <Compile Include="src\NoteDetection\PitchTracker\IIRFilter.cs" />
     <Compile Include="src\NoteDetection\PitchTracker\PitchDsp.cs" />
     <Compile Include="src\NoteDetection\PitchTracker\PitchTracker.cs" />
-    <Compile Include="src\NoteDetection\SignalParser.cs" />
+    <Compile Include="src\NoteDetection\SignalToNote.cs" />
     <Compile Include="src\UndoRedo\Memento.cs" />
     <Compile Include="src\UndoRedo\MementoCareTaker.cs" />
     <Compile Include="src\Utils\CoordConverter.cs" />
@@ -122,6 +124,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="menu dialogs\RemoveStringDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="menu dialogs\TransposeDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

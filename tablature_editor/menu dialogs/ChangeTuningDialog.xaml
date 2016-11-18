@@ -5,11 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PFE.MenuDialogs"
         mc:Ignorable="d"
-        Title="Change tuning" Height="346.218" Width="269.747" ResizeMode="NoResize">
+        Title="Change Tuning" Height="412.605" Width="269.747" ResizeMode="NoResize">
     <Grid>
-        <StackPanel HorizontalAlignment="Left" Height="264" Margin="10,10,0,0" Width="244" VerticalAlignment="Top">
+        <GroupBox x:Name="gb_FateOfNotes" Header="Fate of notes" Margin="10,10,10,0" Height="54" VerticalAlignment="Top">
+            <StackPanel>
+                <RadioButton x:Name="radio_DoNothing" GroupName="group1" Content="Keep them" IsChecked="True"/>
+                <RadioButton x:Name="radio_Scale" GroupName="group1"  Content="Convert them"/>
+            </StackPanel>
+        </GroupBox>
+        <StackPanel Margin="10,69,10,44" Width="244">
             <Label Content="Strings:" />
-            <StackPanel x:Name="stringsPanel" Height="238"/>
+            <StackPanel x:Name="stringsPanel" Height="245" />
         </StackPanel>
         <Button x:Name="btn_ok" Content="Ok" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="60" Click="btn_ok_Click"/>
     </Grid>
