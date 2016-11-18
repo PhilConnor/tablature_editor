@@ -15,7 +15,7 @@
         </GroupBox>
         <GroupBox x:Name="gb_StringLocation_Copy" Header="String note" HorizontalAlignment="Left" Margin="10,69,0,0" VerticalAlignment="Top" Width="272" Height="54">
             <WrapPanel HorizontalAlignment="Left" Height="24" VerticalAlignment="Top" Width="262" Margin="0,10,-2,-2">
-                <ComboBox x:Name="cb_Note" HorizontalAlignment="Left" VerticalAlignment="Top" Width="32" SelectedIndex="0"/>
+                <ComboBox x:Name="cb_Note" HorizontalAlignment="Left" VerticalAlignment="Top" Width="40" SelectedIndex="0"/>
                 <TextBox x:Name="tb_Octave" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="2" MaxLength="2" VerticalAlignment="Top" Width="24" RenderTransformOrigin="-1.614,0.225" PreviewTextInput="NumberValidationTextBox"/>
             </WrapPanel>
         </GroupBox>

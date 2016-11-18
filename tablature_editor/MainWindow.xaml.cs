@@ -26,6 +26,7 @@ namespace PFE
     public partial class MainWindow : Window
     {
         EditorController editorController;
+        public Tablature tablature;
 
         public MainWindow()
         {
@@ -38,7 +39,7 @@ namespace PFE
 
             // Init & Dependancy injection
             Cursor cursor = new Cursor();
-            Models.Tablature tablature = new Models.Tablature();
+            tablature = new Tablature();
             Editor editor = new Editor(tablature, cursor);
             editorController = new EditorController(editor, drawSurface, _scrollViewer);
         }
@@ -125,8 +126,6 @@ namespace PFE
             if (addStringDialog.ShowDialog() == true)
             {
                 editorController.AddString(addStringDialog.NewStringNote, addStringDialog.AddBellow);
-
-
             }
         }
 
@@ -139,12 +138,21 @@ namespace PFE
             }
         }
 
-        private void MenuPrincipal_Configs_Tablature_Click(object sender, RoutedEventArgs e)
+        private void MenuPrincipal_Strings_ChangeTuning_Click(object sender, RoutedEventArgs e)
         {
-            ChangeTuningDialog tuningWindow = new ChangeTuningDialog();
+            ChangeTuningDialog tuningWindow = new ChangeTuningDialog(tablature);
             if (tuningWindow.ShowDialog() == true)
             {
-                MessageBox.Show("You picked : " + tuningWindow.TuningTest);
+                MessageBox.Show("The first note you picked is : " + tuningWindow.selectedTuning.notes[0].ToStringWithOctave());
+            }
+        }
+
+        private void MenuPrincipal_Tools_Transpose_Click(object sender, RoutedEventArgs e)
+        {
+            AddStringDialog addStringDialog = new AddStringDialog();
+            if (addStringDialog.ShowDialog() == true)
+            {
+                editorController.AddString(addStringDialog.NewStringNote, addStringDialog.AddBellow);
             }
         }
     }

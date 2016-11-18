@@ -120,7 +120,7 @@ namespace PFE.Models
             return clone;
         }
 
-        public string ToString()
+        public override string ToString()
         {
             string ascii = "";
 
