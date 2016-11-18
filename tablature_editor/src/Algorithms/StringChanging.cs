@@ -43,7 +43,7 @@ namespace PFE.Algorithms
                 if (elementThere.IsNote())
                 {
                     int? newFretNumberTarget = Retuning.AttemptRetuneFret(
-                        elementThere.GetNoteNumericalValue(),
+                        elementThere.GetFretNumber(),
                         initialStringTuning,
                         targetStringTuning);
 
