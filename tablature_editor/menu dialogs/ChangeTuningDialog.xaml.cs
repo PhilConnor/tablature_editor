@@ -83,7 +83,6 @@ namespace PFE.MenuDialogs
             textbox.Text = "2";
             textbox.TextWrapping = TextWrapping.Wrap;
             textbox.MaxLength = 2;
-            textbox.RenderTransformOrigin = new Point(-1.614, 0.225);
             textbox.PreviewTextInput += new TextCompositionEventHandler(NumberValidationTextBox);
 
             //Add the elements to WrapPanel.

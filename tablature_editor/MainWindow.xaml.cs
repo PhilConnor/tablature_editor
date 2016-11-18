@@ -150,10 +150,10 @@ namespace PFE
 
         private void MenuPrincipal_Tools_Transpose_Click(object sender, RoutedEventArgs e)
         {
-            AddStringDialog addStringDialog = new AddStringDialog();
-            if (addStringDialog.ShowDialog() == true)
+            TransposeDialog transposeDialog = new TransposeDialog();
+            if (transposeDialog.ShowDialog() == true)
             {
-                editorController.AddString(addStringDialog.NewStringNote, addStringDialog.AddBellow);
+                MessageBox.Show("Apply transposition to selection : " + transposeDialog.ApplyToSelection + "\nIncrement : " + transposeDialog.Increment + "\nFor that number of semitones : " + transposeDialog.NumberOfSemiTone);
             }
         }
     }

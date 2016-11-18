@@ -68,6 +68,9 @@
     <Compile Include="menu dialogs\RemoveStringDialog.xaml.cs">
       <DependentUpon>RemoveStringDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="menu dialogs\TransposeDialog.xaml.cs">
+      <DependentUpon>TransposeDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="src\Algorithms\NoteToFret.cs" />
     <Compile Include="src\Algorithms\AsciiManipulation.cs" />
     <Compile Include="src\Algorithms\Retuning.cs" />
@@ -122,6 +125,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="menu dialogs\RemoveStringDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="menu dialogs\TransposeDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
