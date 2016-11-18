@@ -143,7 +143,8 @@ namespace PFE
             ChangeTuningDialog tuningWindow = new ChangeTuningDialog(tablature);
             if (tuningWindow.ShowDialog() == true)
             {
-                MessageBox.Show("The first note you picked is : " + tuningWindow.selectedTuning.notes[0].ToStringWithOctave());
+                editorController.ChangeTuning(tuningWindow.selectedTuning);
+
             }
         }
 
