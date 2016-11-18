@@ -284,9 +284,9 @@ namespace PFE.Models
             NotifyObserverRedraw();
         }
 
-        internal void ChangeTuning(Tuning newTuning)
+        internal void ChangeTuning(Tuning newTuning, bool scaleNotes)
         {
-            Tablature.ChangeTuning(newTuning);
+            Tablature.ChangeTuning(newTuning, scaleNotes);
             NotifyObserverRedraw();
         }
 

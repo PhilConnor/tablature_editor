@@ -14,7 +14,7 @@ namespace PFE.MenuDialogs
     {
         //Properties.
         public bool ScaleNotes { get; set; }
-        private Tuning selectedTuning;
+        public Tuning selectedTuning;
         private Tablature tablature;
 
         //Constructors.
@@ -23,7 +23,7 @@ namespace PFE.MenuDialogs
             InitializeComponent();
             //cb_StandardTuning.ItemsSource = Note.GetListNotes(); //Legacy - CB with standard tunings.
             this.tablature = tablature;
-            selectedTuning = tablature.Tuning;
+            selectedTuning = tablature.Tuning.Clone();
 
             //TODO: Get the number of strings in the editor object.
             for (int i = 0; i < tablature.NStrings; ++i)
@@ -35,9 +35,6 @@ namespace PFE.MenuDialogs
         //Private methods.
         private void btn_ok_Click(object sender, RoutedEventArgs e)
         {
-            //Copy the previous tuning into the tablature.
-            tablature.PreviousTuning = tablature.Tuning.Clone();
-
             //Get the value of the radio buttons.
             ScaleNotes = (bool)radio_Scale.IsChecked;
 

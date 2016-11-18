@@ -265,9 +265,9 @@ namespace PFE.Controllers
 
         }
 
-        internal void ChangeTuning(Tuning newTuning)
+        internal void ChangeTuning(Tuning newTuning, bool scaleNotes)
         {
-            _editor.ChangeTuning(newTuning);
+            _editor.ChangeTuning(newTuning, scaleNotes);
             UpdateMementoCareTaker();
 
         }

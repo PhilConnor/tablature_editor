@@ -34,30 +34,34 @@ namespace PFE.Algorithms
         }
 
 
-        public static void AttemptRetuneTablature(Tablature tablature, Tuning newTuning)
+        public static void AttemptRetuneTablature(Tablature tablature, Tuning newTuning, bool scaleNotes)
         {
             for (int i = 0; i < tablature.Tuning.notes.Count; i++)
             {
-                AttemptRetuneString(tablature, i, newTuning.notes[i]);
+                AttemptRetuneString(tablature, i, newTuning.notes[i], scaleNotes);
             }
         }
 
-        public static void AttemptRetuneString(Tablature tablature, int stringIndex, Note newStringTuning)
+        public static void AttemptRetuneString(Tablature tablature, int stringIndex, Note newStringTuning, bool scaleNotes)
         {
-            for (int i = 0; i < tablature.Length; i++)
+            if (scaleNotes)
             {
-                TabCoord tc = new TabCoord(i, stringIndex);
-                if (tablature.ElementAt(tc).IsNote())
+                for (int i = 0; i < tablature.Length; i++)
                 {
-                    int fret = tablature.ElementAt(tc).GetFretNumber();
-                    int? newFret = AttemptRetuneFret(fret, tablature.Tuning.notes[stringIndex], newStringTuning);
-
-                    if (newFret != null)
+                    TabCoord tc = new TabCoord(i, stringIndex);
+                    if (tablature.ElementAt(tc).IsNote())
                     {
-                        tablature.ChangeNoteAt(tc, newFret.Value);
+                        int fret = tablature.ElementAt(tc).GetFretNumber();
+                        int? newFret = AttemptRetuneFret(fret, tablature.Tuning.notes[stringIndex], newStringTuning);
+
+                        if (newFret != null)
+                        {
+                            tablature.ChangeNoteAt(tc, newFret.Value);
+                        }
                     }
                 }
             }
+            
             tablature.Tuning.notes[stringIndex] = newStringTuning;
         }
     }
