@@ -45,7 +45,7 @@ namespace PFE.Algorithms
 
                     if (element.IsNote())
                     {
-                        int val = element.GetNoteNumericalValue();
+                        int val = element.GetFretNumber();
 
                         //Add the nSemiTones to the current value of the note at tabCoord
                         bool spaceAdded = editor.Tablature.ChangeNoteAt(tabCoord, val + nSemiTones);
@@ -78,10 +78,12 @@ namespace PFE.Algorithms
         /// <param name="tablature"></param>
         /// <param name="stringNumber"></param>
         /// <param name="nSemiTones"></param>
-        public void TransposeString(Tablature tablature, int stringNumber, int nSemiTones)
+        public static void TransposeString(Tablature tablature, int stringNumber, int nSemiTones)
         {
+            for(int i  = 0; i < tablature.Length; i++)
+            {
 
-
+            }
         }
 
         /// <summary>

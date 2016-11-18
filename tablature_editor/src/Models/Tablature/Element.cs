@@ -152,7 +152,7 @@ namespace PFE.Models
         /// Otherwise throws an exception.
         /// </summary>
         /// <returns></returns>
-        public int GetNoteNumericalValue()
+        public int GetFretNumber()
         {
             int value = 0;
 
