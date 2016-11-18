@@ -37,10 +37,15 @@ namespace NAudioDemo
         public void OnPitchDetected(PitchTracker sender, PitchTracker.PitchRecord pitchRecord)
         {
             //Debug.WriteLine("note:" + PitchDsp.GetNoteName(_pitchTracker.CurrentPitchRecord.MidiNote, true, true));
-            string noteName = PitchDsp.GetNoteName(sender.CurrentPitchRecord.MidiNote, true, true);
+            string noteName = tbox.Text + " - " + PitchDsp.GetNoteName(sender.CurrentPitchRecord.MidiNote, true, true);
 
             if (noteName != null)
-                label.Content = noteName;
+                tbox.Text = noteName;
+        }
+
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
         }
     }
 }
