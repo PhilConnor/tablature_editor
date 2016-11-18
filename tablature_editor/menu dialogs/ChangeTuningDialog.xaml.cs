@@ -13,6 +13,7 @@ namespace PFE.MenuDialogs
     public partial class ChangeTuningDialog : Window
     {
         //Properties.
+        public bool ScaleNotes { get; set; }
         private Tuning selectedTuning;
         private Tablature tablature;
 
@@ -34,6 +35,12 @@ namespace PFE.MenuDialogs
         //Private methods.
         private void btn_ok_Click(object sender, RoutedEventArgs e)
         {
+            //Copy the previous tuning into the tablature.
+            tablature.PreviousTuning = tablature.Tuning.Clone();
+
+            //Get the value of the radio buttons.
+            ScaleNotes = (bool)radio_Scale.IsChecked;
+
             //For each string in the tablature...
             for (int i = 0; i < tablature.NStrings; ++i)
             {

@@ -85,13 +85,12 @@
     <Compile Include="src\Models\Note\Tuning.cs" />
     <Compile Include="src\Models\Tablature\SongInfo.cs" />
     <Compile Include="src\Models\Tablature\TablatureAnalysis.cs" />
-    <Compile Include="src\Interfaces\SignalParser.cs" />
     <Compile Include="src\NoteDetection\PitchTracker\CircularBuffer.cs" />
     <Compile Include="src\NoteDetection\PitchTracker\Extensions.cs" />
     <Compile Include="src\NoteDetection\PitchTracker\IIRFilter.cs" />
     <Compile Include="src\NoteDetection\PitchTracker\PitchDsp.cs" />
     <Compile Include="src\NoteDetection\PitchTracker\PitchTracker.cs" />
-    <Compile Include="src\NoteDetection\SignalParser.cs" />
+    <Compile Include="src\NoteDetection\SignalToNote.cs" />
     <Compile Include="src\UndoRedo\Memento.cs" />
     <Compile Include="src\UndoRedo\MementoCareTaker.cs" />
     <Compile Include="src\Utils\CoordConverter.cs" />

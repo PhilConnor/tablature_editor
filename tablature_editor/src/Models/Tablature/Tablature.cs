@@ -24,9 +24,14 @@ namespace PFE.Models
         public List<Position> positions;
 
         /// <summary>
-        /// The current tuning as a string.
+        /// The current tuning as a list of notes.
         /// </summary>
         public Tuning Tuning { get; set; }
+
+        /// <summary>
+        /// The previous tuning as a list of notes.
+        /// </summary>
+        public Tuning PreviousTuning { get; set; }
 
         public SongInfo SongInfo { get; set; }
 
