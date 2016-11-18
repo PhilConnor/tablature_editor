@@ -28,11 +28,6 @@ namespace PFE.Models
         /// </summary>
         public Tuning Tuning { get; set; }
 
-        /// <summary>
-        /// The previous tuning as a list of notes.
-        /// </summary>
-        public Tuning PreviousTuning { get; set; }
-
         public SongInfo SongInfo { get; set; }
 
         /// <summary>
@@ -307,9 +302,9 @@ namespace PFE.Models
             Tuning.RemoveString(atEnd);
         }
         
-        internal void ChangeTuning(Tuning newTuning)
+        internal void ChangeTuning(Tuning newTuning, bool scaleNotes)
         {
-            Retuning.AttemptRetuneTablature(this, newTuning);
+            Retuning.AttemptRetuneTablature(this, newTuning, scaleNotes);
         }
 
         /// <summary>
