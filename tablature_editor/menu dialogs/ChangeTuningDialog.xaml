@@ -5,16 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PFE.MenuDialogs"
         mc:Ignorable="d"
-        Title="Change tuning" Height="300" Width="300" ResizeMode="NoResize">
+        Title="Change tuning" Height="346.218" Width="269.747" ResizeMode="NoResize">
     <Grid>
-        <Button x:Name="btn_ok" Content="Ok" HorizontalAlignment="Left" Margin="222,238,0,0" VerticalAlignment="Top" Width="60" Click="btn_ok_Click"/>
-        <Label x:Name="label" Content="Standard tunings" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-        <StackPanel HorizontalAlignment="Left" Height="197" Margin="10,36,0,0" VerticalAlignment="Top" Width="272">
-            <ComboBox x:Name="cb_StandardTuning" VerticalAlignment="Top" RenderTransformOrigin="0.755,0.775" HorizontalAlignment="Left" Width="120" SelectedIndex="0"/>
-            <Label Content="Strings" />
-            <StackPanel x:Name="stringsPanel" Height="149" Width="272">
-                
-            </StackPanel>
+        <StackPanel HorizontalAlignment="Left" Height="264" Margin="10,10,0,0" Width="244" VerticalAlignment="Top">
+            <Label Content="Strings:" />
+            <StackPanel x:Name="stringsPanel" Height="238"/>
         </StackPanel>
+        <Button x:Name="btn_ok" Content="Ok" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="60" Click="btn_ok_Click"/>
     </Grid>
 </Window>

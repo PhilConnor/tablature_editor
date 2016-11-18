@@ -13,17 +13,19 @@ namespace PFE.MenuDialogs
     public partial class ChangeTuningDialog : Window
     {
         //Properties.
-        public string Tuning { get; set; }
-        public IList<Note> selectedNotes = new List<Note>();
+        public Tuning selectedTuning;
+        private Tablature tablature;
 
         //Constructors.
-        public ChangeTuningDialog()
+        public ChangeTuningDialog(Tablature tablature)
         {
             InitializeComponent();
-            cb_StandardTuning.ItemsSource = Note.GetListNotes();
+            //cb_StandardTuning.ItemsSource = Note.GetListNotes(); //Legacy - CB with standard tunings.
+            this.tablature = tablature;
+            selectedTuning = new Tuning(tablature.NStrings);
 
             //TODO: Get the number of strings in the editor object.
-            for (int i = 0; i < 6; ++i)
+            for (int i = 0; i < tablature.NStrings; ++i)
             {
                 stringsPanel.Children.Add(CreateAndReturnStringChanger(i));
             }
@@ -32,11 +34,8 @@ namespace PFE.MenuDialogs
         //Private methods.
         private void btn_ok_Click(object sender, RoutedEventArgs e)
         {
-            //TODO : Program the preset of tuning.
-            //Tuning = cb_StandardTuning.SelectedValue.ToString();
-
             //For each string in the tablature...
-            for (int i = 0; i < 6; ++i)
+            for (int i = 0; i < tablature.NStrings; ++i)
             {
                 //Retreive the comboBox and textBox object of a string.
                 ComboBox comboBoxNote = (ComboBox)LogicalTreeHelper.FindLogicalNode(stringsPanel, "cb_Note" + i);
@@ -45,10 +44,9 @@ namespace PFE.MenuDialogs
 
                 //Construct the Note object.
                 int noteNumericalEquivalent = int.Parse(tb_Octave.Text) * 12 + (int)stringNote.Value;
-                stringNote.SetNumericalEquivalent(noteNumericalEquivalent);
 
-                //Add the Note to the list.
-                selectedNotes.Add(stringNote);
+                //Add the Note to the Tuning object.
+                selectedTuning.notes[i].SetNumericalEquivalent(noteNumericalEquivalent);
             }
 
             //Close the window et return the values.
