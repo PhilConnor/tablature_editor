@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PFE.MenuDialogs"
         mc:Ignorable="d"
-        Title="Add string to tablature" Height="201.681" Width="300" ResizeMode="NoResize">
+        Title="Add String" Height="201.681" Width="300" ResizeMode="NoResize">
     <Grid>
         <GroupBox x:Name="gb_StringLocation" Header="New string location" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="272" Height="54">
             <StackPanel HorizontalAlignment="Left" Height="34" VerticalAlignment="Top" Width="262" Margin="0,0,-2,0">

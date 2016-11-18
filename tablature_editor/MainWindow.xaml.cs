@@ -143,8 +143,7 @@ namespace PFE
             ChangeTuningDialog tuningWindow = new ChangeTuningDialog(tablature);
             if (tuningWindow.ShowDialog() == true)
             {
-                editorController.ChangeTuning(tuningWindow.selectedTuning);
-
+                editorController.ChangeTuning(tablature.Tuning);
             }
         }
 

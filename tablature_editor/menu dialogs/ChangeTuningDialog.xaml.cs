@@ -13,7 +13,7 @@ namespace PFE.MenuDialogs
     public partial class ChangeTuningDialog : Window
     {
         //Properties.
-        public Tuning selectedTuning;
+        private Tuning selectedTuning;
         private Tablature tablature;
 
         //Constructors.
@@ -22,7 +22,7 @@ namespace PFE.MenuDialogs
             InitializeComponent();
             //cb_StandardTuning.ItemsSource = Note.GetListNotes(); //Legacy - CB with standard tunings.
             this.tablature = tablature;
-            selectedTuning = new Tuning(tablature.NStrings);
+            selectedTuning = tablature.Tuning;
 
             //TODO: Get the number of strings in the editor object.
             for (int i = 0; i < tablature.NStrings; ++i)
@@ -61,6 +61,8 @@ namespace PFE.MenuDialogs
         /// <returns>The WrapPanel, ComboBox and TextBox needed to modify a string.</returns>
         private FrameworkElement CreateAndReturnStringChanger(int i)
         {
+            Note currentNote = tablature.Tuning.notes[i];
+
             //Create the needed FrameworkElements.
             WrapPanel container = new WrapPanel();
             ComboBox combobox = new ComboBox();
@@ -71,7 +73,7 @@ namespace PFE.MenuDialogs
             combobox.HorizontalAlignment = HorizontalAlignment.Left;
             combobox.VerticalAlignment = VerticalAlignment.Top;
             combobox.Width = 48;
-            combobox.SelectedIndex = 0;
+            combobox.SelectedIndex = (int)currentNote.Value;
             combobox.ItemsSource = Note.GetListNotes();
             
             //Initialise the Textbox.
@@ -80,7 +82,7 @@ namespace PFE.MenuDialogs
             textbox.VerticalAlignment = VerticalAlignment.Top;
             textbox.Height = 23;
             textbox.Width = 28;
-            textbox.Text = "2";
+            textbox.Text = currentNote.Octave.ToString();
             textbox.TextWrapping = TextWrapping.Wrap;
             textbox.MaxLength = 2;
             textbox.PreviewTextInput += new TextCompositionEventHandler(NumberValidationTextBox);
