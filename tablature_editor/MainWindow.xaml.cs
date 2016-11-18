@@ -139,12 +139,21 @@ namespace PFE
             }
         }
 
-        private void MenuPrincipal_Configs_Tablature_Click(object sender, RoutedEventArgs e)
+        private void MenuPrincipal_Strings_ChangeTuning_Click(object sender, RoutedEventArgs e)
         {
             ChangeTuningDialog tuningWindow = new ChangeTuningDialog();
             if (tuningWindow.ShowDialog() == true)
             {
-                MessageBox.Show("You picked : " + tuningWindow.TuningTest);
+                MessageBox.Show("They are " + tuningWindow.selectedNotes.Count + " strings.");
+            }
+        }
+
+        private void MenuPrincipal_Tools_Transpose_Click(object sender, RoutedEventArgs e)
+        {
+            ChangeTuningDialog tuningWindow = new ChangeTuningDialog();
+            if (tuningWindow.ShowDialog() == true)
+            {
+                MessageBox.Show("You picked : " + tuningWindow.Tuning);
             }
         }
     }

@@ -30,9 +30,10 @@
                 <MenuItem Header="_Strings">
                     <MenuItem Header="_Add a string" Click="MenuPrincipal_Strings_AddString_Click" />
                     <MenuItem Header="_Remove a string" Click="MenuPrincipal_Strings_RemoveString_Click" />
+                    <MenuItem Header="_Change tuning" Click="MenuPrincipal_Strings_ChangeTuning_Click" />
                 </MenuItem>
-                <MenuItem Header="_Configs">
-                    <MenuItem Header="_Tablature" Click="MenuPrincipal_Configs_Tablature_Click" />
+                <MenuItem Header="_Tools">
+                    <MenuItem Header="_Transpose" Click="MenuPrincipal_Tools_Transpose_Click" />
                 </MenuItem>
             </Menu>
             <TextBox AcceptsReturn="True" Margin="0,0,0,35" />
@@ -58,6 +59,17 @@
             <Button Name="btn_RemoveString" ToolTip="Remove a string from the tablature." Click="MenuPrincipal_Strings_RemoveString_Click">
                 <Button.Content>
                     <Image Source="images/RemoveString.jpg" />
+                </Button.Content>
+            </Button>
+            <Button Name="btn_ChangeTuning" ToolTip="Change the tuning of the tablature." Click="MenuPrincipal_Strings_ChangeTuning_Click">
+                <Button.Content>
+                    <Image Source="images/ChangeTuning.jpg" />
+                </Button.Content>
+            </Button>
+            <Separator Margin="0" Width="4" Visibility="Hidden"/>
+            <Button Name="btn_Transpose" ToolTip="Transpose notes higher or lower in pitch." Click="MenuPrincipal_Tools_Transpose_Click">
+                <Button.Content>
+                    <Image Source="images/Transpose.jpg" />
                 </Button.Content>
             </Button>
         </WrapPanel>
