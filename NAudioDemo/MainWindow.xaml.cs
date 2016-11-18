@@ -1,4 +1,5 @@
 ﻿using NAudio.Wave;
+using NAudioDemo.SignalToNote;
 using Pitch;
 using System;
 using System.Collections.Generic;
@@ -23,72 +24,23 @@ namespace NAudioDemo
     /// </summary>
     public partial class MainWindow : Window
     {
-        private PitchTracker m_pitchTracker;
-        private float[] m_audioBuffer;
-        private float m_sampleRate;
-        private int m_timeInterval;
-
         public MainWindow()
         {
-            m_sampleRate = 44100.0f; //44.1kHz
-            m_timeInterval = 100;  // 100ms
-
-            //Pitchtracker init
-            m_pitchTracker = new PitchTracker();
-            m_pitchTracker.SampleRate = m_sampleRate;
-            m_audioBuffer = new float[(int)Math.Round(m_sampleRate * m_timeInterval / 1000.0)];
-
-
-
             //WPF Init
             InitializeComponent();
+            
+            SignalParser stn = new SignalParser(OnPitchDetected);
+            stn.StartNoteRecognition();
 
-            //Write soundcards to console
-            int waveInDevices = WaveIn.DeviceCount;
-            for (int waveInDevice = 0; waveInDevice < waveInDevices; waveInDevice++)
-            {
-                WaveInCapabilities deviceInfo = WaveIn.GetCapabilities(waveInDevice);
-                Console.WriteLine("Device {0}: {1}, {2} channels",
-                    waveInDevice, deviceInfo.ProductName, deviceInfo.Channels);
-            }
-
-            //Starting the shit
-            WaveIn waveIn = new WaveIn();
-            waveIn.DeviceNumber = 0;
-            waveIn.DataAvailable += waveIn_DataAvailable;
-            waveIn.BufferMilliseconds = m_timeInterval; // every 100ms triggers dataAvailable
-            int sampleRate = (int)m_sampleRate;
-            int channels = 1; // mono
-            waveIn.WaveFormat = new WaveFormat(sampleRate, channels);
-            waveIn.StartRecording();
         }
 
-        int tht = 0;
-
-        void waveIn_DataAvailable(object sender, WaveInEventArgs e)
+        public void OnPitchDetected(PitchTracker sender, PitchTracker.PitchRecord pitchRecord)
         {
-            //convert samples to float
-            int i = 0;
-            for (int index = 0; index < e.BytesRecorded; index += 2)
-            {
-                short sample = (short)((e.Buffer[index + 1] << 8) |
-                                        e.Buffer[index + 0]);
-                float sample32 = sample / 32768f;
+            //Debug.WriteLine("note:" + PitchDsp.GetNoteName(_pitchTracker.CurrentPitchRecord.MidiNote, true, true));
+            string noteName = PitchDsp.GetNoteName(sender.CurrentPitchRecord.MidiNote, true, true);
 
-                m_audioBuffer[i] = sample32;
-                i++;
-            }
-            
-            // process current buffer
-            m_pitchTracker.ProcessBuffer(m_audioBuffer);
-
-            //write current pitch note detected to console
-            tht++;
-            if (tht == 10)
-            {
-                tht = 0;
-                Debug.WriteLine("note:" + PitchDsp.GetNoteName(m_pitchTracker.CurrentPitchRecord.MidiNote, true, true));
-            }
+            if (noteName != null)
+                label.Content = noteName;
         }
     }
 }
