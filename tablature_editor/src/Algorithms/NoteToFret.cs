@@ -14,6 +14,13 @@ namespace PFE.Algorithms
     /// </summary>
     public static class NoteConversion
     {
+        /// <summary>
+        /// Returns the number of the fret that the note could be played on this string 
+        /// based on this it's tuning.
+        /// </summary>
+        /// <param name="note"></param>
+        /// <param name="stringTuning"></param>
+        /// <returns></returns>
         public static int? NoteToFret(Note note, Note stringTuning)
         {
             int? fretNumber = null;
