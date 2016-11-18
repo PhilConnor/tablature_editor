@@ -265,10 +265,16 @@ namespace PFE.Controllers
 
         }
 
+        internal void ChangeTuning(Tuning newTuning)
+        {
+            _editor.ChangeTuning(newTuning);
+            UpdateMementoCareTaker();
+
+        }
+
         internal void RemoveString(bool removeBellow, bool destructive)
         {
-            _editor.RemoveString(removeBellow, destructive);
-            
+            _editor.RemoveString(removeBellow, destructive);            
             UpdateMementoCareTaker();
         }
 

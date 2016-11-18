@@ -301,6 +301,11 @@ namespace PFE.Models
 
             Tuning.RemoveString(atEnd);
         }
+        
+        internal void ChangeTuning(Tuning newTuning)
+        {
+            Retuning.AttemptRetuneTablature(this, newTuning);
+        }
 
         /// <summary>
         /// Returns true if both tablatures are equivalent.

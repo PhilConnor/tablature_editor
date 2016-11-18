@@ -281,7 +281,12 @@ namespace PFE.Models
         internal void AddString(Note note, bool addBellow)
         {
             Tablature.AddString(addBellow, note);
+            NotifyObserverRedraw();
+        }
 
+        internal void ChangeTuning(Tuning newTuning)
+        {
+            Tablature.ChangeTuning(newTuning);
             NotifyObserverRedraw();
         }
 
