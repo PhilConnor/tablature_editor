@@ -196,6 +196,16 @@ namespace PFE.Controllers
             }
 
             //backspace, delete
+            else if (e.Key == Key.Back && Keyboard.IsKeyDown(Key.LeftCtrl) 
+                || e.Key == Key.Delete && Keyboard.IsKeyDown(Key.LeftCtrl)
+                || e.Key == Key.Space && Keyboard.IsKeyDown(Key.LeftCtrl))
+            {
+                _editor.RemoveSpaceAtCursor();
+                UpdateMementoCareTaker();
+            }
+
+
+            //backspace, delete
             else if (e.Key == Key.Back || e.Key == Key.Delete)
             {
                 _editor.ClearCharsAtCursor();
@@ -235,7 +245,6 @@ namespace PFE.Controllers
             //undo
             else if (Keyboard.IsKeyDown(Key.LeftCtrl) && e.Key == Key.Z)
             {
-                Debug.WriteLine("Undo " + DateTime.Now.ToString());
                 Undo();
             }
 

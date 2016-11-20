@@ -171,6 +171,13 @@ namespace PFE.Models
             NotifyObserverRedraw();
         }
 
+        public void RemoveSpaceAtCursor()
+        {
+            Tablature.RemoveSpaceAt(_cursor.TopLeftTabCoord().x);
+
+            NotifyObserverRedraw();
+        }
+        
         /// <summary>
         /// True if write mode is activated.
         /// </summary>
