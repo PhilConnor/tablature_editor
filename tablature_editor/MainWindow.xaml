@@ -25,6 +25,7 @@
                 <MenuItem Header="_File">
                     <MenuItem Header="_Open" Click="MenuPrincipal_File_Open_Click" />
                     <MenuItem Header="_Save" Click="MenuPrincipal_File_Save_Click" />
+                    <MenuItem Header="_Tablature Properties" Click="MenuPrincipal_File_TablatureProperties_Click" />
                     <MenuItem Header="_Quitter" Click="MenuPrincipal_File_Quitter_Click" />
                 </MenuItem>
                 <MenuItem Header="_Strings">
@@ -53,6 +54,11 @@
             <Button Name="btn_Save" ToolTip="Save to a .tabapp file." Click="MenuPrincipal_File_Save_Click">
                 <Button.Content>
                     <Image Source="images/Save.jpg" />
+                </Button.Content>
+            </Button>
+            <Button Name="btn_TablatureProperties" ToolTip="Write about the author." Click="MenuPrincipal_File_TablatureProperties_Click">
+                <Button.Content>
+                    <Image Source="images/TablatureProperties.jpg" />
                 </Button.Content>
             </Button>
             <Separator Margin="0" Width="4" Visibility="Hidden"/>

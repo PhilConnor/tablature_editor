@@ -12,7 +12,7 @@ namespace PFE.Models
         public string Title = "title";
         public string Instrument = "instrument";
 
-        public string ToString()
+        public override string ToString()
         {
             return "Artist\t\t: " + Artist + "\r\n" +
                     "Title\t\t: " + Title + "\r\n" +

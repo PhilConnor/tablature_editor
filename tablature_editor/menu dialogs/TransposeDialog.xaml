@@ -65,7 +65,7 @@
                 VerticalAlignment="Bottom"
                 Width="60"
                 Click="btn_ok_Click"/>
-        <Button x:Name="btn_cancel"
+        <Button x:Name="btn_Cancel"
                 Content="Cancel"
                 HorizontalAlignment="Right"
                 Margin="0,0,10,10"
