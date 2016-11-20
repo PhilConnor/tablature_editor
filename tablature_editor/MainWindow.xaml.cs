@@ -165,15 +165,6 @@ namespace PFE
             }
         }
 
-        private void MenuPrincipal_Tools_MoveOnNeck_Click(object sender, RoutedEventArgs e)
-        {
-            TransposeDialog transposeDialog = new TransposeDialog();
-            if (transposeDialog.ShowDialog() == true)
-            {
-                MessageBox.Show("Apply transposition to selection : " + transposeDialog.ApplyToSelection + "\nIncrement : " + transposeDialog.Increment + "\nFor that number of semitones : " + transposeDialog.NumberOfSemiTone);
-            }
-        }
-
         private void MenuPrincipal_Tools_RegroupAroundFret_Click(object sender, RoutedEventArgs e)
         {
             RegroupAroundFretDialog regroupAroundFretDialog = new RegroupAroundFretDialog();

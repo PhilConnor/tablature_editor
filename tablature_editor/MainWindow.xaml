@@ -37,7 +37,6 @@
                     <MenuItem Header="_Stop recording" Click="MenuPrincipal_Recording_StopRecording_Click" />
                 </MenuItem>
                 <MenuItem Header="_Tools">
-                    <MenuItem Header="_Move on neck" Click="MenuPrincipal_Tools_MoveOnNeck_Click" />
                     <MenuItem Header="_Regroup near fret" Click="MenuPrincipal_Tools_RegroupAroundFret_Click" />
                     <MenuItem Header="_Transpose" Click="MenuPrincipal_Tools_Transpose_Click" />
                 </MenuItem>
@@ -84,11 +83,6 @@
                 </Button.Content>
             </Button>
             <Separator Margin="0" Width="4" Visibility="Hidden"/>
-            <Button Name="btn_MoveOnNeck" ToolTip="Move notes on neck." Click="MenuPrincipal_Tools_MoveOnNeck_Click">
-                <Button.Content>
-                    <Image Source="images/MoveOnNeck.jpg" />
-                </Button.Content>
-            </Button>
             <Button Name="btn_RegroupAroundFret" ToolTip="Regroup the notes around a given fret." Click="MenuPrincipal_Tools_RegroupAroundFret_Click">
                 <Button.Content>
                     <Image Source="images/RegroupAroundFret.jpg" />
