@@ -1,0 +1,27 @@
+﻿<Window x:Name="TablaturePropertiesWindow" x:Class="PFE.MenuDialogs.TablaturePropertiesDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PFE.MenuDialogs"
+        mc:Ignorable="d"
+        Title="Tablature Properties" Height="153.782" Width="305.042">
+    <Grid>
+        <StackPanel Margin="0,4,0,0">
+            <WrapPanel>
+                <Label Content="Artist name" Width="70" />
+                <TextBox x:Name="tb_ArtistName" TextWrapping="Wrap" Width="215" />
+            </WrapPanel>
+            <WrapPanel>
+                <Label Content="Song name" Width="70" />
+                <TextBox x:Name="tb_SongName" TextWrapping="Wrap" Width="215" />
+            </WrapPanel>
+            <WrapPanel>
+                <Label Content="Instrument" Width="70" />
+                <TextBox x:Name="tb_Instrument" TextWrapping="Wrap" Width="215" />
+            </WrapPanel>
+        </StackPanel>
+        <Button x:Name="btn_ok" Content="Ok" HorizontalAlignment="Right" Margin="0,0,75,10" VerticalAlignment="Bottom" Width="60" Click="btn_ok_Click"/>
+        <Button x:Name="btn_Cancel" Content="Cancel" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="60" Click="btn_cancel_Click"/>
+    </Grid>
+</Window>

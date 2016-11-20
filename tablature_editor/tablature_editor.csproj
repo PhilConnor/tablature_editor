@@ -71,6 +71,9 @@
     <Compile Include="menu dialogs\RemoveStringDialog.xaml.cs">
       <DependentUpon>RemoveStringDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="menu dialogs\TablaturePropertiesDialog.xaml.cs">
+      <DependentUpon>TablaturePropertiesDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="menu dialogs\TransposeDialog.xaml.cs">
       <DependentUpon>TransposeDialog.xaml</DependentUpon>
     </Compile>
@@ -134,6 +137,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="menu dialogs\TablaturePropertiesDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="menu dialogs\TransposeDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -185,6 +192,9 @@
     <Resource Include="images\StartRecording.jpg" />
     <Resource Include="images\RegroupAroundFret.jpg" />
     <Resource Include="images\StopRecording.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\TablatureProperties.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

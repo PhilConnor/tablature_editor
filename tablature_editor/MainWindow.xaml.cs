@@ -115,6 +115,13 @@ namespace PFE
             }
         }
 
+        //Show a dialog so the user can enter information about the author.
+        private void MenuPrincipal_File_TablatureProperties_Click(object sender, RoutedEventArgs e)
+        {
+            TablaturePropertiesDialog tablaturePropertiesDialog = new TablaturePropertiesDialog(tablature);
+            tablaturePropertiesDialog.ShowDialog();
+        }
+
         private void MenuPrincipal_File_Quitter_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
