@@ -1,0 +1,24 @@
+﻿<Window x:Name="RegroupAroundFretWindow" x:Class="PFE.MenuDialogs.RegroupAroundFretDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PFE.MenuDialogs"
+        mc:Ignorable="d"
+        Title="Regroup Around Fret" Height="188.235" Width="300">
+    <Grid>
+        <GroupBox x:Name="gb_Regroupment" Header="Apply regroupment to" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="272" Height="54">
+            <StackPanel Height="34" Width="262">
+                <RadioButton x:Name="radio_Selection" GroupName="group1" Content="Selection only" IsChecked="True"/>
+                <RadioButton x:Name="radio_All" GroupName="group1" Content="All notes"/> 
+            </StackPanel>
+        </GroupBox>
+        <GroupBox x:Name="gb_ChoiceNumberFret" Header="Number of fret" HorizontalAlignment="Left" Margin="10,69,0,0" VerticalAlignment="Top" Width="272" Height="45">
+            <StackPanel>
+                <TextBox x:Name="tb_NumberOfFret" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="2" MaxLength="2" VerticalAlignment="Top" Width="24" PreviewTextInput="NumberValidationTextBox"/>
+            </StackPanel>
+        </GroupBox>
+        <Button x:Name="btn_ok" Content="Ok" HorizontalAlignment="Right" Margin="0,0,75,10" VerticalAlignment="Bottom" Width="60" Click="btn_ok_Click"/>
+        <Button x:Name="btn_cancel" Content="Cancel" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="60" Click="btn_cancel_Click"/>
+    </Grid>
+</Window>

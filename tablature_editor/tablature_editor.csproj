@@ -65,6 +65,9 @@
     <Compile Include="menu dialogs\ChangeTuningDialog.xaml.cs">
       <DependentUpon>ChangeTuningDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="menu dialogs\RegroupAroundFretDialog.xaml.cs">
+      <DependentUpon>RegroupAroundFretDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="menu dialogs\RemoveStringDialog.xaml.cs">
       <DependentUpon>RemoveStringDialog.xaml</DependentUpon>
     </Compile>
@@ -123,6 +126,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="menu dialogs\RegroupAroundFretDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="menu dialogs\RemoveStringDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -175,9 +182,8 @@
     <Resource Include="images\Transpose.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="images\MoveOnNeck.jpg" />
     <Resource Include="images\StartRecording.jpg" />
-    <Resource Include="images\RegroupNearFret.jpg" />
+    <Resource Include="images\RegroupAroundFret.jpg" />
     <Resource Include="images\StopRecording.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
