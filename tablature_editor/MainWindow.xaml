@@ -38,7 +38,7 @@
                 </MenuItem>
                 <MenuItem Header="_Tools">
                     <MenuItem Header="_Move on neck" Click="MenuPrincipal_Tools_MoveOnNeck_Click" />
-                    <MenuItem Header="_Regroup near fret" Click="MenuPrincipal_Tools_RegroupNearFret_Click" />
+                    <MenuItem Header="_Regroup near fret" Click="MenuPrincipal_Tools_RegroupAroundFret_Click" />
                     <MenuItem Header="_Transpose" Click="MenuPrincipal_Tools_Transpose_Click" />
                 </MenuItem>
             </Menu>
@@ -89,9 +89,9 @@
                     <Image Source="images/MoveOnNeck.jpg" />
                 </Button.Content>
             </Button>
-            <Button Name="btn_RegroupNearFret" ToolTip="Regroup the notes around a given fret." Click="MenuPrincipal_Tools_RegroupNearFret_Click">
+            <Button Name="btn_RegroupAroundFret" ToolTip="Regroup the notes around a given fret." Click="MenuPrincipal_Tools_RegroupAroundFret_Click">
                 <Button.Content>
-                    <Image Source="images/RegroupNearFret.jpg" />
+                    <Image Source="images/RegroupAroundFret.jpg" />
                 </Button.Content>
             </Button>
             <Button Name="btn_Transpose" ToolTip="Transpose notes higher or lower in pitch." Click="MenuPrincipal_Tools_Transpose_Click">

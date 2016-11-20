@@ -7,14 +7,14 @@
         mc:Ignorable="d"
         Title="Add String" Height="201.681" Width="300" ResizeMode="NoResize">
     <Grid>
-        <GroupBox x:Name="gb_StringLocation" Header="New string location" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="272" Height="54">
+        <GroupBox x:Name="gb_NewString" Header="New string location" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="272" Height="54">
             <StackPanel HorizontalAlignment="Left" Height="34" VerticalAlignment="Top" Width="262" Margin="0,0,-2,0">
                 <RadioButton x:Name="radio_Above" GroupName="group1" Content="Above staff" IsChecked="True"/>
                 <RadioButton x:Name="radio_Bellow" GroupName="group1"  Content="Bellow staff"/>
             </StackPanel>
         </GroupBox>
-        <GroupBox x:Name="gb_StringLocation_Copy" Header="String note" HorizontalAlignment="Left" Margin="10,69,0,0" VerticalAlignment="Top" Width="272" Height="54">
-            <WrapPanel HorizontalAlignment="Left" Height="24" VerticalAlignment="Top" Width="262" Margin="0,10,-2,-2">
+        <GroupBox x:Name="gb_NoteOfString" Header="String note" HorizontalAlignment="Left" Margin="10,69,0,0" VerticalAlignment="Top" Width="272" Height="54">
+            <WrapPanel Height="24" Width="262">
                 <ComboBox x:Name="cb_Note" HorizontalAlignment="Left" VerticalAlignment="Top" Width="40" SelectedIndex="0"/>
                 <TextBox x:Name="tb_Octave" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="2" MaxLength="2" VerticalAlignment="Top" Width="24" RenderTransformOrigin="-1.614,0.225" PreviewTextInput="NumberValidationTextBox"/>
             </WrapPanel>

@@ -174,12 +174,12 @@ namespace PFE
             }
         }
 
-        private void MenuPrincipal_Tools_RegroupNearFret_Click(object sender, RoutedEventArgs e)
+        private void MenuPrincipal_Tools_RegroupAroundFret_Click(object sender, RoutedEventArgs e)
         {
-            TransposeDialog transposeDialog = new TransposeDialog();
-            if (transposeDialog.ShowDialog() == true)
+            RegroupAroundFretDialog regroupAroundFretDialog = new RegroupAroundFretDialog();
+            if (regroupAroundFretDialog.ShowDialog() == true)
             {
-                MessageBox.Show("Apply transposition to selection : " + transposeDialog.ApplyToSelection + "\nIncrement : " + transposeDialog.Increment + "\nFor that number of semitones : " + transposeDialog.NumberOfSemiTone);
+                MessageBox.Show("Apply to selection : " + regroupAroundFretDialog.ApplyToSelection + "\nAround fret #" + regroupAroundFretDialog.NumberOfFret);
             }
         }
 
