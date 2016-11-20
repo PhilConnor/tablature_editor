@@ -124,6 +124,38 @@ namespace PFE.Models
             positions[x].Clear();
         }
 
+        public void RemoveSpaceAt(int x)
+        {
+            for (int y = 0; y < NStrings; y++)
+                AttemptSetCharAt(new TabCoord(x, y), '-');
+
+            for (x = x + 1; x < Length; x++)
+            {
+                for (int y = 0; y < NStrings; y++)
+                {
+                    char tmpChar = GetCharAt(new TabCoord(x, y));
+                    AttemptSetCharAt(new TabCoord(x, y), '-');
+                    AttemptSetCharAt(new TabCoord(x-1, y), tmpChar);
+                }
+            }
+        }
+
+        public void ClearCharsAt(int x)
+        {
+            for (int y = 0; y < NStrings; y++)
+                AttemptSetCharAt(new TabCoord(x, y), '-');
+        }
+
+        public List<char> CharsAt(int x)
+        {
+            List<char> chars = new List<char>();
+
+            for (int y = 0; y < NStrings; y++)
+                chars.Add(GetCharAt(new TabCoord(x, y)));
+
+            return chars;
+        }
+
         /// <summary>
         /// Set the modifier (non-numerical char) at tabCoord
         /// </summary>
@@ -301,7 +333,7 @@ namespace PFE.Models
 
             Tuning.RemoveString(atEnd);
         }
-        
+
         internal void ChangeTuning(Tuning newTuning, bool scaleNotes)
         {
             Retuning.AttemptRetuneTablature(this, newTuning, scaleNotes);

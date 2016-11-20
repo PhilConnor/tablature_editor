@@ -31,6 +31,7 @@ namespace PFE.Models
                 elements.Add(new Element());
             }
         }
+            
 
         /// <summary>
         /// Add a blank element at first or last.
