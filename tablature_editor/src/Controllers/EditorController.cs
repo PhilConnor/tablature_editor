@@ -196,7 +196,7 @@ namespace PFE.Controllers
             }
 
             //backspace, delete
-            else if (e.Key == Key.Back && Keyboard.IsKeyDown(Key.LeftCtrl) 
+            else if (e.Key == Key.Back && Keyboard.IsKeyDown(Key.LeftCtrl)
                 || e.Key == Key.Delete && Keyboard.IsKeyDown(Key.LeftCtrl)
                 || e.Key == Key.Space && Keyboard.IsKeyDown(Key.LeftCtrl))
             {
@@ -274,6 +274,18 @@ namespace PFE.Controllers
 
         }
 
+        internal void StopRecording()
+        {
+            _editor.StopRecording();
+            UpdateMementoCareTaker();
+        }
+
+        internal void StartRecording()
+        {
+            _editor.StartRecording();
+            UpdateMementoCareTaker();
+        }
+
         internal void ChangeTuning(Tuning newTuning, bool scaleNotes)
         {
             _editor.ChangeTuning(newTuning, scaleNotes);
@@ -283,7 +295,7 @@ namespace PFE.Controllers
 
         internal void RemoveString(bool removeBellow, bool destructive)
         {
-            _editor.RemoveString(removeBellow, destructive);            
+            _editor.RemoveString(removeBellow, destructive);
             UpdateMementoCareTaker();
         }
 

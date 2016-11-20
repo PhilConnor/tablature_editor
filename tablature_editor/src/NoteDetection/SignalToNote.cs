@@ -113,7 +113,6 @@ namespace NAudioDemo.SignalToNote
         /// <param name="pitchRecord"></param>
         public void OnPitchDetected(PitchTracker sender, PitchTracker.PitchRecord pitchRecord)
         {
-            //Debug.WriteLine("note:" + PitchDsp.GetNoteName(_pitchTracker.CurrentPitchRecord.MidiNote, true, true));
             currNoteName = PitchDsp.GetNoteName(sender.CurrentPitchRecord.MidiNote, true, true);
 
             if (currNoteName == prevNoteName)
@@ -121,7 +120,7 @@ namespace NAudioDemo.SignalToNote
             else
                 n = 0;
 
-            if (n > 3)
+            if (n > 2)
             {
                 realNoteDetected = currNoteName;
 

@@ -6,6 +6,8 @@ using PFE.Utils;
 using PFE.UndoRedo;
 using System.Windows.Media;
 using PFE.Algorithms;
+using NAudioDemo.SignalToNote;
+using Pitch;
 
 namespace PFE.Models
 {
@@ -20,7 +22,7 @@ namespace PFE.Models
         private Cursor _cursor;
         private WriteModes WriteMode;
         private SkipModes SkipMode;
-
+        private SignalParser sp;
         /// <summary>
         /// Number of strings.
         /// </summary>
@@ -88,6 +90,9 @@ namespace PFE.Models
 
             _tablature = tablature;
             _cursor = cursor;
+
+            sp = new SignalParser(OnPitchDetectedHandler);
+
 
             NotifyObserverRedraw();
         }
@@ -177,7 +182,7 @@ namespace PFE.Models
 
             NotifyObserverRedraw();
         }
-        
+
         /// <summary>
         /// True if write mode is activated.
         /// </summary>
@@ -609,5 +614,63 @@ namespace PFE.Models
 
         private enum WriteModes { Unity, Tenth, Twenyth };
         private enum SkipModes { Zero, One };
+
+        #region Recording
+        public void StartRecording()
+        {
+            sp.StartNoteRecognition();
+        }
+
+        public void OnPitchDetectedHandler(PitchTracker sender, PitchTracker.PitchRecord pitchRecord)
+        {
+            string noteName = PitchDsp.GetNoteName(sender.CurrentPitchRecord.MidiNote, true, true);
+            if (noteName == null)
+                return;
+
+            noteName = noteName.Replace(" ", "");
+            Note note = Note.ParseStringWithOctave(noteName);
+            List<int> stringIndexes = NoteConversion.GetStringsIndexContainingNotes(note, Tablature.Tuning);
+            if (!(stringIndexes.Count > 0))
+                return;
+
+            int stringIndex = stringIndexes[0];
+            int? fret = NoteConversion.NoteToFret(note, Tablature.Tuning.notes[stringIndex]);
+            if (!fret.HasValue)
+                return;
+
+            int x = Cursor.TopLeftTabCoord().x;
+            Cursor.BaseCoord = (new TabCoord(x, 0));
+            Cursor.DragableCoord = (new TabCoord(x, NStrings - 1));
+
+
+            AttemptSetNoteAt(new TabCoord(x, stringIndex), fret.Value);
+            MoveCursorWithoutNotifyingObservers(CursorMovements.Right);
+            MoveCursorWithoutNotifyingObservers(CursorMovements.Right);
+
+            NotifyObserverRedraw();
+        }
+
+        public void AttemptSetNoteAt(TabCoord tabCoord, int fret)
+        {
+            int tenth = fret / 10;
+            int unity = fret % 10;
+
+            if (fret > 9)
+            {
+                Tablature.AttemptSetNoteCharAt(tabCoord, tenth.ToString()[0]);
+                MoveCursorWithoutNotifyingObservers(CursorMovements.Right);
+                Tablature.AttemptSetNoteCharAt(new TabCoord(tabCoord.x + 1, tabCoord.y), unity.ToString()[0]);
+            }
+            else
+                Tablature.AttemptSetNoteCharAt(new TabCoord(tabCoord.x, tabCoord.y), unity.ToString()[0]);
+
+        }
+
+        public void StopRecording()
+        {
+            sp.StopNoteRecognition();
+        }
+        #endregion
+
     }
 }

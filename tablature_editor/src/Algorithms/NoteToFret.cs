@@ -74,5 +74,21 @@ namespace PFE.Algorithms
 
             return strings;
         }
+
+        public static List<int> GetStringsIndexContainingNotes(Note note, Tuning tuning)
+        {
+            List<int> strings = new List<int>();
+
+            int y = 0;
+            foreach (Note stringTuning in tuning.notes)
+            {
+                if (IsNoteContainedInString(note, stringTuning))
+                    strings.Add(y);
+
+                y++;
+            }
+
+            return strings;
+        }
     }
 }
