@@ -293,6 +293,13 @@ namespace PFE.Controllers
                 UpdateMementoCareTaker();
             }
 
+            //Chords temp implementation
+            else if (Keyboard.IsKeyDown(Key.LeftCtrl) && e.Key == Key.I)
+            {
+                _editor.SeparatorAtCursor();
+                UpdateMementoCareTaker();
+            }
+
         }
 
         internal void StopRecording()

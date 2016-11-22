@@ -324,6 +324,18 @@ namespace PFE.Models
             NotifyObserverRedraw();
         }
 
+        internal void SeparatorAtCursor()
+        {
+            int x = _cursor.TopLeftTabCoord().x;
+
+            for (int i = 0; i < NStrings; i++)
+            {
+                Tablature.AttemptSetCharAt(new TabCoord(x, i), '|');
+            }
+
+            NotifyObserverRedraw();
+        }
+
         /// <summary>
         /// Drags the secondary cursor tabCoord to select an area greater than 1x1.
         /// </summary>
