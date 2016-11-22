@@ -356,6 +356,13 @@ namespace PFE.Models
         {
             return _cursor.GetSelectedTabCoords();
         }
+
+        public void ApplyChordAtCursor(List<int?> ChordFrets)
+        {
+            Tablature.ApplyChordAt(Cursor.TopLeftTabCoord().x, ChordFrets);
+            NotifyObserverRedraw();
+
+        }
         #endregion
 
         #region Private

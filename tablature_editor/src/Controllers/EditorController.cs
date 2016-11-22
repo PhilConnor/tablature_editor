@@ -272,6 +272,27 @@ namespace PFE.Controllers
             else if (e.Key == Key.CapsLock)
                 _editor.ToggleWriteMode();
 
+            //Chords temp implementation
+            else if (Keyboard.IsKeyDown(Key.LeftCtrl) && e.Key == Key.D0)
+            {
+                _editor.ApplyChordAtCursor(Chords.GetChordFretsC());
+                UpdateMementoCareTaker();
+            }
+
+            //Chords temp implementation
+            else if (Keyboard.IsKeyDown(Key.LeftCtrl) && e.Key == Key.D1)
+            {
+                _editor.ApplyChordAtCursor(Chords.GetChordFretsE());
+                UpdateMementoCareTaker();
+            }
+
+            //Chords temp implementation
+            else if (Keyboard.IsKeyDown(Key.LeftCtrl) && e.Key == Key.D2)
+            {
+                _editor.ApplyChordAtCursor(Chords.GetChordFretsG());
+                UpdateMementoCareTaker();
+            }
+
         }
 
         internal void StopRecording()
