@@ -88,6 +88,7 @@
     <Compile Include="src\Models\Coord\DrawSurfaceCoord.cs" />
     <Compile Include="src\Models\Coord\TabCoord.cs" />
     <Compile Include="src\Models\Note\Note.cs" />
+    <Compile Include="src\Models\Note\Chord.cs" />
     <Compile Include="src\Models\Note\Tuning.cs" />
     <Compile Include="src\Models\Tablature\SongInfo.cs" />
     <Compile Include="src\Models\Tablature\TablatureAnalysis.cs" />

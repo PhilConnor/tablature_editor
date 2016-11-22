@@ -96,6 +96,18 @@ namespace PFE.Models
             SongInfo = new SongInfo();
         }
 
+        public void ApplyChordAt(int x, List<int?> ChordFrets)
+        {
+            int i = 0;
+            foreach (int? c in ChordFrets)
+            {
+                if (c.HasValue)
+                    AttemptSetNoteCharAt(new TabCoord(x, i), c.Value.ToString()[0]);
+
+                i++;
+            }
+        }
+
         /// <summary>
         /// Inserts a space at tabCoordX position and 
         /// shift all elements to the right.
@@ -135,7 +147,7 @@ namespace PFE.Models
                 {
                     char tmpChar = GetCharAt(new TabCoord(x, y));
                     AttemptSetCharAt(new TabCoord(x, y), '-');
-                    AttemptSetCharAt(new TabCoord(x-1, y), tmpChar);
+                    AttemptSetCharAt(new TabCoord(x - 1, y), tmpChar);
                 }
             }
         }
